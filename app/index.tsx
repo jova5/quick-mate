@@ -1,4 +1,5 @@
-import {StyleSheet, Platform, ScrollView, SafeAreaView} from "react-native";
+import {StyleSheet, Platform, ScrollView} from "react-native";
+import {SafeAreaView} from "react-native-safe-area-context"
 import {Text, Button, Checkbox, MD3Theme, useTheme} from "react-native-paper";
 import {router} from "expo-router";
 import {useState} from "react";
@@ -15,24 +16,18 @@ const App = () => {
   return (
       <Container style={styles.container}>
         <Text>LOGIN SCREEN</Text>
-        <Button
-            mode='contained'
-            onPress={() => {
-              router.navigate('/profile')
-            }}>
-          PROFILE SCREEN</Button>
+        {/*<Button*/}
+        {/*    mode='contained'*/}
+        {/*    onPress={() => {*/}
+        {/*      router.navigate('/profile')*/}
+        {/*    }}>*/}
+        {/*  PROFILE SCREEN</Button>*/}
         <Button
             mode='outlined'
             onPress={() => {
               router.navigate('/home')
             }}>
           HOME SCREEN</Button>
-        <Button
-            mode='outlined'
-            onPress={() => {
-              router.navigate('/home-test')
-            }}>
-          HOME SCREEN TEST</Button>
         <Checkbox
             status={checked ? 'checked' : 'unchecked'}
             onPress={() => {

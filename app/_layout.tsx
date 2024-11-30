@@ -3,7 +3,6 @@ import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
 import 'react-native-reanimated';
-
 import {useColorScheme} from '@/hooks/useColorScheme';
 import {adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, PaperProvider} from "react-native-paper";
 import {SafeAreaProvider} from "react-native-safe-area-context";
@@ -15,14 +14,15 @@ import {
 } from "@react-navigation/native";
 
 import merge from "deepmerge";
+import {StatusBar} from "expo-status-bar";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const customDarkTheme = { ...MD3DarkTheme, colors: Colors.dark };
-const customLightTheme = { ...MD3LightTheme, colors: Colors.light };
+const customDarkTheme = {...MD3DarkTheme, colors: Colors.dark};
+const customLightTheme = {...MD3LightTheme, colors: Colors.light};
 
-const { LightTheme, DarkTheme } = adaptNavigationTheme({
+const {LightTheme, DarkTheme} = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
   reactNavigationDark: NavigationDarkTheme,
 });
@@ -57,11 +57,18 @@ export default function RootLayout() {
             {/*LOGIN SCREEN*/}
             <Stack.Screen name="index" options={{headerShown: false}}/>
             {/*HOME SCREENS*/}
-            <Stack.Screen name="(home)" options={{headerShown: false}}/>
-            {/*PROFILE SCREENS*/}
-            <Stack.Screen name="(profile)" options={{headerShown: false}}/>
+            <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+            <Stack.Screen name="posts/[id]" options={
+              {
+                headerShown: true,
+                headerStyle: {backgroundColor: paperTheme.colors.surfaceVariant},
+                headerShadowVisible: false,
+                headerTitleStyle: {color: paperTheme.colors.onSurfaceVariant},
+                headerTintColor: paperTheme.colors.onSurfaceVariant
+              }}/>
             <Stack.Screen name="+not-found"/>
           </Stack>
+          <StatusBar style={colorScheme === "dark" ? "light" : "dark"}/>
         </SafeAreaProvider>
       </PaperProvider>
   );
