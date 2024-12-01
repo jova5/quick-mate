@@ -1,5 +1,4 @@
 import {useFonts} from 'expo-font';
-import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
 import 'react-native-reanimated';
@@ -14,7 +13,11 @@ import {
 } from "@react-navigation/native";
 
 import merge from "deepmerge";
-import {StatusBar} from "expo-status-bar";
+import App from "@/app/app";
+import {Provider} from "react-redux";
+import {setupStore} from "@/store/store";
+
+const store = setupStore();
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -51,25 +54,12 @@ export default function RootLayout() {
   }
 
   return (
-      <PaperProvider theme={paperTheme}>
-        <SafeAreaProvider>
-          <Stack>
-            {/*LOGIN SCREEN*/}
-            <Stack.Screen name="index" options={{headerShown: false}}/>
-            {/*HOME SCREENS*/}
-            <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
-            <Stack.Screen name="posts/[id]" options={
-              {
-                headerShown: true,
-                headerStyle: {backgroundColor: paperTheme.colors.surfaceVariant},
-                headerShadowVisible: false,
-                headerTitleStyle: {color: paperTheme.colors.onSurfaceVariant},
-                headerTintColor: paperTheme.colors.onSurfaceVariant
-              }}/>
-            <Stack.Screen name="+not-found"/>
-          </Stack>
-          <StatusBar style={colorScheme === "dark" ? "light" : "dark"}/>
-        </SafeAreaProvider>
-      </PaperProvider>
+      <Provider store={store}>
+        <PaperProvider theme={paperTheme}>
+          <SafeAreaProvider>
+            <App/>
+          </SafeAreaProvider>
+        </PaperProvider>
+      </Provider>
   );
 }

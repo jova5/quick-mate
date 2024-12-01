@@ -3,12 +3,15 @@ import {SafeAreaView} from "react-native-safe-area-context"
 import {Text, Button, Checkbox, MD3Theme, useTheme} from "react-native-paper";
 import {router} from "expo-router";
 import {useState} from "react";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {increment, selectCount} from "@/store/counterSlice";
 
-const App = () => {
+const LoginScreen = () => {
 
   const theme = useTheme();
   const styles = createStyles(theme);
-
+  const {value, test} = useAppSelector(selectCount);
+  const dispatch = useAppDispatch();
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
   const [checked, setChecked] = useState(false);
@@ -16,6 +19,8 @@ const App = () => {
   return (
       <Container style={styles.container}>
         <Text>LOGIN SCREEN</Text>
+        <Text>COUNT: {value}</Text>
+        <Text>{test}</Text>
         {/*<Button*/}
         {/*    mode='contained'*/}
         {/*    onPress={() => {*/}
@@ -32,13 +37,14 @@ const App = () => {
             status={checked ? 'checked' : 'unchecked'}
             onPress={() => {
               setChecked(!checked);
+              dispatch(increment());
             }}
         />
       </Container>
   )
 }
 
-export default App;
+export default LoginScreen;
 
 const createStyles = (theme: MD3Theme) => {
   return StyleSheet.create({
