@@ -2,70 +2,14 @@ import React from 'react';
 
 import {CommonActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {BottomNavigation, useTheme} from 'react-native-paper';
+import {BottomNavigation} from 'react-native-paper';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import HomeScreen from "@/app/(tabs)/home";
 import ProfileScreen from "@/app/(tabs)/profile";
 
 const Tab = createBottomTabNavigator();
 
-
 const HomeScreens = () => {
-
-  const theme = useTheme();
-
-
-  // return(
-  //     <Stack>
-  //       <Stack.Screen name="home" options={{headerShown: false}}/>
-  //       <Stack.Screen name="posts/[id]" options={
-  //         {
-  //           headerShown: true,
-  //           headerStyle: {backgroundColor: theme.colors.surfaceVariant} ,
-  //           headerTitleStyle: {color: theme.colors.onSurfaceVariant},
-  //           headerTintColor: theme.colors.onSurfaceVariant
-  //         }}/>
-  //     </Stack>
-  // )
-
-  // return (
-  //     <Tabs
-  //         screenOptions={{
-  //           tabBarActiveTintColor:  'black',
-  //           headerShown: false,
-  //           tabBarButton: HapticTab,
-  //           tabBarBackground: TabBarBackground,
-  //           tabBarStyle: Platform.select({
-  //             android: {
-  //               backgroundColor: theme.colors.tertiaryContainer,
-  //             },
-  //             ios: {
-  //               // Use a transparent background on iOS to show the blur effect
-  //               position: 'absolute',
-  //             },
-  //             default: {},
-  //           }),
-  //         }}>
-  //       <Tabs.Screen
-  //           name="home"
-  //           options={{
-  //             title: 'Home',
-  //             tabBarIcon: ({color}) => <IconSymbol size={28} name="house.fill" color={theme.colors.onTertiaryContainer}/>,
-  //           }}
-  //       />
-  //       <Tabs.Screen
-  //           name="profile"
-  //           options={{
-  //             headerShown: true,
-  //             headerStyle: {backgroundColor: theme.colors.surfaceVariant},
-  //             headerTitleStyle: {color: theme.colors.onSurfaceVariant},
-  //             headerTintColor: theme.colors.onSurfaceVariant,
-  //             title: 'Profile',
-  //             tabBarIcon: ({color}) => <IconSymbol size={28} name="paperplane.fill" color={theme.colors.onTertiaryContainer}/>,
-  //           }}
-  //       />
-  //     </Tabs>
-  // );
 
   return (
       <Tab.Navigator
