@@ -1,5 +1,17 @@
-import {router, Stack, useLocalSearchParams, useNavigation} from "expo-router";
+import {useLocalSearchParams, useNavigation} from "expo-router";
 import {Platform, SafeAreaView, ScrollView, StyleSheet, View} from "react-native";
+import {
+  ActivityIndicator,
+  Button,
+  Card,
+  Dialog,
+  MD3Theme,
+  Portal,
+  Text,
+  useTheme
+} from "react-native-paper";
+import {useEffect, useState} from "react";
+import {HOME_ITEMS} from "@/constants/HomeItems";
 
 const PostTest = () => {
   const params = useLocalSearchParams();
@@ -12,6 +24,10 @@ const PostTest = () => {
   const styles = createStyles(theme);
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
+
+  const [visible, setVisible] = useState(false);
+  const showDialog = () => setVisible(true);
+  const hideDialog = () => setVisible(false);
 
   useEffect(() => {
 
@@ -91,20 +107,30 @@ const PostTest = () => {
           <Card.Actions>
             <Button
                 mode="contained-tonal"
-                onPress={() => {
-                }}
+                onPress={() => showDialog()}
                 style={{width: '100%'}}
                 uppercase={true}
             >prihvati</Button>
           </Card.Actions>
         </Card>
+
+        <Portal>
+          <Dialog visible={visible} onDismiss={hideDialog}>
+            <Dialog.Title>Potvrda</Dialog.Title>
+            <Dialog.Content>
+              <Text variant="bodyMedium">Potvrdite obavezu izvrsavanja sledeceg zadatka:</Text>
+            </Dialog.Content>
+            <Dialog.Content>
+              <Text variant="bodyMedium">Nazvi posla</Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={hideDialog}>ACCPET</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
       </Container>
   )
 }
-
-import {ActivityIndicator, Button, Card, MD3Theme, Text, useTheme} from "react-native-paper";
-import {useEffect, useState} from "react";
-import {HOME_ITEMS} from "@/constants/HomeItems";
 
 export default PostTest;
 

@@ -23,7 +23,6 @@ const HomeScreen = () => {
               data={HOME_ITEMS}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
-              // ItemSeparatorComponent={() => <View style={{height: 12}}/>}
               keyExtractor={(item, _) => `${item.id}`}
               renderItem={({item}) => (
                   <Card
@@ -32,8 +31,8 @@ const HomeScreen = () => {
                       style={{marginHorizontal: 16, marginBottom: 8, marginTop: 4}}
                   >
                     <Card.Title
-                        style={{marginTop: 0,  paddingTop: 0, width: '100%'}}
-                        titleStyle={{ marginTop: 0, paddingVertical: 4,alignSelf: 'center'}}
+                        style={{marginTop: 0, paddingTop: 0, width: '100%'}}
+                        titleStyle={{marginTop: 0, paddingVertical: 4, textAlign: 'center'}}
                         title={item.title.toUpperCase()}
                         titleNumberOfLines={2}
                         titleVariant={"titleLarge"}
@@ -47,7 +46,8 @@ const HomeScreen = () => {
                       <View style={{
                         flex: 1,
                         flexDirection: 'row',
-                        justifyContent: 'space-between'}}
+                        justifyContent: 'space-between'
+                      }}
                       >
                         <View style={{justifyContent: 'space-evenly'}}>
                           <Text variant={"bodyLarge"}>Rok</Text>
