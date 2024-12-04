@@ -1,20 +1,28 @@
 import {FlatList, StyleSheet, View} from "react-native";
 import {HOME_ITEMS} from "@/constants/HomeItems";
-import {Chip, MD3Theme, Surface, Text, useTheme} from "react-native-paper";
+import {Chip, MD3Theme, Surface, Text, TouchableRipple, useTheme} from "react-native-paper";
+import {useAppDispatch} from "@/redux/hooks";
+import {showCompleteDialog} from "@/redux/post-slice/postSlice";
+import {router} from "expo-router";
 
 const CompletedPosts = () => {
   const theme = useTheme();
   const styles = createStyles(theme);
 
+  const dispatch = useAppDispatch();
+
   return(
       <View style={{flexDirection: 'column', flex: 1}}>
-        <Text>COMPLETED POSTS</Text>
         <FlatList
-            data={HOME_ITEMS}
+            data={HOME_ITEMS.filter(item => item.status === "COMPLETED")}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item, _) => `${item.id}`}
             renderItem={({item}) => (
+                <TouchableRipple
+                    style={{margin: 8, borderRadius: 16}}
+                    onPress={() => router.push(`/posts/${item.id}`)}
+                >
                 <Surface style={styles.surface} elevation={4}>
                   <View style={{width: '100%', marginBottom: 4}}>
                     <Text variant='titleLarge' style={{textAlign: 'center'}} numberOfLines={2}>
@@ -42,11 +50,20 @@ const CompletedPosts = () => {
                       <Text variant={"bodyLarge"}>+ prateci troskovi</Text>
                     </View>
                   </View>
-                  <Chip
-                      style={{width: '100%', justifyContent: 'center', alignSelf: 'center'}}
-                      textStyle={{width: '100%', textAlign: 'center'}}
-                  >Completed</Chip>
+                  {item.status === "IN_PROGRESS" ? (
+                      <Chip
+                          onPress={() => dispatch(showCompleteDialog())}
+                          style={{width: '100%', justifyContent: 'center', alignSelf: 'center'}}
+                          textStyle={{width: '100%', textAlign: 'center'}}
+                      >{item.status}</Chip>
+                  ):(
+                      <Chip
+                          style={{width: '100%', justifyContent: 'center', alignSelf: 'center'}}
+                          textStyle={{width: '100%', textAlign: 'center'}}
+                      >{item.status}</Chip>
+                  )}
                 </Surface>
+                </TouchableRipple>
             )}/>
       </View>
   )
@@ -62,7 +79,6 @@ const createStyles = (theme: MD3Theme) => {
     },
     surface: {
       padding: 8,
-      margin: 8,
       alignItems: 'center',
       justifyContent: 'space-evenly',
       borderRadius: 16

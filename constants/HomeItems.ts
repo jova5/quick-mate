@@ -8,7 +8,8 @@ export const HOME_ITEMS = [
         "consectetur adipisicing elit. Quisquam tenetur odit " +
         "eveniet inventore magnam officia quia nemo porro? Dolore sapiente quos illo distinctio " +
         "nisi incidunt? Eaque officiis iusto exercitationem natus?",
-    price: 25
+    price: 25,
+    status: "COMPLETED"
   },
   {
     id: 2,
@@ -16,7 +17,8 @@ export const HOME_ITEMS = [
     description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam tenetur odit " +
         "eveniet inventore magnam officia quia nemo porro? Dolore sapiente quos illo distinctio " +
         "nisi incidunt? Eaque officiis iusto exercitationem natus?",
-    price: 25
+    price: 25,
+    status: "IN_PROGRESS"
   },
   {
     id: 3,
@@ -24,7 +26,8 @@ export const HOME_ITEMS = [
     description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam tenetur odit " +
         "eveniet inventore magnam officia quia nemo porro? Dolore sapiente quos illo distinctio " +
         "nisi incidunt? Eaque officiis iusto exercitationem natus?",
-    price: 25
+    price: 25,
+    status: "COMPLETED"
   },
   {
     id: 4,
@@ -32,7 +35,8 @@ export const HOME_ITEMS = [
     description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam tenetur odit " +
         "eveniet inventore magnam officia quia nemo porro? Dolore sapiente quos illo distinctio " +
         "nisi incidunt? Eaque officiis iusto exercitationem natus?",
-    price: 25
+    price: 25,
+    status: "IN_PROGRESS"
   },
   {
     id: 5,
@@ -40,7 +44,8 @@ export const HOME_ITEMS = [
     description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam tenetur odit " +
         "eveniet inventore magnam officia quia nemo porro? Dolore sapiente quos illo distinctio " +
         "nisi incidunt? Eaque officiis iusto exercitationem natus?",
-    price: 25
+    price: 25,
+    status: "IN_PROGRESS"
   },
   {
     id: 6,
@@ -48,6 +53,7 @@ export const HOME_ITEMS = [
     description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam tenetur odit " +
         "eveniet inventore magnam officia quia nemo porro? Dolore sapiente quos illo distinctio " +
         "nisi incidunt? Eaque officiis iusto exercitationem natus?",
-    price: 25
+    price: 25,
+    status: "IN_PROGRESS"
   },
 ]

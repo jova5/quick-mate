@@ -1,8 +1,10 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
-import counterReducer from "@/store/counterSlice";
+import counterReducer from "@/redux/counter-slice/counterSlice";
+import postReducer from "@/redux/post-slice/postSlice";
 
 const rootReducer = combineReducers({
   counter: counterReducer,
+  post: postReducer
 });
 
 export function setupStore(preloadedState?: Partial<RootState>) {

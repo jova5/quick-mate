@@ -67,7 +67,7 @@ const HomeScreens = () => {
             options={{
               tabBarLabel: 'Profile',
               tabBarIcon: ({ color, size }) => {
-                return <Icon name="cog" size={size} color={color} />;
+                return <Icon name="account-circle" size={size} color={color} />;
               },
             }}
         />

@@ -68,7 +68,7 @@ const PostTest = () => {
         >
           <Card.Title
               style={{marginTop: 0, paddingTop: 0, width: '100%'}}
-              titleStyle={{marginTop: 0, paddingVertical: 4, alignSelf: 'center'}}
+              titleStyle={{marginTop: 0, paddingVertical: 4, textAlign: 'center'}}
               title={post.title.toUpperCase()}
               titleVariant={"titleLarge"}
           />
@@ -102,15 +102,26 @@ const PostTest = () => {
               height: 300,
               width: '100%'
             }}></View>
-            <Text>Contact: </Text>
+            <Text>Contact: 065123456</Text>
           </Card.Content>
           <Card.Actions>
-            <Button
-                mode="contained-tonal"
-                onPress={() => showDialog()}
-                style={{width: '100%'}}
-                uppercase={true}
-            >prihvati</Button>
+            {
+              post.status === "OPEN" ? (
+                  <Button
+                      mode="contained-tonal"
+                      onPress={() => showDialog()}
+                      style={{width: '100%'}}
+                      uppercase={true}
+                  >prihvati</Button>
+                ) : (
+                  <Button
+                      mode="contained-tonal"
+                      style={{width: '100%'}}
+                      uppercase={true}
+                  >{post.status}</Button>
+              )
+            }
+
           </Card.Actions>
         </Card>
 

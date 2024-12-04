@@ -15,7 +15,7 @@ import {
 import merge from "deepmerge";
 import App from "@/app/app";
 import {Provider} from "react-redux";
-import {setupStore} from "@/store/store";
+import {setupStore} from "@/redux/store";
 
 const store = setupStore();
 

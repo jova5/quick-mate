@@ -3,8 +3,8 @@ import {SafeAreaView} from "react-native-safe-area-context"
 import {Text, Button, Checkbox, MD3Theme, useTheme} from "react-native-paper";
 import {router} from "expo-router";
 import {useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/store/hooks";
-import {increment, selectCount} from "@/store/counterSlice";
+import {useAppDispatch, useAppSelector} from "@/redux/hooks";
+import {increment, selectCount} from "@/redux/counter-slice/counterSlice";
 
 const LoginScreen = () => {
 
