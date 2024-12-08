@@ -1,8 +1,9 @@
 import {Platform, ScrollView, StyleSheet, View} from "react-native";
 import {
+  Avatar,
   Button,
-  Dialog,
-  MD3Theme,
+  Dialog, IconButton,
+  MD3Theme, Modal,
   Portal,
   SegmentedButtons,
   Text,
@@ -15,6 +16,8 @@ import YourPosts from "@/app/(tabs)/profile-components/YourPosts";
 import CompletedPosts from "@/app/(tabs)/profile-components/CompletedPosts";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {hideCompleteDialog, selectPost} from "@/redux/post-slice/postSlice";
+import {router} from "expo-router";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const ProfileScreen = () => {
   const theme = useTheme();
@@ -24,6 +27,9 @@ const ProfileScreen = () => {
   const dispatch = useAppDispatch();
   const {isCompleteDialogShowing} = useAppSelector(selectPost)
   const hideDialog = () => dispatch(hideCompleteDialog());
+  const [isLanguageModalShowing, setLanguageModalShowing] = useState(false);
+  const hideLanguageModal = () => setLanguageModalShowing(false);
+  const showLanguageModal = () => setLanguageModalShowing(true);
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
@@ -33,7 +39,31 @@ const ProfileScreen = () => {
         flex: 1,
         padding: 16
       }}>
-        <View style={{height: 60}}></View>
+        <View style={
+          {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 4,
+          }}>
+          <Avatar.Text size={40} label="XD"/>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <Button mode='outlined' onPress={() => {
+              console.log('tests')
+              router.push('/city', {})
+            }}>Test</Button>
+            <IconButton
+                onPress={showLanguageModal}
+                icon={({size, color}) => {
+                  return <Icon name="language" size={size} color={color}/>
+                }}
+            />
+          </View>
+        </View>
         <SegmentedButtons
             value={value}
             onValueChange={setValue}
@@ -75,6 +105,27 @@ const ProfileScreen = () => {
             </Dialog.Content>
             <Dialog.Actions>
               <Button onPress={hideDialog}>ACCPET</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+        <Portal>
+          <Dialog visible={isLanguageModalShowing} onDismiss={hideLanguageModal}>
+            <Dialog.Title>Izaberite jezik</Dialog.Title>
+            <Dialog.Actions
+                style={{
+                  padding: 4,
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                }}>
+              <Button style={{flex: 1}} mode={'outlined'} onPress={hideLanguageModal}>Srpski</Button>
+            </Dialog.Actions>
+            <Dialog.Actions
+                style={{
+                  padding: 4,
+                  justifyContent: 'center',
+                  alignContent: 'center'
+                }}>
+              <Button style={{flex: 1}} mode={'outlined'} onPress={hideLanguageModal}>Engleski</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

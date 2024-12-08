@@ -28,7 +28,7 @@ const HomeScreen = () => {
                   <Card
                       // onPress={() => { router.push({pathname:"/post", params: {id: 1}})
                       onPress={() => router.push(`/posts/${item.id}`)}
-                      style={{marginHorizontal: 16, marginBottom: 8, marginTop: 4}}
+                      style={{marginHorizontal: 16, marginBottom: 8}}
                   >
                     <Card.Title
                         style={{marginTop: 0, paddingTop: 0, width: '100%'}}
@@ -103,7 +103,8 @@ const createStyles = (theme: MD3Theme) => {
   return StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
-      flex: 1
+      flex: 1,
+      paddingTop: 8
     },
     fab: {
       position: 'absolute',

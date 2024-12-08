@@ -23,6 +23,14 @@ const App = () => {
               headerTitleStyle: {color: theme.colors.onSurfaceVariant},
               headerTintColor: theme.colors.onSurfaceVariant
             }}/>
+          <Stack.Screen name="city" options={
+            {
+              headerShown: true,
+              headerStyle: {backgroundColor: theme.colors.surfaceVariant},
+              headerShadowVisible: false,
+              headerTitleStyle: {color: theme.colors.onSurfaceVariant},
+              headerTintColor: theme.colors.onSurfaceVariant
+            }}/>
           <Stack.Screen name="+not-found"/>
         </Stack>
         <StatusBar style={colorScheme === "dark" ? "light" : "dark"}/>
