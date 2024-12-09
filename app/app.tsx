@@ -15,14 +15,7 @@ const App = () => {
           <Stack.Screen name="index" options={{headerShown: false}}/>
           {/*HOME SCREENS*/}
           <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
-          <Stack.Screen name="posts/[id]" options={
-            {
-              headerShown: true,
-              headerStyle: {backgroundColor: theme.colors.surfaceVariant},
-              headerShadowVisible: false,
-              headerTitleStyle: {color: theme.colors.onSurfaceVariant},
-              headerTintColor: theme.colors.onSurfaceVariant
-            }}/>
+          <Stack.Screen name="posts" options={{headerShown: false}}/>
           <Stack.Screen name="city" options={
             {
               headerShown: true,

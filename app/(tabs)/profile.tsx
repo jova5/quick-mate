@@ -2,8 +2,9 @@ import {Platform, ScrollView, StyleSheet, View} from "react-native";
 import {
   Avatar,
   Button,
-  Dialog, IconButton,
-  MD3Theme, Modal,
+  Dialog,
+  IconButton,
+  MD3Theme,
   Portal,
   SegmentedButtons,
   Text,

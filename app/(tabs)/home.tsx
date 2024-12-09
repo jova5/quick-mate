@@ -26,7 +26,6 @@ const HomeScreen = () => {
               keyExtractor={(item, _) => `${item.id}`}
               renderItem={({item}) => (
                   <Card
-                      // onPress={() => { router.push({pathname:"/post", params: {id: 1}})
                       onPress={() => router.push(`/posts/${item.id}`)}
                       style={{marginHorizontal: 16, marginBottom: 8}}
                   >
@@ -90,7 +89,10 @@ const HomeScreen = () => {
         <FAB
             icon="plus"
             style={styles.fab}
-            onPress={() => console.log('Pressed')}
+            onPress={() => {
+              router.navigate('/posts')
+            }}
+
         />
       </View>
 
