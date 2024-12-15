@@ -20,8 +20,9 @@ const CompletedPosts = () => {
             keyExtractor={(item, _) => `${item.id}`}
             renderItem={({item}) => (
                 <TouchableRipple
+                    key={`${item.id}`}
                     style={{margin: 8, borderRadius: 16}}
-                    onPress={() => router.push(`/posts/${item.id}`)}
+                    onPress={() => router.push(`/posts/${item.id}`, {})}
                 >
                 <Surface style={styles.surface} elevation={4}>
                   <View style={{width: '100%', marginBottom: 4}}>

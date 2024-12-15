@@ -35,11 +35,7 @@ const ProfileScreen = () => {
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
   return (
-      <View style={{
-        backgroundColor: theme.colors.background,
-        flex: 1,
-        padding: 16
-      }}>
+      <Container style={styles.container}>
         <View style={
           {
             flexDirection: 'row',
@@ -54,7 +50,6 @@ const ProfileScreen = () => {
             justifyContent: 'space-between'
           }}>
             <Button mode='outlined' onPress={() => {
-              console.log('tests')
               router.push('/city', {})
             }}>Test</Button>
             <IconButton
@@ -80,7 +75,10 @@ const ProfileScreen = () => {
               {value: 'completed-posts', label: 'Completed'},
             ]}
         />
-        <Container style={styles.container}>
+        <View style={{
+          backgroundColor: theme.colors.background,
+          flex: 1
+        }}>
           {(() => {
             switch (value) {
               case 'in-progress-posts':
@@ -93,7 +91,7 @@ const ProfileScreen = () => {
                 return null; // Or a fallback component/message
             }
           })()}
-        </Container>
+        </View>
 
         <Portal>
           <Dialog visible={isCompleteDialogShowing} onDismiss={hideDialog}>
@@ -130,8 +128,7 @@ const ProfileScreen = () => {
             </Dialog.Actions>
           </Dialog>
         </Portal>
-      </View>
-
+      </Container>
   )
 };
 
@@ -141,9 +138,8 @@ const createStyles = (theme: MD3Theme) => {
   return StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
-      flex: 1,
-      marginTop: 4,
-      borderRadius: 16
+      paddingHorizontal: 8,
+      flex: 1
     },
     surface: {
       padding: 8,

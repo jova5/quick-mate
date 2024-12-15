@@ -26,6 +26,7 @@ const HomeScreen = () => {
               keyExtractor={(item, _) => `${item.id}`}
               renderItem={({item}) => (
                   <Card
+                      key={`${item.id}`}
                       onPress={() => router.push(`/posts/${item.id}`)}
                       style={{marginHorizontal: 16, marginBottom: 8}}
                   >

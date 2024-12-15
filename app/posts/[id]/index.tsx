@@ -38,7 +38,7 @@ const PostTest = () => {
 
       navigation.setOptions({title: post?.title});
       setPost(post);
-    }, 5000); // 5 seconds
+    }, 1000); // 5 seconds
 
     // Cleanup timer on component unmount
     return () => clearTimeout(timer);

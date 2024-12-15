@@ -20,8 +20,9 @@ const InProgressPosts = () => {
             keyExtractor={(item, _) => `${item.id}`}
             renderItem={({item}) => (
                 <TouchableRipple
-                    style={{margin: 8, borderRadius: 16}}
-                    onPress={() => router.push(`/posts/${item.id}`)}
+                    key={`${item.id}`}
+                    style={{margin: 8, marginHorizontal: 16, borderRadius: 16}}
+                    onPress={() => router.push(`/posts/${item.id}`, {})}
                 >
                   <Surface style={styles.surface} elevation={4}>
                     <View style={{width: '100%', marginBottom: 4}}>

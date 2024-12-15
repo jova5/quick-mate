@@ -1,8 +1,8 @@
-import {StyleSheet, Platform, ScrollView} from "react-native";
+import {Platform, ScrollView, StyleSheet} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context"
-import {Text, Button, Checkbox, MD3Theme, useTheme} from "react-native-paper";
+import {Button, Checkbox, MD3Theme, Text, useTheme} from "react-native-paper";
 import {router} from "expo-router";
-import {useState} from "react";
+import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {increment, selectCount} from "@/redux/counter-slice/counterSlice";
 
