@@ -40,17 +40,16 @@
           "android": {
             "datePicker": {
               "colorAccent": {
-                "light": "#FF5722",
+                "light": "#edddf6",
                 "dark": "#4d4357"
               },
               "textColorPrimaryInverse": {
+                "light": "#21182a",
                 "dark": "#edddf6"
               },
               "textColorSecondaryInverse": {
+                "light": "#21182a",
                 "dark": "#edddf6"
-              },
-              "textColorPrimary": {
-                "light": "#FF5722"
               }
             },
             "timePicker": {
