@@ -50,11 +50,37 @@
               "textColorSecondaryInverse": {
                 "light": "#21182a",
                 "dark": "#edddf6"
+              },
+              "windowBackground": {
+                "dark": "#d0c1da",
+                "light": "#ffffff"
+              },
+              "textColorSecondary": {
+                "dark": "#362c3f",
+                "light": "#000000"
+              },
+              "textColorPrimary": {
+                "dark": "#362c3f",
+                "light": "#000000"
               }
             },
             "timePicker": {
-              "background": {"light": "#FF5722", "dark": "#383838"},
-              "numbersBackgroundColor": {"light": "#FF5722", "dark": "#383838"}
+              "background": {
+                "dark": "#d0c1da",
+                "light": "#ffffff"
+              },
+              "headerBackground": {
+                "light": "#edddf6",
+                "dark": "#4d4357"
+              },
+              "numbersTextColor": {
+                "dark": "#9e7dbd",
+                "light": "#000000"
+              },
+              "numbersSelectorColor": {
+                "light": "#edddf6",
+                "dark": "#4d4357"
+              }
             }
           }
         }
