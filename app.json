@@ -33,6 +33,32 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "@react-native-community/datetimepicker",
+        {
+          "android": {
+            "datePicker": {
+              "colorAccent": {
+                "light": "#FF5722",
+                "dark": "#4d4357"
+              },
+              "textColorPrimaryInverse": {
+                "dark": "#edddf6"
+              },
+              "textColorSecondaryInverse": {
+                "dark": "#edddf6"
+              },
+              "textColorPrimary": {
+                "light": "#FF5722"
+              }
+            },
+            "timePicker": {
+              "background": {"light": "#FF5722", "dark": "#383838"},
+              "numbersBackgroundColor": {"light": "#FF5722", "dark": "#383838"}
+            }
+          }
+        }
       ]
     ],
     "experiments": {
