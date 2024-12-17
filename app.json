@@ -73,10 +73,6 @@
                 "light": "#edddf6",
                 "dark": "#4d4357"
               },
-              "numbersTextColor": {
-                "dark": "#9e7dbd",
-                "light": "#000000"
-              },
               "numbersSelectorColor": {
                 "light": "#edddf6",
                 "dark": "#4d4357"
