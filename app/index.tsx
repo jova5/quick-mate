@@ -1,45 +1,36 @@
-import {Platform, ScrollView, StyleSheet} from "react-native";
+import {Image, Platform, ScrollView, StyleSheet, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context"
-import {Button, Checkbox, MD3Theme, Text, useTheme} from "react-native-paper";
+import {Button, MD3Theme, Text, useTheme} from "react-native-paper";
 import {router} from "expo-router";
-import React, {useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks";
-import {increment, selectCount} from "@/redux/counter-slice/counterSlice";
+import React from "react";
+import {useAppDispatch} from "@/redux/hooks";
 
 const LoginScreen = () => {
 
   const theme = useTheme();
   const styles = createStyles(theme);
-  const {value, test} = useAppSelector(selectCount);
   const dispatch = useAppDispatch();
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
-  const [checked, setChecked] = useState(false);
-
   return (
       <Container style={styles.container}>
-        <Text>LOGIN SCREEN</Text>
-        <Text>COUNT: {value}</Text>
-        <Text>{test}</Text>
-        {/*<Button*/}
-        {/*    mode='contained'*/}
-        {/*    onPress={() => {*/}
-        {/*      router.navigate('/profile')*/}
-        {/*    }}>*/}
-        {/*  PROFILE SCREEN</Button>*/}
-        <Button
-            mode='outlined'
-            onPress={() => {
-              router.navigate('/home')
-            }}>
-          HOME SCREEN</Button>
-        <Checkbox
-            status={checked ? 'checked' : 'unchecked'}
-            onPress={() => {
-              setChecked(!checked);
-              dispatch(increment());
-            }}
-        />
+        <View style={{height: '45%', justifyContent: 'center'}}>
+          <Text variant='displayLarge' style={{textAlign: 'center'}}>Quick Mate</Text>
+        </View>
+        <View style={{alignItems: 'center', width: '100%'}}>
+          <Button
+              mode='contained-tonal'
+              icon={() => (
+                  <Image source={require('../assets/icon/unnamed.png')}
+                         style={{width: 20, height: 20,}}
+                  />
+              )}
+              contentStyle={{flexDirection: 'row-reverse'}}
+              onPress={() => {
+                router.navigate('/home')
+              }}>
+            Continue with</Button>
+        </View>
       </Container>
   )
 }
@@ -51,7 +42,7 @@ const createStyles = (theme: MD3Theme) => {
     container: {
       backgroundColor: theme.colors.background,
       flex: 1,
-      padding: 16
+      padding: 16,
     }
   })
 }
