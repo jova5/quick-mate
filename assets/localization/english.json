@@ -3,7 +3,7 @@
   "confirmObligation": "Confirm the obligation to perform the following task:",
   "deadline": "Deadline",
   "service": "Service",
-  "plusAccompanyingCosts": "+ accompanying costs",
+  "plusAdditionalCost": "+ additional costs",
   "accept": "accept",
   "confirmation": "Confirmation!",
   "jobTitle": "Job Title",
@@ -27,5 +27,9 @@
   "post": "post",
   "cancel": "Cancel",
   "ok": "Ok",
-  "newPost": "New Post"
+  "newPost": "New Post",
+  "IN_PROGRESS": "In Progress",
+  "COMPLETED": "Completed",
+  "OPEN": "Open",
+  "CANCELED": "Canceled"
 }

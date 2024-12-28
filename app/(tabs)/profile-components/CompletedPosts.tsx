@@ -50,7 +50,7 @@ const CompletedPosts = () => {
                     <View style={{alignItems: "flex-end"}}>
                       <Text variant={"bodyLarge"}>{t("service")}</Text>
                       <Text variant={"bodyLarge"}>{item.price} KM</Text>
-                      <Text variant={"bodyLarge"}>{t("plusAccompanyingCosts")}</Text>
+                      <Text variant={"bodyLarge"}>{t("plusAdditionalCost")}</Text>
                     </View>
                   </View>
                   {item.status === "IN_PROGRESS" ? (
@@ -58,12 +58,12 @@ const CompletedPosts = () => {
                           onPress={() => dispatch(showCompleteDialog())}
                           style={{width: '100%', justifyContent: 'center', alignSelf: 'center'}}
                           textStyle={{width: '100%', textAlign: 'center'}}
-                      >{item.status}</Chip>
+                      >{t(item.status).toUpperCase()}</Chip>
                   ):(
                       <Chip
                           style={{width: '100%', justifyContent: 'center', alignSelf: 'center'}}
                           textStyle={{width: '100%', textAlign: 'center'}}
-                      >{item.status}</Chip>
+                      >{t(item.status).toUpperCase()}</Chip>
                   )}
                 </Surface>
                 </TouchableRipple>

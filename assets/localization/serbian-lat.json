@@ -3,7 +3,7 @@
   "confirmObligation": "Potvrdite obavezu izvršavanja sledećeg zadatka:",
   "deadline": "Rok",
   "service": "Usluga",
-  "plusAccompanyingCosts": "+ prateći troškovi",
+  "plusAdditionalCost": "+ prateći troškovi",
   "accept": "prihvati",
   "confirmation": "Potvrda!",
   "jobTitle": "Naziv posla",
@@ -26,5 +26,9 @@
   "post": "objavi",
   "cancel": "Otkaži",
   "ok": "Ok",
-  "newPost": "Nova objava"
+  "newPost": "Nova objava",
+  "IN_PROGRESS": "U toku",
+  "COMPLETED": "Završeno",
+  "OPEN": "Otvoreno",
+  "CANCELED": "Otkazano"
 }

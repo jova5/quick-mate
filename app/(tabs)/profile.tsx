@@ -20,16 +20,7 @@ import {hideCompleteDialog, selectPost} from "@/redux/post-slice/postSlice";
 import {router} from "expo-router";
 import Icon from "react-native-vector-icons/Ionicons";
 import {useTranslation} from "react-i18next";
-import i18next from "i18next";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const saveLanguageData = async (languageCode: "rs" | "en") => {
-  try {
-    await AsyncStorage.setItem('LANGUAGE', languageCode);
-  } catch {
-    console.log('err in saving language data');
-  }
-};
+import {changeI18NLanguage} from "@/assets/localization/i18n";
 
 const ProfileScreen = () => {
   const theme = useTheme();
@@ -40,14 +31,13 @@ const ProfileScreen = () => {
   const dispatch = useAppDispatch();
   const {isCompleteDialogShowing} = useAppSelector(selectPost)
   const hideDialog = () => dispatch(hideCompleteDialog());
-  const [isLanguageModalShowing, setLanguageModalShowing] = useState(false);
-  const hideLanguageModal = () => setLanguageModalShowing(false);
-  const showLanguageModal = () => setLanguageModalShowing(true);
+  const [isLanguageModalShowing, setIsLanguageModalShowing] = useState(false);
+  const hideLanguageModal = () => setIsLanguageModalShowing(false);
+  const showLanguageModal = () => setIsLanguageModalShowing(true);
 
   const changeLanguageLocalization = (languageCode: "rs" | "en") => {
 
-    i18next.changeLanguage(languageCode);// it will change the language through out the app.
-    saveLanguageData(languageCode);
+    changeI18NLanguage(languageCode);
 
     hideLanguageModal();
   }

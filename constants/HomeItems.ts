@@ -45,7 +45,7 @@ export const HOME_ITEMS = [
         "eveniet inventore magnam officia quia nemo porro? Dolore sapiente quos illo distinctio " +
         "nisi incidunt? Eaque officiis iusto exercitationem natus?",
     price: 25,
-    status: "IN_PROGRESS"
+    status: "OPEN"
   },
   {
     id: 6,
@@ -55,5 +55,14 @@ export const HOME_ITEMS = [
         "nisi incidunt? Eaque officiis iusto exercitationem natus?",
     price: 25,
     status: "IN_PROGRESS"
+  },
+  {
+    id: 7,
+    title: "Title 7",
+    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam tenetur odit " +
+        "eveniet inventore magnam officia quia nemo porro? Dolore sapiente quos illo distinctio " +
+        "nisi incidunt? Eaque officiis iusto exercitationem natus?",
+    price: 25,
+    status: "CANCELED"
   },
 ]

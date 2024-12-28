@@ -58,7 +58,7 @@ const HomeScreen = () => {
                         <View style={{alignItems: "flex-end"}}>
                           <Text variant={"bodyLarge"}>{t("service")}</Text>
                           <Text variant={"bodyLarge"}>{item.price} KM</Text>
-                          <Text variant={"bodyLarge"}>{t("plusAccompanyingCosts")}</Text>
+                          <Text variant={"bodyLarge"}>{t("plusAdditionalCost")}</Text>
                         </View>
                       </View>
                     </Card.Actions>
