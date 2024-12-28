@@ -19,10 +19,22 @@ import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {hideCompleteDialog, selectPost} from "@/redux/post-slice/postSlice";
 import {router} from "expo-router";
 import Icon from "react-native-vector-icons/Ionicons";
+import {useTranslation} from "react-i18next";
+import i18next from "i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const saveLanguageData = async (languageCode: "rs" | "en") => {
+  try {
+    await AsyncStorage.setItem('LANGUAGE', languageCode);
+  } catch {
+    console.log('err in saving language data');
+  }
+};
 
 const ProfileScreen = () => {
   const theme = useTheme();
   const styles = createStyles(theme);
+  const {t} = useTranslation();
 
   const [value, setValue] = useState('in-progress-posts');
   const dispatch = useAppDispatch();
@@ -31,6 +43,14 @@ const ProfileScreen = () => {
   const [isLanguageModalShowing, setLanguageModalShowing] = useState(false);
   const hideLanguageModal = () => setLanguageModalShowing(false);
   const showLanguageModal = () => setLanguageModalShowing(true);
+
+  const changeLanguageLocalization = (languageCode: "rs" | "en") => {
+
+    i18next.changeLanguage(languageCode);// it will change the language through out the app.
+    saveLanguageData(languageCode);
+
+    hideLanguageModal();
+  }
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
@@ -51,7 +71,7 @@ const ProfileScreen = () => {
           }}>
             <Button mode='outlined' onPress={() => {
               router.push('/city', {})
-            }}>Test</Button>
+            }}>{t("city")}</Button>
             <IconButton
                 onPress={showLanguageModal}
                 icon={({size, color}) => {
@@ -66,13 +86,16 @@ const ProfileScreen = () => {
             buttons={[
               {
                 value: 'in-progress-posts',
-                label: 'In progress',
+                label: t("inProgress"),
               },
               {
                 value: 'posts',
-                label: 'Your posts',
+                label: t("yourPosts"),
               },
-              {value: 'completed-posts', label: 'Completed'},
+              {
+                value: 'completed-posts',
+                label: t("completed")
+              },
             ]}
         />
         <View style={{
@@ -95,28 +118,32 @@ const ProfileScreen = () => {
 
         <Portal>
           <Dialog visible={isCompleteDialogShowing} onDismiss={hideDialog}>
-            <Dialog.Title>Potvrda</Dialog.Title>
+            <Dialog.Title>{t("confirmation")}</Dialog.Title>
             <Dialog.Content>
-              <Text variant="bodyMedium">Potvrdite kompletiranje sledeceg zadatka:</Text>
+              <Text variant="bodyMedium">{t("confirmCompletion")}</Text>
             </Dialog.Content>
             <Dialog.Content>
-              <Text variant="bodyMedium">Nazvi posla</Text>
+              <Text variant="bodyMedium">{t("jobTitle")}</Text>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={hideDialog}>ACCPET</Button>
+              <Button onPress={hideDialog}>{t("accept").toUpperCase()}</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>
         <Portal>
           <Dialog visible={isLanguageModalShowing} onDismiss={hideLanguageModal}>
-            <Dialog.Title>Izaberite jezik</Dialog.Title>
+            <Dialog.Title>{t("chooseLanguage")}</Dialog.Title>
             <Dialog.Actions
                 style={{
                   padding: 4,
                   justifyContent: 'center',
                   alignContent: 'center',
                 }}>
-              <Button style={{flex: 1}} mode={'outlined'} onPress={hideLanguageModal}>Srpski</Button>
+              <Button
+                  style={{flex: 1}}
+                  mode={'outlined'}
+                  onPress={() => changeLanguageLocalization("rs")}>
+                {t("serbian")}</Button>
             </Dialog.Actions>
             <Dialog.Actions
                 style={{
@@ -124,7 +151,11 @@ const ProfileScreen = () => {
                   justifyContent: 'center',
                   alignContent: 'center'
                 }}>
-              <Button style={{flex: 1}} mode={'outlined'} onPress={hideLanguageModal}>Engleski</Button>
+              <Button
+                  style={{flex: 1}}
+                  mode={'outlined'}
+                  onPress={() => changeLanguageLocalization("en")}>
+                {t("english")}</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

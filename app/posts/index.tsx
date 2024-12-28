@@ -4,10 +4,12 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import React, {useRef, useState} from "react";
 import {router} from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import {useTranslation} from "react-i18next";
 
 const NewPost = () => {
 
   const theme = useTheme();
+  const {t} = useTranslation();
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
@@ -66,74 +68,83 @@ const NewPost = () => {
   return (
       <>
         <View style={styles.container}>
-        <ScrollView style={{paddingHorizontal: 16}} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-          <TextInput
-              mode="outlined"
-              label="Title"
-              value={title}
-              onChangeText={text => setTitle(text)}
-          />
-          <TextInput
-              mode="outlined"
-              label="Description"
-              value={description}
-              multiline={true}
-              style={{height: 160}}
-              onChangeText={text => setDescription(text)}
-          />
-          <TextInput
-              mode="outlined"
-              label="Contact phone"
-              placeholder="06x123456"
-              value={contactNumber}
-              onChangeText={text => setContactNumber(text)}
-          />
-          <TextInput
-              mode="outlined"
-              label="City"
-              value={''}
-              onPress={() => {router.push('/city', {})}}
-          />
-          <TextInput
-              ref={timeInputRef}
-              onFocus={() => {timeInputRef.current.blur()}}
-              mode="outlined"
-              label="Time"
-              value={showTime ?? ''}
-              onPress={() => {
-                setDateTimeMode('time')
-                setShowTimePicker(true)
-              }}
-          />
-          <TextInput
-              ref={dateInputRef}
-              onFocus={() => {dateInputRef.current.blur()}}
-              mode="outlined"
-              label="Date"
-              value={showDate ?? ''}
-              onPress={() => {
-                setDateTimeMode('date')
-                setShowTimePicker(true)
-              }}
-          />
-          <TextInput
-              mode="outlined"
-              label="Price"
-              keyboardType="numeric"
-              placeholder="11KM"
-              value={price}
-              onChangeText={text => setPrice(text)}
-          />
-          <View style={{
-            marginVertical: 12,
-            backgroundColor: 'blue',
-            height: 300,
-            width: '100%'
-          }}></View>
-          <Button mode='contained' style={{marginBottom: 6}} onPress={() => {
-            router.push('/city', {})
-          }}>POST</Button>
-        </ScrollView>
+          <ScrollView
+              style={{paddingHorizontal: 16}}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled">
+            <TextInput
+                mode="outlined"
+                label={t("title")}
+                value={title}
+                onChangeText={text => setTitle(text)}
+            />
+            <TextInput
+                mode="outlined"
+                label={t("description")}
+                value={description}
+                multiline={true}
+                style={{height: 160}}
+                onChangeText={text => setDescription(text)}
+            />
+            <TextInput
+                mode="outlined"
+                label={t("contactPhone")}
+                placeholder="06x123456"
+                value={contactNumber}
+                onChangeText={text => setContactNumber(text)}
+            />
+            <TextInput
+                mode="outlined"
+                label={t("city")}
+                value={''}
+                onPress={() => {
+                  router.push('/city', {})
+                }}
+            />
+            <TextInput
+                ref={timeInputRef}
+                onFocus={() => {
+                  timeInputRef.current.blur()
+                }}
+                mode="outlined"
+                label={t("time")}
+                value={showTime ?? ''}
+                onPress={() => {
+                  setDateTimeMode('time')
+                  setShowTimePicker(true)
+                }}
+            />
+            <TextInput
+                ref={dateInputRef}
+                onFocus={() => {
+                  dateInputRef.current.blur()
+                }}
+                mode="outlined"
+                label={t("date")}
+                value={showDate ?? ''}
+                onPress={() => {
+                  setDateTimeMode('date')
+                  setShowTimePicker(true)
+                }}
+            />
+            <TextInput
+                mode="outlined"
+                label={t("price")}
+                keyboardType="numeric"
+                placeholder="11KM"
+                value={price}
+                onChangeText={text => setPrice(text)}
+            />
+            <View style={{
+              marginVertical: 12,
+              backgroundColor: 'blue',
+              height: 300,
+              width: '100%'
+            }}></View>
+            <Button mode='contained' style={{marginBottom: 6}} onPress={() => {
+              router.push('/city', {})
+            }}>{t("post").toUpperCase()}</Button>
+          </ScrollView>
         </View>
         {
             showTimePicker && (
@@ -144,8 +155,8 @@ const NewPost = () => {
                     mode={dateTimeMode}
                     value={dateTimeMode === 'time' ? (time ?? new Date()) : (date ?? new Date())}
                     onChange={handleTimeChane}
-                    negativeButton={{label: "cancel"}}
-                    positiveButton={{label: "ok"}}
+                    negativeButton={{label: t("cancel")}}
+                    positiveButton={{label: t("ok")}}
                 />
             )
         }

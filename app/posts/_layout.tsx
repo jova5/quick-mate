@@ -1,15 +1,17 @@
 import {Stack} from "expo-router";
 import {useTheme} from "react-native-paper";
+import {useTranslation} from "react-i18next";
 
 const Layout = () => {
 
   const theme = useTheme();
+  const {t} = useTranslation();
 
   return(
       <Stack>
         <Stack.Screen name="index"  options={
           {
-            title: 'New Post',
+            title: t("newPost"),
             headerShown: true,
             headerStyle: {backgroundColor: theme.colors.surfaceVariant},
             headerShadowVisible: false,

@@ -4,11 +4,13 @@ import {Button, Card, Dialog, FAB, MD3Theme, Portal, Text, useTheme} from "react
 import {HOME_ITEMS} from "@/constants/HomeItems";
 import {router} from "expo-router";
 import {useState} from "react";
+import {useTranslation} from "react-i18next";
 
 const HomeScreen = () => {
 
   const theme = useTheme();
   const styles = createStyles(theme);
+  const {t} = useTranslation();
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
@@ -50,13 +52,13 @@ const HomeScreen = () => {
                       }}
                       >
                         <View style={{justifyContent: 'space-evenly'}}>
-                          <Text variant={"bodyLarge"}>Rok</Text>
+                          <Text variant={"bodyLarge"}>{t("deadline")}</Text>
                           <Text variant={"bodyLarge"}>16:20h 25.11.2024</Text>
                         </View>
                         <View style={{alignItems: "flex-end"}}>
-                          <Text variant={"bodyLarge"}>Usluga</Text>
+                          <Text variant={"bodyLarge"}>{t("service")}</Text>
                           <Text variant={"bodyLarge"}>{item.price} KM</Text>
-                          <Text variant={"bodyLarge"}>+ prateci troskovi</Text>
+                          <Text variant={"bodyLarge"}>{t("plusAccompanyingCosts")}</Text>
                         </View>
                       </View>
                     </Card.Actions>
@@ -66,7 +68,7 @@ const HomeScreen = () => {
                           onPress={() => showDialog()}
                           style={{width: '100%'}}
                           uppercase={true}
-                      >prihvati</Button>
+                      >{t("accept").toUpperCase()}</Button>
                     </Card.Actions>
                   </Card>
               )}/>
@@ -74,15 +76,15 @@ const HomeScreen = () => {
 
         <Portal>
           <Dialog visible={visible} onDismiss={hideDialog}>
-            <Dialog.Title>Potvrda</Dialog.Title>
+            <Dialog.Title>{t("confirmation")}</Dialog.Title>
             <Dialog.Content>
-              <Text variant="bodyMedium">Potvrdite obavezu izvrsavanja sledeceg zadatka:</Text>
+              <Text variant="bodyMedium">{t("confirmObligation")}</Text>
             </Dialog.Content>
             <Dialog.Content>
-              <Text variant="bodyMedium">Nazvi posla</Text>
+              <Text variant="bodyMedium">{t("jobTitle")}</Text>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={hideDialog}>ACCPET</Button>
+              <Button onPress={hideDialog}>{t("accept").toUpperCase()}</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

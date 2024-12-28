@@ -4,12 +4,15 @@ import {Button, MD3Theme, Text, useTheme} from "react-native-paper";
 import {router} from "expo-router";
 import React from "react";
 import {useAppDispatch} from "@/redux/hooks";
+import {useTranslation} from "react-i18next";
 
 const LoginScreen = () => {
 
   const theme = useTheme();
   const styles = createStyles(theme);
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
   return (
@@ -28,8 +31,7 @@ const LoginScreen = () => {
               contentStyle={{flexDirection: 'row-reverse'}}
               onPress={() => {
                 router.navigate('/home')
-              }}>
-            Continue with</Button>
+              }}>{t("continueWith")}</Button>
         </View>
       </Container>
   )

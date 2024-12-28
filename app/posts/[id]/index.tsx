@@ -12,6 +12,7 @@ import {
 } from "react-native-paper";
 import {useEffect, useState} from "react";
 import {HOME_ITEMS} from "@/constants/HomeItems";
+import {useTranslation} from "react-i18next";
 
 const PostTest = () => {
   const params = useLocalSearchParams();
@@ -22,6 +23,7 @@ const PostTest = () => {
 
   const theme = useTheme();
   const styles = createStyles(theme);
+  const {t} = useTranslation();
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
@@ -84,14 +86,14 @@ const PostTest = () => {
             }}>
 
               <View style={{justifyContent: 'space-evenly'}}>
-                <Text variant={"bodyLarge"}>Rok</Text>
+                <Text variant={"bodyLarge"}>{t("deadline")}</Text>
                 <Text variant={"bodyLarge"}>16:20h 25.11.2024</Text>
 
               </View>
               <View style={{alignItems: "flex-end"}}>
-                <Text variant={"bodyLarge"}>Usluga</Text>
+                <Text variant={"bodyLarge"}>{t("service")}</Text>
                 <Text variant={"bodyLarge"}>{post.price} KM</Text>
-                <Text variant={"bodyLarge"}>+ prateci troskovi</Text>
+                <Text variant={"bodyLarge"}>{t("plusAccompanyingCosts")}</Text>
               </View>
             </View>
           </Card.Content>
@@ -102,7 +104,7 @@ const PostTest = () => {
               height: 300,
               width: '100%'
             }}></View>
-            <Text>Contact: 065123456</Text>
+            <Text>{t("contact")} 065123456</Text>
           </Card.Content>
           <Card.Actions>
             {
@@ -112,7 +114,7 @@ const PostTest = () => {
                       onPress={() => showDialog()}
                       style={{width: '100%'}}
                       uppercase={true}
-                  >prihvati</Button>
+                  >{t("accept").toUpperCase()}</Button>
                 ) : (
                   <Button
                       mode="contained-tonal"
@@ -127,15 +129,15 @@ const PostTest = () => {
 
         <Portal>
           <Dialog visible={visible} onDismiss={hideDialog}>
-            <Dialog.Title>Potvrda</Dialog.Title>
+            <Dialog.Title>{t("confirmation")}</Dialog.Title>
             <Dialog.Content>
-              <Text variant="bodyMedium">Potvrdite obavezu izvrsavanja sledeceg zadatka:</Text>
+              <Text variant="bodyMedium">{t("confirmObligation")}</Text>
             </Dialog.Content>
             <Dialog.Content>
-              <Text variant="bodyMedium">Nazvi posla</Text>
+              <Text variant="bodyMedium">{t("jobTitle")}</Text>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={hideDialog}>ACCPET</Button>
+              <Button onPress={hideDialog}>{t("accept").toUpperCase()}</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

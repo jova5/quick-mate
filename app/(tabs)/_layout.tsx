@@ -6,10 +6,13 @@ import {BottomNavigation} from 'react-native-paper';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import HomeScreen from "@/app/(tabs)/home";
 import ProfileScreen from "@/app/(tabs)/profile";
+import {useTranslation} from "react-i18next";
 
 const Tab = createBottomTabNavigator();
 
 const HomeScreens = () => {
+
+  const {t} = useTranslation();
 
   return (
       <Tab.Navigator
@@ -55,7 +58,7 @@ const HomeScreens = () => {
             name="home"
             component={HomeScreen}
             options={{
-              tabBarLabel: 'Home',
+              tabBarLabel: t("home"),
               tabBarIcon: ({ color, size }) => {
                 return <Icon name="home" size={size} color={color} />;
               },
@@ -65,7 +68,7 @@ const HomeScreens = () => {
             name="profile"
             component={ProfileScreen}
             options={{
-              tabBarLabel: 'Profile',
+              tabBarLabel: t("profile"),
               tabBarIcon: ({ color, size }) => {
                 return <Icon name="account-circle" size={size} color={color} />;
               },

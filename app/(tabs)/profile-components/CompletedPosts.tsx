@@ -4,10 +4,12 @@ import {Chip, MD3Theme, Surface, Text, TouchableRipple, useTheme} from "react-na
 import {useAppDispatch} from "@/redux/hooks";
 import {showCompleteDialog} from "@/redux/post-slice/postSlice";
 import {router} from "expo-router";
+import {useTranslation} from "react-i18next";
 
 const CompletedPosts = () => {
   const theme = useTheme();
   const styles = createStyles(theme);
+  const {t} = useTranslation();
 
   const dispatch = useAppDispatch();
 
@@ -42,13 +44,13 @@ const CompletedPosts = () => {
                   }}
                   >
                     <View style={{justifyContent: 'space-evenly'}}>
-                      <Text variant={"bodyLarge"}>Rok</Text>
+                      <Text variant={"bodyLarge"}>{t("deadline")}</Text>
                       <Text variant={"bodyLarge"}>16:20h 25.11.2024</Text>
                     </View>
                     <View style={{alignItems: "flex-end"}}>
-                      <Text variant={"bodyLarge"}>Usluga</Text>
+                      <Text variant={"bodyLarge"}>{t("service")}</Text>
                       <Text variant={"bodyLarge"}>{item.price} KM</Text>
-                      <Text variant={"bodyLarge"}>+ prateci troskovi</Text>
+                      <Text variant={"bodyLarge"}>{t("plusAccompanyingCosts")}</Text>
                     </View>
                   </View>
                   {item.status === "IN_PROGRESS" ? (

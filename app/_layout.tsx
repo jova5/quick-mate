@@ -16,6 +16,9 @@ import merge from "deepmerge";
 import App from "@/app/app";
 import {Provider} from "react-redux";
 import {setupStore} from "@/redux/store";
+import "../assets/localization/i18n";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import i18next from "i18next";
 
 const store = setupStore();
 
@@ -44,7 +47,19 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
+    const loadLanguage = async ()=>{
+      try{
+        const storedLanguage = await AsyncStorage.getItem('LANGUAGE');
+        if (storedLanguage) {
+          i18next.changeLanguage(storedLanguage);
+        }
+      }catch(e){
+        console.log(e)
+      }
+
+    }
     if (loaded) {
+      loadLanguage()
       SplashScreen.hideAsync();
     }
   }, [loaded]);
