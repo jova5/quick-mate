@@ -47,13 +47,13 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    const loadLanguage = async ()=>{
-      try{
+    const loadLanguage = async () => {
+      try {
         const storedLanguage = await AsyncStorage.getItem('LANGUAGE');
         if (storedLanguage) {
           i18next.changeLanguage(storedLanguage);
         }
-      }catch(e){
+      } catch (e) {
         console.log(e)
       }
 

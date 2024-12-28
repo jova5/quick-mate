@@ -1,4 +1,4 @@
-import {Button, MD3Theme, Text, useTheme} from "react-native-paper";
+import {Button, MD3Theme, useTheme} from "react-native-paper";
 import {FlatList, Platform, ScrollView, StyleSheet} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {HOME_ITEMS} from "@/constants/HomeItems";
