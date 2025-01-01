@@ -5,6 +5,8 @@ import React, {useRef, useState} from "react";
 import {router} from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {useTranslation} from "react-i18next";
+import {addPost, CreatePostInterface, PostStatus} from "@/db/collections/posts";
+import {Timestamp} from "@firebase/firestore";
 
 const NewPost = () => {
 
@@ -28,6 +30,9 @@ const NewPost = () => {
   const [showDate, setShowDate] = useState<string | null>(null);
   const [dateTimeMode, setDateTimeMode] = useState<'date' | 'time' | undefined>(undefined);
   const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const [isPostCreating, setIsPostCreating] = useState<boolean>(false);
+
   const timeInputRef = useRef(null);
   const dateInputRef = useRef(null);
 
@@ -65,6 +70,39 @@ const NewPost = () => {
 
     setShowTimePicker(false);
   }
+
+  async function createPost() {
+
+    setIsPostCreating(true);
+
+    try {
+      const post: CreatePostInterface = {
+        title: "TEST",
+        description: "opis",
+        price: 12,
+        dueDateTime: Timestamp.fromDate(new Date('2024-02-27T19:00')),
+        destination: {latitude: 12.123, longitude: 13.321},
+        contactPhoneNumber: "123456789",
+        cityId: "123",
+        status: PostStatus.OPEN,
+        createdBy: "asd123",
+        workerUserId: "dsadsaqwe"
+      };
+
+      await addPost(post);
+
+      router.back();
+    } catch (e) {
+      console.log(e);
+      setIsPostCreating(false);
+      router.back();
+    } finally {
+      setIsPostCreating(false);
+      router.back();
+    }
+  }
+
+
   return (
       <>
         <View style={styles.container}>
@@ -141,9 +179,12 @@ const NewPost = () => {
               height: 300,
               width: '100%'
             }}></View>
-            <Button mode='contained' style={{marginBottom: 6}} onPress={() => {
-              router.push('/city', {})
-            }}>{t("post").toUpperCase()}</Button>
+            <Button
+                loading={isPostCreating}
+                mode='contained'
+                style={{marginBottom: 6}}
+                onPress={() => createPost()}
+            >{t("post").toUpperCase()}</Button>
           </ScrollView>
         </View>
         {

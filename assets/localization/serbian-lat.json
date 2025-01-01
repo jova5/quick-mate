@@ -30,5 +30,6 @@
   "IN_PROGRESS": "U toku",
   "COMPLETED": "Završeno",
   "OPEN": "Otvoreno",
-  "CANCELED": "Otkazano"
+  "CANCELED": "Otkazano",
+  "thereAreNoPosts": "Nema objava"
 }

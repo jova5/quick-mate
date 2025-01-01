@@ -1,10 +1,21 @@
-import {FlatList, Platform, ScrollView, StyleSheet, View} from "react-native";
+import {FlatList, Platform, RefreshControl, ScrollView, StyleSheet, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context"
-import {Button, Card, Dialog, FAB, MD3Theme, Portal, Text, useTheme} from "react-native-paper";
-import {HOME_ITEMS} from "@/constants/HomeItems";
+import {
+  ActivityIndicator,
+  Button,
+  Card,
+  Dialog,
+  FAB,
+  MD3Theme,
+  Portal,
+  Text,
+  useTheme
+} from "react-native-paper";
 import {router} from "expo-router";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
+import {acceptPost, getAllOpenPostsByCityId, PostInterface} from "@/db/collections/posts";
+import {formatDate} from "@/assets/functions/dateFormater";
 
 const HomeScreen = () => {
 
@@ -14,18 +25,88 @@ const HomeScreen = () => {
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
+
+  const [availablePosts, setAvailablePosts] = useState<PostInterface[] | null>(null);
+
   const [visible, setVisible] = useState(false);
+  const [isPostAccepting, setIsPostAccepting] = useState<boolean>(false);
+  const [arePostsLoading, setArePostsLoading] = useState<boolean>(false);
+  const [selectedPostForAccepting, setSelectedPostForAccepting] = useState<PostInterface | null>(null);
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
+
+  async function acceptSelectedPost(docId: string, workerUserId: string) {
+
+    setIsPostAccepting(true);
+
+    try {
+      await acceptPost(docId, workerUserId);
+      setIsPostAccepting(false);
+      hideDialog()
+      getAllOpenPosts("123");
+    } catch (e) {
+      console.log(e);
+      setIsPostAccepting(false);
+      hideDialog()
+    } finally {
+      setIsPostAccepting(false);
+      hideDialog()
+    }
+  }
+
+  async function getAllOpenPosts(cityId: string) {
+
+    setArePostsLoading(true);
+    setAvailablePosts(null);
+
+    try {
+      const result = await getAllOpenPostsByCityId(cityId);
+      const posts: PostInterface[] = result.docs.map((d): PostInterface => ({
+        ...d.data() as PostInterface,
+        id: d.id
+      }))
+      setAvailablePosts(posts);
+      setArePostsLoading(false);
+    } catch (e) {
+      console.log(e);
+      setArePostsLoading(false);
+    } finally {
+      setArePostsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getAllOpenPosts("123");
+  }, []);
 
   return (
       <View style={{flex: 1}}>
         <Container style={styles.container}>
           <FlatList
-              data={HOME_ITEMS}
+              data={availablePosts}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               keyExtractor={(item, _) => `${item.id}`}
+
+              contentContainerStyle={{flex: 1}}
+              ListEmptyComponent={() => {
+                if (arePostsLoading) {
+                  return <ActivityIndicator style={{flex: 1}} size="large" animating={true}/>
+                }
+                return <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
+                  <Text style={{textAlign: 'center'}}>{t("thereAreNoPosts")}</Text>
+                </View>;
+              }}
+
+              refreshControl={
+                <RefreshControl
+                    colors={[theme.colors.primary, theme.colors.primaryContainer]}
+                    refreshing={arePostsLoading}
+                    progressViewOffset={arePostsLoading ? -200 : 0}
+                    onRefresh={() => getAllOpenPosts("123")}
+                />
+              }
+
               renderItem={({item}) => (
                   <Card
                       key={`${item.id}`}
@@ -53,7 +134,9 @@ const HomeScreen = () => {
                       >
                         <View style={{justifyContent: 'space-evenly'}}>
                           <Text variant={"bodyLarge"}>{t("deadline")}</Text>
-                          <Text variant={"bodyLarge"}>16:20h 25.11.2024</Text>
+                          <Text variant={"bodyLarge"}>
+                            {formatDate(item.dueDateTime.toDate().toString())}
+                          </Text>
                         </View>
                         <View style={{alignItems: "flex-end"}}>
                           <Text variant={"bodyLarge"}>{t("service")}</Text>
@@ -65,7 +148,10 @@ const HomeScreen = () => {
                     <Card.Actions>
                       <Button
                           mode="contained-tonal"
-                          onPress={() => showDialog()}
+                          onPress={() => {
+                            setSelectedPostForAccepting(item);
+                            showDialog()
+                          }}
                           style={{width: '100%'}}
                           uppercase={true}
                       >{t("accept").toUpperCase()}</Button>
@@ -81,10 +167,13 @@ const HomeScreen = () => {
               <Text variant="bodyMedium">{t("confirmObligation")}</Text>
             </Dialog.Content>
             <Dialog.Content>
-              <Text variant="bodyMedium">{t("jobTitle")}</Text>
+              <Text variant="bodyMedium">{selectedPostForAccepting?.title}</Text>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={hideDialog}>{t("accept").toUpperCase()}</Button>
+              <Button
+                  loading={isPostAccepting}
+                  onPress={() => acceptSelectedPost(selectedPostForAccepting?.id!, "qwe")}
+              >{t("accept").toUpperCase()}</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

@@ -31,5 +31,6 @@
   "IN_PROGRESS": "In Progress",
   "COMPLETED": "Completed",
   "OPEN": "Open",
-  "CANCELED": "Canceled"
+  "CANCELED": "Canceled",
+  "thereAreNoPosts": "There are no posts"
 }
