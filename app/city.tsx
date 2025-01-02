@@ -1,29 +1,68 @@
-import {Button, MD3Theme, useTheme} from "react-native-paper";
-import {FlatList, Platform, ScrollView, StyleSheet} from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {HOME_ITEMS} from "@/constants/HomeItems";
+import {ActivityIndicator, Button, List, MD3Theme, useTheme} from "react-native-paper";
+import {StyleSheet, View} from "react-native";
+import {useEffect, useState} from "react";
+import {CountryInterface, getAllCities} from "@/db/collections/cities";
 
 const CityScreen = () => {
   const theme = useTheme();
   const styles = createStyles(theme);
 
-  const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
+  const [areCountriesLoading, setAreCountriesLoading] = useState<boolean>(false);
+  const [countries, setCountries] = useState<CountryInterface[]>([]);
 
-  return(
-      <Container style={styles.container}>
-        <FlatList
-            data={HOME_ITEMS}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item, _) => `${item.id}`}
-            renderItem={({item}) => {
-              return (
-                  <Button onPress={() => {
-                    console.log(item.id)}} style={{margin: 4}} mode='contained-tonal'>{item.title}</Button>
+  async function getAllCountriesWithCities() {
+
+    setAreCountriesLoading(true);
+    setCountries([]);
+
+    try {
+      const countries: CountryInterface[] = await getAllCities();
+      setCountries(countries);
+      setAreCountriesLoading(false);
+    } catch (e) {
+      console.log(e);
+      setAreCountriesLoading(false);
+    } finally {
+      setAreCountriesLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getAllCountriesWithCities();
+  }, [])
+
+  return (
+      <View style={styles.container}>
+        {
+          areCountriesLoading ?
+              (
+                  <ActivityIndicator style={{flex: 1}} size="large" animating={true}/>
               )
-            }}
-        />
-      </Container>
+              :
+              (
+                  <List.Section>
+                    {
+                      countries.map(country => {
+                        return (
+                            <List.Accordion key={country.id} title={country.name}>
+                              {
+                                country.cities.map(city => {
+                                  return (
+                                      <Button key={city.id} onPress={() => {
+                                        console.log(city.id)
+                                      }} style={{margin: 4}}
+                                              mode='contained-tonal'>{city.name}</Button>
+                                  )
+                                })
+                              }
+                            </List.Accordion>
+                        )
+                      })
+                    }
+                  </List.Section>
+              )
+        }
+      </View>
   )
 }
 

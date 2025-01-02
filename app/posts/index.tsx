@@ -77,16 +77,16 @@ const NewPost = () => {
 
     try {
       const post: CreatePostInterface = {
-        title: "TEST",
-        description: "opis",
-        price: 12,
-        dueDateTime: Timestamp.fromDate(new Date('2024-02-27T19:00')),
+        title: title,
+        description: description,
+        price: parseFloat(price),
+        dueDateTime: Timestamp.fromDate(new Date(`${date}T${time}`)),
         destination: {latitude: 12.123, longitude: 13.321},
-        contactPhoneNumber: "123456789",
+        contactPhoneNumber: contactNumber,
         cityId: "123",
         status: PostStatus.OPEN,
         createdBy: "asd123",
-        workerUserId: "dsadsaqwe"
+        workerUserId: ""
       };
 
       await addPost(post);
