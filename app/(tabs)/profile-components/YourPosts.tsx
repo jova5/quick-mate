@@ -1,10 +1,20 @@
-import {FlatList, StyleSheet, View} from "react-native";
+import {FlatList, RefreshControl, StyleSheet, View} from "react-native";
 import {HOME_ITEMS} from "@/constants/HomeItems";
-import {Chip, MD3Theme, Surface, Text, TouchableRipple, useTheme} from "react-native-paper";
+import {
+  ActivityIndicator,
+  Chip,
+  MD3Theme,
+  Surface,
+  Text,
+  TouchableRipple,
+  useTheme
+} from "react-native-paper";
 import {useAppDispatch} from "@/redux/hooks";
 import {showCompleteDialog} from "@/redux/post-slice/postSlice";
 import {router} from "expo-router";
 import {useTranslation} from "react-i18next";
+import {useEffect, useState} from "react";
+import {getAllUserPostsByUserId, PostInterface} from "@/db/collections/posts";
 
 const YourPosts = () => {
   const theme = useTheme();
@@ -13,13 +23,59 @@ const YourPosts = () => {
 
   const dispatch = useAppDispatch();
 
+  const [userPosts, setUserPosts] = useState<PostInterface[] | null>(null);
+  const [arePostsLoading, setArePostsLoading] = useState<boolean>(false);
+
+  async function getAllUserPosts(userId: string) {
+
+    setArePostsLoading(true);
+    setUserPosts(null);
+
+    try {
+      const posts: PostInterface[] = await getAllUserPostsByUserId(userId);
+
+      setUserPosts(posts);
+      setArePostsLoading(false);
+    } catch (e) {
+      console.log(e);
+      setArePostsLoading(false);
+    } finally {
+      setArePostsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getAllUserPosts("123");
+  }, []);
+
+
   return (
       <View style={{flexDirection: 'column', flex: 1}}>
         <FlatList
-            data={HOME_ITEMS}
+            data={userPosts}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item, _) => `${item.id}`}
+
+            contentContainerStyle={{flex: 1}}
+            ListEmptyComponent={() => {
+              if (arePostsLoading) {
+                return <ActivityIndicator style={{flex: 1}} size="large" animating={true}/>
+              }
+              return <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
+                <Text style={{textAlign: 'center'}}>{t("thereAreNoPosts")}</Text>
+              </View>;
+            }}
+
+            refreshControl={
+              <RefreshControl
+                  colors={[theme.colors.primary, theme.colors.primaryContainer]}
+                  refreshing={arePostsLoading}
+                  progressViewOffset={arePostsLoading ? -200 : 0}
+                  onRefresh={() => getAllUserPostsByUserId("123")}
+              />
+            }
+
             renderItem={({item}) => (
                 <TouchableRipple
                     key={`${item.id}`}
@@ -59,7 +115,7 @@ const YourPosts = () => {
                             style={{width: '100%', justifyContent: 'center', alignSelf: 'center'}}
                             textStyle={{width: '100%', textAlign: 'center'}}
                         >{t(item.status).toUpperCase()}</Chip>
-                    ):(
+                    ) : (
                         <Chip
                             style={{width: '100%', justifyContent: 'center', alignSelf: 'center'}}
                             textStyle={{width: '100%', textAlign: 'center'}}

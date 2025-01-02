@@ -3,14 +3,14 @@ import {useEffect, useState} from "react";
 import {ActivityIndicator, MD3Theme, useTheme} from "react-native-paper";
 import {Platform, ScrollView, StyleSheet} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {HOME_ITEMS} from "@/constants/HomeItems";
 import {useAppDispatch} from "@/redux/hooks";
 import {setExistingPostLoading, setExistingPostNotLoading} from "@/redux/post-slice/postSlice";
 import Post from "@/app/posts/[id]/PostScreen";
+import {getPost, PostInterface} from "@/db/collections/posts";
 
 const Layout = () => {
   const params = useLocalSearchParams();
-  const {id, other} = params;
+  const {id} = params;
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [post, setPost] = useState<any>(undefined);
@@ -21,23 +21,30 @@ const Layout = () => {
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
-  useEffect(() => {
+  async function getExistingPost(id: string) {
 
     dispatch(setExistingPostLoading());
 
-    const timer = setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const post: PostInterface | null = await getPost(id);
 
-      // Simulate some data
-      const post = HOME_ITEMS.find(item => item.id.toString() === id)
       navigation.setOptions({title: post?.title});
 
+      setIsLoading(false);
       setPost(post);
       dispatch(setExistingPostNotLoading());
-    }, 1000); // 5 seconds
+    } catch (e) {
+      console.log(e);
+      setIsLoading(false);
+      dispatch(setExistingPostNotLoading());
+    } finally {
+      setIsLoading(false);
+      dispatch(setExistingPostNotLoading());
+    }
+  }
 
-    // Cleanup timer on component unmount
-    return () => clearTimeout(timer);
+  useEffect(() => {
+    getExistingPost(id as string);
   }, [id, navigation]);
 
   if (isLoading) {
@@ -60,6 +67,7 @@ const createStyles = (theme: MD3Theme) => {
   return StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
+      justifyContent: 'center',
       flex: 1,
     }
   })

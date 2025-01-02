@@ -1,36 +1,37 @@
-import {Platform, ScrollView, StyleSheet, View} from "react-native";
+import {ScrollView, StyleSheet, View} from "react-native";
 import {Button, MD3Theme, TextInput, useTheme} from "react-native-paper";
-import {SafeAreaView} from "react-native-safe-area-context";
 import React, {useRef, useState} from "react";
 import {router} from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {useTranslation} from "react-i18next";
 import {addPost, CreatePostInterface, PostStatus} from "@/db/collections/posts";
 import {Timestamp} from "@firebase/firestore";
+import {useAppDispatch, useAppSelector} from "@/redux/hooks";
+import {selectCity, setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
+import {formatToISODate, formatToISOTime} from "@/assets/functions/dateFormater";
 
 const NewPost = () => {
 
   const theme = useTheme();
   const {t} = useTranslation();
 
-  const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
-
   const styles = createStyles(theme);
+
+  const {selectedCityId, selectedCityName} = useAppSelector(selectCity);
+  const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<string>('');
   const [contactNumber, setContactNumber] = useState<string>("");
   const [coordinates, setCoordinates] = useState<string>("");
-  const [cityId, setCityId] = useState<number>(0);
-
   const [time, setTime] = useState(null);
   const [date, setDate] = useState(null);
+
   const [showTime, setShowTime] = useState<string | null>(null);
   const [showDate, setShowDate] = useState<string | null>(null);
   const [dateTimeMode, setDateTimeMode] = useState<'date' | 'time' | undefined>(undefined);
   const [showTimePicker, setShowTimePicker] = useState(false);
-
   const [isPostCreating, setIsPostCreating] = useState<boolean>(false);
 
   const timeInputRef = useRef(null);
@@ -80,10 +81,10 @@ const NewPost = () => {
         title: title,
         description: description,
         price: parseFloat(price),
-        dueDateTime: Timestamp.fromDate(new Date(`${date}T${time}`)),
+        dueDateTime: Timestamp.fromDate(new Date(`${formatToISODate(date!)}T${formatToISOTime(time!)}`)),
         destination: {latitude: 12.123, longitude: 13.321},
         contactPhoneNumber: contactNumber,
-        cityId: "123",
+        cityId: selectedCityId,
         status: PostStatus.OPEN,
         createdBy: "asd123",
         workerUserId: ""
@@ -91,6 +92,8 @@ const NewPost = () => {
 
       await addPost(post);
 
+      dispatch(setSelectedCityId(""));
+      dispatch(setSelectedCityName(""));
       router.back();
     } catch (e) {
       console.log(e);
@@ -134,9 +137,9 @@ const NewPost = () => {
             <TextInput
                 mode="outlined"
                 label={t("city")}
-                value={''}
+                value={selectedCityName}
                 onPress={() => {
-                  router.push('/city', {})
+                  router.push('/city?mode=NEW_POST')
                 }}
             />
             <TextInput

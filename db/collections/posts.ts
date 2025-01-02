@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
   Timestamp,
@@ -68,4 +69,84 @@ export async function getAllOpenPostsByCityId(cityId: string) {
   );
 
   return await getDocs(posts);
+}
+
+export async function getAllCompletedPostsByUserId(userId: string): Promise<PostInterface[]> {
+
+  const posts = query(
+      postsCollection,
+      where("workerUserId", "==", userId),
+      where("status", "==", PostStatus.COMPLETED)
+  );
+
+  const t = await getDocs(posts);
+  return t.docs.map(doc => {
+    return {
+      ...doc.data() as PostInterface,
+      id: doc.id,
+    }
+  });
+}
+
+export async function getAllInProgressPostsByUserId(userId: string): Promise<PostInterface[]> {
+
+  const posts = query(
+      postsCollection,
+      where("workerUserId", "==", userId),
+      where("status", "==", PostStatus.IN_PROGRESS)
+  );
+
+  const t = await getDocs(posts);
+  return t.docs.map(doc => {
+    return {
+      ...doc.data() as PostInterface,
+      id: doc.id,
+    }
+  });
+}
+
+export async function getAllUserPostsByUserId(userId: string): Promise<PostInterface[]> {
+
+  const posts = query(
+      postsCollection,
+      where("createdBy", "==", userId)
+  );
+
+  const t = await getDocs(posts);
+  return t.docs.map(doc => {
+    return {
+      ...doc.data() as PostInterface,
+      id: doc.id,
+    }
+  });
+}
+
+export async function getPost(docId: string): Promise<PostInterface | null> {
+
+  const docRef = doc(postsCollection, docId);
+  const docSnapshot = await getDoc(docRef);
+
+  if (!docSnapshot.exists()) {
+    console.error(`Document with ID ${docId} does not exist.`);
+    return null;
+  }
+
+  const postData = docSnapshot.data();
+
+  return {
+    id: docSnapshot.id,
+    title: postData.title as string,
+    description: postData.description as string,
+    price: postData.price as number,
+    dueDateTime: postData.dueDateTime as Timestamp,
+    destination: {
+      latitude: postData.destination.latitude as number,
+      longitude: postData.destination.longitude as number,
+    } as GeoLocation,
+    contactPhoneNumber: postData.contactPhoneNumber as string,
+    cityId: postData.cityId as string,
+    status: postData.status as PostStatus,
+    createdBy: postData.createdBy as string,
+    workerUserId: postData.workerUserId as string,
+  };
 }

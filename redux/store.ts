@@ -1,10 +1,12 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import postReducer from "@/redux/post-slice/postSlice";
 import userReducer from "@/redux/user-slice/userSlice";
+import cityReducer from "@/redux/city-slice/citySlice";
 
 const rootReducer = combineReducers({
   post: postReducer,
-  user: userReducer
+  user: userReducer,
+  city: cityReducer
 });
 
 export function setupStore(preloadedState?: Partial<RootState>) {

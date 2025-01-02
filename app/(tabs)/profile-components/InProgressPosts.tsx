@@ -1,10 +1,19 @@
-import {FlatList, StyleSheet, View} from "react-native";
-import {HOME_ITEMS} from "@/constants/HomeItems";
-import {Chip, MD3Theme, Surface, Text, TouchableRipple, useTheme} from "react-native-paper";
+import {FlatList, RefreshControl, StyleSheet, View} from "react-native";
+import {
+  ActivityIndicator,
+  Chip,
+  MD3Theme,
+  Surface,
+  Text,
+  TouchableRipple,
+  useTheme
+} from "react-native-paper";
 import {useAppDispatch} from "@/redux/hooks";
 import {showCompleteDialog} from "@/redux/post-slice/postSlice";
 import {router} from "expo-router";
 import {useTranslation} from "react-i18next";
+import {useEffect, useState} from "react";
+import {getAllInProgressPostsByUserId, PostInterface} from "@/db/collections/posts";
 
 const InProgressPosts = () => {
   const theme = useTheme();
@@ -13,13 +22,58 @@ const InProgressPosts = () => {
 
   const dispatch = useAppDispatch();
 
+  const [inProgressPosts, setInProgressPosts] = useState<PostInterface[] | null>(null);
+  const [arePostsLoading, setArePostsLoading] = useState<boolean>(false);
+
+  async function getAllInProgressPosts(userId: string) {
+
+    setArePostsLoading(true);
+    setInProgressPosts(null);
+
+    try {
+      const posts: PostInterface[] = await getAllInProgressPostsByUserId(userId);
+
+      setInProgressPosts(posts);
+      setArePostsLoading(false);
+    } catch (e) {
+      console.log(e);
+      setArePostsLoading(false);
+    } finally {
+      setArePostsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getAllInProgressPosts("321");
+  }, []);
+
   return (
       <View style={{flexDirection: 'column', flex: 1}}>
         <FlatList
-            data={HOME_ITEMS.filter(item => item.status === "IN_PROGRESS")}
+            data={inProgressPosts}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item, _) => `${item.id}`}
+
+            contentContainerStyle={{flex: 1}}
+            ListEmptyComponent={() => {
+              if (arePostsLoading) {
+                return <ActivityIndicator style={{flex: 1}} size="large" animating={true}/>
+              }
+              return <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
+                <Text style={{textAlign: 'center'}}>{t("thereAreNoPosts")}</Text>
+              </View>;
+            }}
+
+            refreshControl={
+              <RefreshControl
+                  colors={[theme.colors.primary, theme.colors.primaryContainer]}
+                  refreshing={arePostsLoading}
+                  progressViewOffset={arePostsLoading ? -200 : 0}
+                  onRefresh={() => getAllInProgressPosts("321")}
+              />
+            }
+
             renderItem={({item}) => (
                 <TouchableRipple
                     key={`${item.id}`}

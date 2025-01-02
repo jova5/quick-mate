@@ -14,7 +14,7 @@ export interface CountryInterface {
 
 const countriesCollection = collection(db, 'countries')
 
-export async function getAllCities() {
+export async function getAllCities(): Promise<CountryInterface[]> {
 
   // Fetch all countries
   const countriesSnapshot: QuerySnapshot = await getDocs(countriesCollection);

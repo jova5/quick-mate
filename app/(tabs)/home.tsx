@@ -43,7 +43,7 @@ const HomeScreen = () => {
       await acceptPost(docId, workerUserId);
       setIsPostAccepting(false);
       hideDialog()
-      getAllOpenPosts("123");
+      getAllOpenPosts("BrWLKQPwUGrOarJve8D");
     } catch (e) {
       console.log(e);
       setIsPostAccepting(false);
@@ -76,7 +76,7 @@ const HomeScreen = () => {
   }
 
   useEffect(() => {
-    getAllOpenPosts("123");
+    getAllOpenPosts("BBrWLKQPwUGrOarJve8D");
   }, []);
 
   return (
@@ -103,7 +103,7 @@ const HomeScreen = () => {
                     colors={[theme.colors.primary, theme.colors.primaryContainer]}
                     refreshing={arePostsLoading}
                     progressViewOffset={arePostsLoading ? -200 : 0}
-                    onRefresh={() => getAllOpenPosts("123")}
+                    onRefresh={() => getAllOpenPosts("BBrWLKQPwUGrOarJve8D")}
                 />
               }
 
