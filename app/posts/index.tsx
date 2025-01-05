@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, View} from "react-native";
-import {Button, MD3Theme, TextInput, useTheme} from "react-native-paper";
+import {Button, Checkbox, MD3Theme, TextInput, useTheme} from "react-native-paper";
 import React, {useRef, useState} from "react";
 import {router} from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -27,6 +27,7 @@ const NewPost = () => {
   const [coordinates, setCoordinates] = useState<string>("");
   const [time, setTime] = useState(null);
   const [date, setDate] = useState(null);
+  const [cowerAdditionalCost, setCowerAdditionalCost] = useState<boolean>(false);
 
   const [showTime, setShowTime] = useState<string | null>(null);
   const [showDate, setShowDate] = useState<string | null>(null);
@@ -87,7 +88,8 @@ const NewPost = () => {
         cityId: selectedCityId,
         status: PostStatus.OPEN,
         createdBy: "asd123",
-        workerUserId: ""
+        workerUserId: "",
+        cowerAdditionalCost: cowerAdditionalCost
       };
 
       await addPost(post);
@@ -104,7 +106,6 @@ const NewPost = () => {
       router.back();
     }
   }
-
 
   return (
       <>
@@ -175,6 +176,15 @@ const NewPost = () => {
                 placeholder="11KM"
                 value={price}
                 onChangeText={text => setPrice(text)}
+            />
+            <Checkbox.Item
+                labelStyle={{textAlign:'left'}}
+                position="leading"
+                status={cowerAdditionalCost ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setCowerAdditionalCost(!cowerAdditionalCost);
+                }}
+                label={t("coverAdditionalCosts")}
             />
             <View style={{
               marginVertical: 12,

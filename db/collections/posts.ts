@@ -33,8 +33,8 @@ export interface CreatePostInterface {
   cityId: string,
   status: PostStatus,
   createdBy: string,
-  workerUserId: string
-//   TODO, dodaj pratece troskove
+  workerUserId: string,
+  cowerAdditionalCost: boolean
 }
 
 export interface PostInterface extends CreatePostInterface {
@@ -148,5 +148,6 @@ export async function getPost(docId: string): Promise<PostInterface | null> {
     status: postData.status as PostStatus,
     createdBy: postData.createdBy as string,
     workerUserId: postData.workerUserId as string,
+    cowerAdditionalCost: postData.cowerAdditionalCost as boolean
   };
 }

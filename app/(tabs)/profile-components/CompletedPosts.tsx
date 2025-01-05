@@ -104,7 +104,10 @@ const CompletedPosts = () => {
                       <View style={{alignItems: "flex-end"}}>
                         <Text variant={"bodyLarge"}>{t("service")}</Text>
                         <Text variant={"bodyLarge"}>{item.price} KM</Text>
-                        <Text variant={"bodyLarge"}>{t("plusAdditionalCost")}</Text>
+                        {
+                            item.cowerAdditionalCost
+                            && <Text variant={"bodyLarge"}>{t("plusAdditionalCosts")}</Text>
+                        }
                       </View>
                     </View>
                     {item.status === "IN_PROGRESS" ? (

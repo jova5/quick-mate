@@ -3,7 +3,7 @@
   "confirmObligation": "Potvrdite obavezu izvršavanja sledećeg zadatka:",
   "deadline": "Rok",
   "service": "Usluga",
-  "plusAdditionalCost": "+ prateći troškovi",
+  "plusAdditionalCosts": "+ prateći troškovi",
   "accept": "prihvati",
   "confirmation": "Potvrda!",
   "jobTitle": "Naziv posla",
@@ -31,5 +31,6 @@
   "COMPLETED": "Završeno",
   "OPEN": "Otvoreno",
   "CANCELED": "Otkazano",
-  "thereAreNoPosts": "Nema objava"
+  "thereAreNoPosts": "Nema objava",
+  "coverAdditionalCosts": "Ja pokrivam dodatne troškove"
 }

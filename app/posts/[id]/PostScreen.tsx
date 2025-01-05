@@ -68,7 +68,7 @@ const Post = ({post}:{post: PostInterface}) => {
               <View style={{alignItems: "flex-end"}}>
                 <Text variant={"bodyLarge"}>{t("service")}</Text>
                 <Text variant={"bodyLarge"}>{post.price} KM</Text>
-                <Text variant={"bodyLarge"}>{t("plusAdditionalCost")}</Text>
+                <Text variant={"bodyLarge"}>{t("plusAdditionalCosts")}</Text>
               </View>
             </View>
           </Card.Actions>
