@@ -1,3 +1,4 @@
+import "../db/firebaseConfig";
 import {useFonts} from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
@@ -5,13 +6,13 @@ import 'react-native-reanimated';
 import {useColorScheme} from '@/hooks/useColorScheme';
 import {adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, PaperProvider} from "react-native-paper";
 import {SafeAreaProvider} from "react-native-safe-area-context";
+
 import {Colors} from "@/constants/Colors";
 
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
-
 import merge from "deepmerge";
 import App from "@/app/app";
 import {Provider} from "react-redux";
@@ -60,7 +61,6 @@ export default function RootLayout() {
     }
     if (loaded) {
       loadLanguage()
-      SplashScreen.hideAsync();
     }
   }, [loaded]);
 

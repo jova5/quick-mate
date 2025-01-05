@@ -2,25 +2,26 @@ import {Platform, ScrollView, StyleSheet, View} from "react-native";
 import {
   Avatar,
   Button,
-  Dialog,
+  Dialog, Divider,
   IconButton,
-  MD3Theme,
+  MD3Theme, Menu,
   Portal,
   SegmentedButtons,
-  Text,
+  Text, TouchableRipple,
   useTheme
 } from "react-native-paper";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {useState} from "react";
-import InProgressPosts from "@/app/(tabs)/profile-components/InProgressPosts";
-import YourPosts from "@/app/(tabs)/profile-components/YourPosts";
-import CompletedPosts from "@/app/(tabs)/profile-components/CompletedPosts";
+import React, {useState} from "react";
+import InProgressPosts from "@/app/profile-components/InProgressPosts";
+import YourPosts from "@/app/profile-components/YourPosts";
+import CompletedPosts from "@/app/profile-components/CompletedPosts";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {hideCompleteDialog, selectPost} from "@/redux/post-slice/postSlice";
 import {router} from "expo-router";
 import Icon from "react-native-vector-icons/Ionicons";
 import {useTranslation} from "react-i18next";
 import {changeI18NLanguage} from "@/assets/localization/i18n";
+import {selectUser} from "@/redux/user-slice/userSlice";
 
 const ProfileScreen = () => {
   const theme = useTheme();
@@ -28,10 +29,13 @@ const ProfileScreen = () => {
   const {t} = useTranslation();
 
   const [value, setValue] = useState('in-progress-posts');
+  const [isLanguageModalShowing, setIsLanguageModalShowing] = useState(false);
+
   const dispatch = useAppDispatch();
   const {isCompleteDialogShowing} = useAppSelector(selectPost)
+  const {user} = useAppSelector(selectUser);
+
   const hideDialog = () => dispatch(hideCompleteDialog());
-  const [isLanguageModalShowing, setIsLanguageModalShowing] = useState(false);
   const hideLanguageModal = () => setIsLanguageModalShowing(false);
   const showLanguageModal = () => setIsLanguageModalShowing(true);
 
@@ -53,7 +57,13 @@ const ProfileScreen = () => {
             justifyContent: 'space-between',
             marginBottom: 4,
           }}>
-          <Avatar.Text size={40} label="XD"/>
+          <TouchableRipple
+              onPress={() => router.navigate("/profile-info")}
+              rippleColor="rgba(0, 0, 0, .32)"
+          >
+            <Avatar.Image source={{ uri: user!.photoURL! }} size={40}/>
+          </TouchableRipple>
+
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',

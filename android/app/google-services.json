@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "394706700488",
+    "project_id": "quick-mate",
+    "storage_bucket": "quick-mate.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394706700488:android:4badec7eebfb7237837dfd",
+        "android_client_info": {
+          "package_name": "com.anonymous.quickmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394706700488-i46gnrvhq126vcvmcte9re19lcm3qaaa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzF3InVQDkBzu_OoHu6sA_7DAEetCFC-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394706700488-i46gnrvhq126vcvmcte9re19lcm3qaaa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,11 @@
+<resources>
+  <color name="datePicker_colorAccent">#4d4357</color>
+  <color name="datePicker_textColorPrimaryInverse">#edddf6</color>
+  <color name="datePicker_textColorSecondaryInverse">#edddf6</color>
+  <color name="datePicker_windowBackground">#d0c1da</color>
+  <color name="datePicker_textColorSecondary">#362c3f</color>
+  <color name="datePicker_textColorPrimary">#362c3f</color>
+  <color name="timePicker_background">#d0c1da</color>
+  <color name="timePicker_headerBackground">#4d4357</color>
+  <color name="timePicker_numbersSelectorColor">#4d4357</color>
+</resources>
