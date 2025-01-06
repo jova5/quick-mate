@@ -2,23 +2,24 @@ import {Image, Platform, ScrollView, StyleSheet, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context"
 import {Button, Dialog, IconButton, MD3Theme, Portal, Text, useTheme} from "react-native-paper";
 import React, {useEffect, useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks";
+import {useAppDispatch} from "@/redux/hooks";
 import {useTranslation} from "react-i18next";
 import Icon from "react-native-vector-icons/Ionicons";
 import {changeI18NLanguage} from "@/assets/localization/i18n";
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import firebase from "firebase/compat";
-import {selectUser, setIsLoggedIn, setUserInfo, UserInfo} from "@/redux/user-slice/userSlice";
+import {setIsLoggedIn, setUserInfo, UserInfo} from "@/redux/user-slice/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {UserCredential} from "@firebase/auth-types";
-import {addUser, CreateUserInterface, getUser, UserInterface} from "@/db/collections/users";
-import auth = firebase.auth;
+import {
+  addUser,
+  checkUserByEmail,
+  CreateUserInterface,
+  getUser,
+  UserInterface
+} from "@/db/collections/users";
 import {router} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import {addPost, CreatePostInterface, PostStatus} from "@/db/collections/posts";
-import {Timestamp} from "@firebase/firestore";
-import {formatToISODate, formatToISOTime} from "@/assets/functions/dateFormater";
-import {setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
+import auth = firebase.auth;
 
 const LoginScreen = () => {
 
@@ -45,11 +46,6 @@ const LoginScreen = () => {
   }
 
   useEffect(() => {
-
-    // GoogleSignin.configure({
-    //   webClientId: "394706700488-i46gnrvhq126vcvmcte9re19lcm3qaaa.apps.googleusercontent.com",
-    // });
-
 
     checkIsLoggedIn().then(isLogged => {
       if (isLogged) {
@@ -174,21 +170,25 @@ const LoginScreen = () => {
 
   async function addLoggedUser(id: string, user: UserInfo) {
 
-    try {
-      const userData: CreateUserInterface = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        photoURL: user.photoURL,
-        phoneNumber: user.phoneNumber,
-        cityId: user.cityId,
-        notifyPhoneId: user.notifyPhoneId
-      };
+    const exists = await checkUserByEmail(user.email!);
 
-      await addUser(id, userData);
-    } catch (e) {
-      console.log(e);
-    } finally {
+    if (!exists) {
+      try {
+        const userData: CreateUserInterface = {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          photoURL: user.photoURL,
+          phoneNumber: user.phoneNumber,
+          cityId: user.cityId,
+          notifyPhoneId: user.notifyPhoneId
+        };
+
+        await addUser(id, userData);
+      } catch (e) {
+        console.log(e);
+      } finally {
+      }
     }
   }
 

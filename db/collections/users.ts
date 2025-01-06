@@ -1,4 +1,4 @@
-import {collection, doc, getDoc, setDoc} from "@firebase/firestore";
+import {collection, doc, getDoc, getDocs, query, setDoc, where} from "@firebase/firestore";
 import db from "@/db/firestore";
 
 
@@ -19,11 +19,6 @@ export interface UserInterface extends CreateUserInterface {
 const usersCollection = collection(db, 'users')
 
 export async function addUser(id: string, user: CreateUserInterface) {
-
-  console.log("ID");
-
-  console.log(id);
-  console.log(user)
 
   const userDocRef = doc(usersCollection, id);
 
@@ -62,4 +57,25 @@ export async function getUser(docId: string): Promise<UserInterface | null> {
     cityId: userData.cityId as string,
     photoURL: userData.photoURL as string,
   };
+}
+
+export async function checkUserByEmail(email: string) {
+
+  try {
+    const users = query(
+        usersCollection,
+        where('email', '==', email)
+    );
+
+    const querySnapshot = await getDocs(users);
+
+    if (querySnapshot.empty) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (error) {
+    console.error('Greška pri provjeri korisnika:', error);
+    return false;
+  }
 }
