@@ -1,19 +1,25 @@
 import {StyleSheet, View} from "react-native";
 import {Button, Card, Dialog, MD3Theme, Portal, Text, useTheme} from "react-native-paper";
-import {useState} from "react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {acceptPost, PostInterface} from "@/db/collections/posts";
+import {acceptPost, completePost, PostInterface} from "@/db/collections/posts";
 import {formatDate} from "@/assets/functions/dateFormater";
 import {router} from "expo-router";
+import {useAppSelector} from "@/redux/hooks";
+import {selectUser} from "@/redux/user-slice/userSlice";
 
-const Post = ({post}:{post: PostInterface}) => {
+const Post = ({post, mode}:{post: PostInterface, mode: string | undefined | string[]}) => {
 
   const theme = useTheme();
   const styles = createStyles(theme);
   const {t} = useTranslation();
 
+  const {user} = useAppSelector(selectUser);
+
   const [visible, setVisible] = useState(false);
   const [isPostAccepting, setIsPostAccepting] = useState<boolean>(false);
+  const [isPostCompleting, setIsPostCompleting] = useState<boolean>(false);
+  const [isCompleteDialogShowing, setIsCompleteDialogShowing] = useState<boolean>(false);
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
@@ -36,6 +42,25 @@ const Post = ({post}:{post: PostInterface}) => {
       hideDialog()
     }
   }
+
+  async function completeSelectedPost(docId: string) {
+
+    setIsPostCompleting(true);
+
+    try {
+      await completePost(docId);
+      setIsPostCompleting(false);
+      setIsCompleteDialogShowing(false);
+    } catch (e) {
+      console.log(e);
+      setIsPostCompleting(false);
+      setIsCompleteDialogShowing(false);
+    } finally {
+      setIsPostCompleting(false);
+      setIsCompleteDialogShowing(false);
+    }
+  }
+
   return (
       <View style={styles.container}>
         <Card
@@ -85,6 +110,7 @@ const Post = ({post}:{post: PostInterface}) => {
             {
               post.status === "OPEN" ? (
                   <Button
+                      disabled={post.createdBy === user!.id}
                       mode="contained-tonal"
                       onPress={() => showDialog()}
                       style={{width: '100%'}}
@@ -92,15 +118,35 @@ const Post = ({post}:{post: PostInterface}) => {
                   >{t("accept")}</Button>
                 ) : (
                   <Button
+                      disabled={mode === undefined || mode !== "IN_PROGRESS"}
                       mode="contained-tonal"
                       style={{width: '100%'}}
                       uppercase={true}
+                      onPress={() => setIsCompleteDialogShowing(true)}
                   >{t(post.status)}</Button>
               )
             }
 
           </Card.Actions>
         </Card>
+
+        <Portal>
+          <Dialog visible={isCompleteDialogShowing} onDismiss={() => setIsCompleteDialogShowing(false)}>
+            <Dialog.Title>{t("confirmation")}</Dialog.Title>
+            <Dialog.Content>
+              <Text variant="bodyMedium">{t("confirmCompletion")}</Text>
+            </Dialog.Content>
+            <Dialog.Content>
+              <Text variant="bodyMedium">{post.title}</Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button
+                  loading={isPostCompleting}
+                  onPress={() => completeSelectedPost(post.id)}
+              >{t("confirm").toUpperCase()}</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
 
         <Portal>
           <Dialog visible={visible} onDismiss={hideDialog}>

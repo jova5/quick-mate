@@ -1,8 +1,8 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from "@/redux/store";
-import {bool} from "prop-types";
 
 export interface UserInfo {
+  id: string | null | undefined,
   firstName: string | null | undefined,
   lastName: string | null | undefined,
   email: string | null | undefined,

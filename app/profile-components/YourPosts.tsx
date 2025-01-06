@@ -9,12 +9,14 @@ import {
   TouchableRipple,
   useTheme
 } from "react-native-paper";
-import {useAppDispatch} from "@/redux/hooks";
-import {showCompleteDialog} from "@/redux/post-slice/postSlice";
+import {useAppDispatch, useAppSelector} from "@/redux/hooks";
+import {setPostForCompletion, showCompleteDialog} from "@/redux/post-slice/postSlice";
 import {router} from "expo-router";
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
 import {getAllUserPostsByUserId, PostInterface} from "@/db/collections/posts";
+import {formatDate} from "@/assets/functions/dateFormater";
+import {selectUser} from "@/redux/user-slice/userSlice";
 
 const YourPosts = () => {
   const theme = useTheme();
@@ -22,6 +24,7 @@ const YourPosts = () => {
   const {t} = useTranslation();
 
   const dispatch = useAppDispatch();
+  const {user} = useAppSelector(selectUser);
 
   const [userPosts, setUserPosts] = useState<PostInterface[] | null>(null);
   const [arePostsLoading, setArePostsLoading] = useState<boolean>(false);
@@ -45,7 +48,7 @@ const YourPosts = () => {
   }
 
   useEffect(() => {
-    getAllUserPosts("123");
+    getAllUserPosts(user?.id!);
   }, []);
 
 
@@ -80,7 +83,7 @@ const YourPosts = () => {
                 <TouchableRipple
                     key={`${item.id}`}
                     style={{margin: 8, marginHorizontal: 16, borderRadius: 16}}
-                    onPress={() => router.push(`/posts/${item.id}`, {})}
+                    onPress={() => router.push(`/posts/${item.id}?mode=IN_PROGRESS`, {})}
                 >
                   <Surface style={styles.surface} elevation={4}>
                     <View style={{width: '100%', marginBottom: 4}}>
@@ -101,7 +104,8 @@ const YourPosts = () => {
                     >
                       <View style={{justifyContent: 'space-evenly'}}>
                         <Text variant={"bodyLarge"}>{t("deadline")}</Text>
-                        <Text variant={"bodyLarge"}>16:20h 25.11.2024</Text>
+                        <Text
+                            variant={"bodyLarge"}> {formatDate(item.dueDateTime.toDate().toString())}</Text>
                       </View>
                       <View style={{alignItems: "flex-end"}}>
                         <Text variant={"bodyLarge"}>{t("service")}</Text>
@@ -114,7 +118,10 @@ const YourPosts = () => {
                     </View>
                     {item.status === "IN_PROGRESS" ? (
                         <Chip
-                            onPress={() => dispatch(showCompleteDialog())}
+                            onPress={() => {
+                              dispatch(setPostForCompletion({title: item.title, id: item.id}));
+                              dispatch(showCompleteDialog());
+                            }}
                             style={{width: '100%', justifyContent: 'center', alignSelf: 'center'}}
                             textStyle={{width: '100%', textAlign: 'center'}}
                         >{t(item.status).toUpperCase()}</Chip>

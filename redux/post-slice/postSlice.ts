@@ -1,16 +1,20 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from "@/redux/store";
 
 // Define a type for the slice state
 interface PostState {
   isCompleteDialogShowing: boolean,
   existingPostLoading: boolean,
+  postForCompletionId: string | undefined,
+  postForCompletionTitle: string | undefined,
 }
 
 // Define the initial state using that type
 const initialState: PostState = {
   isCompleteDialogShowing: false,
-  existingPostLoading: false
+  existingPostLoading: false,
+  postForCompletionId: undefined,
+  postForCompletionTitle: undefined,
 }
 
 export const postSlice = createSlice({
@@ -30,6 +34,10 @@ export const postSlice = createSlice({
     setExistingPostNotLoading: (state: PostState) => {
       state.existingPostLoading = false;
     },
+    setPostForCompletion: (state: PostState, action: PayloadAction<{ title: string, id: string }>) => {
+      state.postForCompletionId = action.payload.id;
+      state.postForCompletionTitle = action.payload.title;
+    }
   },
 })
 
@@ -37,7 +45,8 @@ export const {
   showCompleteDialog,
   hideCompleteDialog,
   setExistingPostLoading,
-  setExistingPostNotLoading
+  setExistingPostNotLoading,
+  setPostForCompletion
 } = postSlice.actions
 
 export const selectPost = (state: RootState) => state.post

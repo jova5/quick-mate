@@ -10,7 +10,7 @@ import {getPost, PostInterface} from "@/db/collections/posts";
 
 const Layout = () => {
   const params = useLocalSearchParams();
-  const {id} = params;
+  const {id, mode} = params;
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [post, setPost] = useState<any>(undefined);
@@ -57,7 +57,7 @@ const Layout = () => {
   }
 
   return (
-      <Post post={post}/>
+      <Post post={post} mode={mode}/>
   )
 }
 

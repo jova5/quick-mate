@@ -16,6 +16,8 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {acceptPost, getAllOpenPostsByCityId, PostInterface} from "@/db/collections/posts";
 import {formatDate} from "@/assets/functions/dateFormater";
+import {useAppSelector} from "@/redux/hooks";
+import {selectUser} from "@/redux/user-slice/userSlice";
 
 const HomeScreen = () => {
 
@@ -25,6 +27,7 @@ const HomeScreen = () => {
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
+  const {user} = useAppSelector(selectUser);
 
   const [availablePosts, setAvailablePosts] = useState<PostInterface[] | null>(null);
 
@@ -142,7 +145,7 @@ const HomeScreen = () => {
                           <Text variant={"bodyLarge"}>{t("service")}</Text>
                           <Text variant={"bodyLarge"}>{item.price} KM</Text>
                           {
-                            item.cowerAdditionalCost
+                              item.cowerAdditionalCost
                               && <Text variant={"bodyLarge"}>{t("plusAdditionalCosts")}</Text>
                           }
                         </View>
@@ -150,6 +153,7 @@ const HomeScreen = () => {
                     </Card.Actions>
                     <Card.Actions>
                       <Button
+                          disabled={item.createdBy === user?.id}
                           mode="contained-tonal"
                           onPress={() => {
                             setSelectedPostForAccepting(item);
@@ -175,7 +179,7 @@ const HomeScreen = () => {
             <Dialog.Actions>
               <Button
                   loading={isPostAccepting}
-                  onPress={() => acceptSelectedPost(selectedPostForAccepting?.id!, "qwe")}
+                  onPress={() => acceptSelectedPost(selectedPostForAccepting?.id!, user!.id!)}
               >{t("accept").toUpperCase()}</Button>
             </Dialog.Actions>
           </Dialog>

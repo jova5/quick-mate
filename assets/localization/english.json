@@ -33,5 +33,7 @@
   "OPEN": "Open",
   "CANCELED": "Canceled",
   "thereAreNoPosts": "There are no posts",
-  "coverAdditionalCosts": "I cover additional costs"
+  "coverAdditionalCosts": "I cover additional costs",
+  "confirm": "Confirm",
+  "profileInfo": "Profile info"
 }

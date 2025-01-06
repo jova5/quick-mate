@@ -2,12 +2,13 @@ import {Platform, ScrollView, StyleSheet, View} from "react-native";
 import {
   Avatar,
   Button,
-  Dialog, Divider,
+  Dialog,
   IconButton,
-  MD3Theme, Menu,
+  MD3Theme,
   Portal,
   SegmentedButtons,
-  Text, TouchableRipple,
+  Text,
+  TouchableRipple,
   useTheme
 } from "react-native-paper";
 import {SafeAreaView} from "react-native-safe-area-context";
@@ -22,6 +23,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import {useTranslation} from "react-i18next";
 import {changeI18NLanguage} from "@/assets/localization/i18n";
 import {selectUser} from "@/redux/user-slice/userSlice";
+import {completePost} from "@/db/collections/posts";
 
 const ProfileScreen = () => {
   const theme = useTheme();
@@ -30,9 +32,10 @@ const ProfileScreen = () => {
 
   const [value, setValue] = useState('in-progress-posts');
   const [isLanguageModalShowing, setIsLanguageModalShowing] = useState(false);
+  const [isPostCompleting, setIsPostCompleting] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
-  const {isCompleteDialogShowing} = useAppSelector(selectPost)
+  const {isCompleteDialogShowing, postForCompletionId, postForCompletionTitle} = useAppSelector(selectPost)
   const {user} = useAppSelector(selectUser);
 
   const hideDialog = () => dispatch(hideCompleteDialog());
@@ -47,6 +50,24 @@ const ProfileScreen = () => {
   }
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
+
+  async function completeSelectedPost(docId: string) {
+
+    setIsPostCompleting(true);
+
+    try {
+      await completePost(docId);
+      setIsPostCompleting(false);
+      hideDialog()
+    } catch (e) {
+      console.log(e);
+      setIsPostCompleting(false);
+      hideDialog()
+    } finally {
+      setIsPostCompleting(false);
+      hideDialog()
+    }
+  }
 
   return (
       <Container style={styles.container}>
@@ -123,10 +144,13 @@ const ProfileScreen = () => {
               <Text variant="bodyMedium">{t("confirmCompletion")}</Text>
             </Dialog.Content>
             <Dialog.Content>
-              <Text variant="bodyMedium">{t("jobTitle")}</Text>
+              <Text variant="bodyMedium">{postForCompletionTitle}</Text>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={hideDialog}>{t("accept").toUpperCase()}</Button>
+              <Button
+                  loading={isPostCompleting}
+                  onPress={() => completeSelectedPost(postForCompletionId!)}
+              >{t("confirm").toUpperCase()}</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

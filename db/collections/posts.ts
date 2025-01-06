@@ -82,8 +82,18 @@ export async function getAllCompletedPostsByUserId(userId: string): Promise<Post
   const t = await getDocs(posts);
   return t.docs.map(doc => {
     return {
-      ...doc.data() as PostInterface,
       id: doc.id,
+      title: doc.data().title,
+      description: doc.data().description,
+      price: doc.data().price,
+      dueDateTime: doc.data().dueDateTime,
+      destination: doc.data().destination as GeoLocation,
+      contactPhoneNumber: doc.data().contactPhoneNumber,
+      cityId: doc.data().cityId,
+      status: doc.data().status as PostStatus,
+      createdBy: doc.data().createdBy,
+      workerUserId: doc.data().workerUserId,
+      cowerAdditionalCost: doc.data().cowerAdditionalCost
     }
   });
 }
@@ -99,8 +109,18 @@ export async function getAllInProgressPostsByUserId(userId: string): Promise<Pos
   const t = await getDocs(posts);
   return t.docs.map(doc => {
     return {
-      ...doc.data() as PostInterface,
       id: doc.id,
+      title: doc.data().title,
+      description: doc.data().description,
+      price: doc.data().price,
+      dueDateTime: doc.data().dueDateTime,
+      destination: doc.data().destination as GeoLocation,
+      contactPhoneNumber: doc.data().contactPhoneNumber,
+      cityId: doc.data().cityId,
+      status: doc.data().status as PostStatus,
+      createdBy: doc.data().createdBy,
+      workerUserId: doc.data().workerUserId,
+      cowerAdditionalCost: doc.data().cowerAdditionalCost
     }
   });
 }
@@ -115,8 +135,18 @@ export async function getAllUserPostsByUserId(userId: string): Promise<PostInter
   const t = await getDocs(posts);
   return t.docs.map(doc => {
     return {
-      ...doc.data() as PostInterface,
       id: doc.id,
+      title: doc.data().title,
+      description: doc.data().description,
+      price: doc.data().price,
+      dueDateTime: doc.data().dueDateTime,
+      destination: doc.data().destination as GeoLocation,
+      contactPhoneNumber: doc.data().contactPhoneNumber,
+      cityId: doc.data().cityId,
+      status: doc.data().status as PostStatus,
+      createdBy: doc.data().createdBy,
+      workerUserId: doc.data().workerUserId,
+      cowerAdditionalCost: doc.data().cowerAdditionalCost
     }
   });
 }
@@ -150,4 +180,11 @@ export async function getPost(docId: string): Promise<PostInterface | null> {
     workerUserId: postData.workerUserId as string,
     cowerAdditionalCost: postData.cowerAdditionalCost as boolean
   };
+}
+
+export async function completePost(docId: string) {
+
+  const docRef = doc(postsCollection, docId);
+
+  return await updateDoc(docRef, {status: PostStatus.COMPLETED})
 }

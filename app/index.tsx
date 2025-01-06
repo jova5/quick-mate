@@ -55,6 +55,7 @@ const LoginScreen = () => {
 
         getLoggedUser().then(loggedUser => {
           userInfo = {
+            id: loggedUser?.id,
             firstName: loggedUser?.firstName,
             lastName: loggedUser?.lastName,
             email: loggedUser?.email,
@@ -137,6 +138,7 @@ const LoginScreen = () => {
       const userI = userCredential.user;
 
       const userInfo = {
+        id: user.user.id,
         firstName: user?.user.givenName,
         lastName: user?.user.familyName,
         email: user?.user.email,

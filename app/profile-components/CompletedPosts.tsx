@@ -14,6 +14,7 @@ import {router} from "expo-router";
 import {useTranslation} from "react-i18next";
 import {getAllCompletedPostsByUserId, PostInterface} from "@/db/collections/posts";
 import {useEffect, useState} from "react";
+import {formatDate} from "@/assets/functions/dateFormater";
 
 const CompletedPosts = () => {
   const theme = useTheme();
@@ -99,7 +100,8 @@ const CompletedPosts = () => {
                     >
                       <View style={{justifyContent: 'space-evenly'}}>
                         <Text variant={"bodyLarge"}>{t("deadline")}</Text>
-                        <Text variant={"bodyLarge"}>16:20h 25.11.2024</Text>
+                        <Text
+                            variant={"bodyLarge"}> {formatDate(item.dueDateTime.toDate().toString())}</Text>
                       </View>
                       <View style={{alignItems: "flex-end"}}>
                         <Text variant={"bodyLarge"}>{t("service")}</Text>
