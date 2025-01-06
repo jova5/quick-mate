@@ -164,7 +164,7 @@ const LoginScreen = () => {
 
       return userCredential;
     } catch (e) {
-      console.log("error: " + e)
+      console.log("error continue with google: " + e)
       setIsLoggedUserLoading(false);
 
     }

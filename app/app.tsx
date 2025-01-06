@@ -6,8 +6,7 @@ import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
 import {GoogleSignin} from "@react-native-google-signin/google-signin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {selectUser, setIsLoggedIn, setUserInfo} from "@/redux/user-slice/userSlice";
-import * as SplashScreen from "expo-splash-screen";
+import {selectUser} from "@/redux/user-slice/userSlice";
 import {useAppSelector} from "@/redux/hooks";
 
 const App = () => {
