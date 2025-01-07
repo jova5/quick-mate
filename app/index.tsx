@@ -137,20 +137,46 @@ const LoginScreen = () => {
 
       const userI = userCredential.user;
 
-      const userInfo = {
-        id: user.user.id,
-        firstName: user?.user.givenName,
-        lastName: user?.user.familyName,
-        email: user?.user.email,
-        phoneNumber: userI?.phoneNumber,
-        notifyPhoneId: null,
-        cityId: null,
-        photoURL: user?.user.photo,
+      let userInfo;
+
+      const exists = await checkUserByEmail(user?.user.email);
+
+      if (!exists) {
+
+        userInfo = {
+          id: user.user.id,
+          firstName: user?.user.givenName,
+          lastName: user?.user.familyName,
+          email: user?.user.email,
+          phoneNumber: userI?.phoneNumber,
+          notifyPhoneId: null,
+          cityId: null,
+          photoURL: user?.user.photo,
+          cityName: null,
+        }
+
+        await addLoggedUser(user.user.id, userInfo);
+
+        dispatch(setUserInfo(userInfo));
+      } else {
+        const userId = GoogleSignin.getCurrentUser()?.user.id;
+
+        const loggedUser: UserInterface | null = await getUser(userId!);
+
+        userInfo = {
+          id: loggedUser?.id,
+          firstName: loggedUser?.firstName,
+          lastName: loggedUser?.lastName,
+          email: loggedUser?.email,
+          phoneNumber: loggedUser?.phoneNumber,
+          notifyPhoneId: loggedUser?.notifyPhoneId,
+          cityId: loggedUser?.cityId,
+          photoURL: loggedUser?.photoURL,
+          cityName: loggedUser?.cityName,
+        }
+
+        dispatch(setUserInfo(userInfo));
       }
-
-      dispatch(setUserInfo(userInfo));
-
-      await addLoggedUser(user.user.id, userInfo);
 
       await AsyncStorage.setItem('AUTH_TOKEN', user?.idToken);
       dispatch(setIsLoggedIn(true));
@@ -158,7 +184,11 @@ const LoginScreen = () => {
       // navigiraj podesavanje telefonskog broja
       // navigiraj podesavanje grada
 
-      router.navigate('/home')
+      if (!exists || userInfo.phoneNumber === null || userInfo.phoneNumber === undefined || userInfo.phoneNumber === "") {
+        router.navigate('/after-login-setup');
+      }else{
+        router.navigate('/home')
+      }
 
       setIsLoggedUserLoading(false);
 
@@ -172,9 +202,6 @@ const LoginScreen = () => {
 
   async function addLoggedUser(id: string, user: UserInfo) {
 
-    const exists = await checkUserByEmail(user.email!);
-
-    if (!exists) {
       try {
         const userData: CreateUserInterface = {
           firstName: user.firstName,
@@ -183,7 +210,8 @@ const LoginScreen = () => {
           photoURL: user.photoURL,
           phoneNumber: user.phoneNumber,
           cityId: user.cityId,
-          notifyPhoneId: user.notifyPhoneId
+          notifyPhoneId: user.notifyPhoneId,
+          cityName: user.cityName
         };
 
         await addUser(id, userData);
@@ -191,7 +219,7 @@ const LoginScreen = () => {
         console.log(e);
       } finally {
       }
-    }
+
   }
 
   return (

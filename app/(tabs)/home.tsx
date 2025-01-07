@@ -16,13 +16,16 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {acceptPost, getAllOpenPostsByCityId, PostInterface} from "@/db/collections/posts";
 import {formatDate} from "@/assets/functions/dateFormater";
-import {useAppSelector} from "@/redux/hooks";
-import {selectUser} from "@/redux/user-slice/userSlice";
+import {useAppDispatch, useAppSelector} from "@/redux/hooks";
+import {selectUser, setUserInfo} from "@/redux/user-slice/userSlice";
+import {GoogleSignin} from "@react-native-google-signin/google-signin";
+import {getUser, UserInterface} from "@/db/collections/users";
 
 const HomeScreen = () => {
 
   const theme = useTheme();
   const styles = createStyles(theme);
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
@@ -46,7 +49,7 @@ const HomeScreen = () => {
       await acceptPost(docId, workerUserId);
       setIsPostAccepting(false);
       hideDialog()
-      getAllOpenPosts("BrWLKQPwUGrOarJve8D");
+      getAllOpenPosts(user!.cityId!);
     } catch (e) {
       console.log(e);
       setIsPostAccepting(false);
@@ -78,8 +81,30 @@ const HomeScreen = () => {
     }
   }
 
+  const loadUser = async () => {
+    const userId = GoogleSignin.getCurrentUser()?.user.id;
+
+    const loggedUser: UserInterface | null = await getUser(userId!);
+
+    const userInfo = {
+      id: loggedUser?.id,
+      firstName: loggedUser?.firstName,
+      lastName: loggedUser?.lastName,
+      email: loggedUser?.email,
+      phoneNumber: loggedUser?.phoneNumber,
+      notifyPhoneId: loggedUser?.notifyPhoneId,
+      cityId: loggedUser?.cityId,
+      photoURL: loggedUser?.photoURL,
+      cityName: loggedUser?.cityName,
+    }
+
+    dispatch(setUserInfo(userInfo));
+
+    getAllOpenPosts(userInfo.cityId!);
+  }
+
   useEffect(() => {
-    getAllOpenPosts("BBrWLKQPwUGrOarJve8D");
+    loadUser();
   }, []);
 
   return (
@@ -106,7 +131,7 @@ const HomeScreen = () => {
                     colors={[theme.colors.primary, theme.colors.primaryContainer]}
                     refreshing={arePostsLoading}
                     progressViewOffset={arePostsLoading ? -200 : 0}
-                    onRefresh={() => getAllOpenPosts("BBrWLKQPwUGrOarJve8D")}
+                    onRefresh={() => getAllOpenPosts(user!.cityId!)}
                 />
               }
 

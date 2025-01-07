@@ -5,12 +5,14 @@ import {RootState} from "@/redux/store";
 interface CityState {
   selectedCityId: string
   selectedCityName: string
+  cities: any[]
 }
 
 // Define the initial state using that type
 const initialState: CityState = {
   selectedCityId: "",
-  selectedCityName: ""
+  selectedCityName: "",
+  cities: []
 }
 
 export const citySlice = createSlice({
@@ -24,6 +26,9 @@ export const citySlice = createSlice({
     setSelectedCityName: (state: CityState, action: PayloadAction<string>) => {
       state.selectedCityName = action.payload;
     },
+    setCities: (state: CityState, action: PayloadAction<any[]>) => {
+      state.cities = action.payload;
+    }
   },
 })
 

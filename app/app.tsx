@@ -65,6 +65,14 @@ const App = () => {
               headerTitleStyle: {color: theme.colors.onSurfaceVariant},
               headerTintColor: theme.colors.onSurfaceVariant
             }}/>
+          <Stack.Screen name="after-login-setup" options={
+            {
+              headerShown: false,
+              // headerStyle: {backgroundColor: theme.colors.surfaceVariant},
+              // headerShadowVisible: false,
+              // headerTitleStyle: {color: theme.colors.onSurfaceVariant},
+              // headerTintColor: theme.colors.onSurfaceVariant
+            }}/>
           <Stack.Screen name="+not-found"/>
         </Stack>
         <StatusBar style={colorScheme === "dark" ? "light" : "dark"}/>

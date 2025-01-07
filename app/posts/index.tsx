@@ -9,6 +9,7 @@ import {Timestamp} from "@firebase/firestore";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectCity, setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
 import {formatToISODate, formatToISOTime} from "@/assets/functions/dateFormater";
+import {selectUser} from "@/redux/user-slice/userSlice";
 
 const NewPost = () => {
 
@@ -18,6 +19,7 @@ const NewPost = () => {
   const styles = createStyles(theme);
 
   const {selectedCityId, selectedCityName} = useAppSelector(selectCity);
+  const {user} = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState<string>("");
@@ -87,13 +89,14 @@ const NewPost = () => {
         contactPhoneNumber: contactNumber,
         cityId: selectedCityId,
         status: PostStatus.OPEN,
-        createdBy: "asd123",
+        createdBy: user!.id as string,
         workerUserId: "",
         cowerAdditionalCost: cowerAdditionalCost
       };
 
       await addPost(post);
 
+      // TODO mozda ovo treba ukloniti
       dispatch(setSelectedCityId(""));
       dispatch(setSelectedCityName(""));
       router.back();

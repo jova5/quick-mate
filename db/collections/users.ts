@@ -1,4 +1,13 @@
-import {collection, doc, getDoc, getDocs, query, setDoc, where} from "@firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where
+} from "@firebase/firestore";
 import db from "@/db/firestore";
 
 
@@ -9,7 +18,8 @@ export interface CreateUserInterface {
   phoneNumber: string | null | undefined,
   notifyPhoneId: string | null | undefined,
   cityId: string | null | undefined,
-  photoURL: string | null | undefined
+  photoURL: string | null | undefined,
+  cityName: string | null | undefined
 }
 
 export interface UserInterface extends CreateUserInterface {
@@ -24,16 +34,6 @@ export async function addUser(id: string, user: CreateUserInterface) {
 
   return await setDoc(userDocRef, user);
 }
-// ISKORISTITI ZA AZURIRANJE KORISNIKA
-// export async function acceptPost(docId: string, workerUserId: string) {
-//
-//   const docRef = doc(postsCollection, docId);
-//
-//   const userDocRef = doc(usersCollection, id);
-//   await setDoc(userDocRef, user);
-//
-//   return await updateDoc(docRef, {workerUserId: workerUserId, status: PostStatus.IN_PROGRESS})
-// }
 
 export async function getUser(docId: string): Promise<UserInterface | null> {
 
@@ -56,6 +56,7 @@ export async function getUser(docId: string): Promise<UserInterface | null> {
     notifyPhoneId: userData.notifyPhoneId as string,
     cityId: userData.cityId as string,
     photoURL: userData.photoURL as string,
+    cityName: userData.cityName as string,
   };
 }
 
@@ -78,4 +79,19 @@ export async function checkUserByEmail(email: string) {
     console.error('Greška pri provjeri korisnika:', error);
     return false;
   }
+}
+
+export async function updateUserPhoneNumberAndCityId(docId: string, phoneNumber: string, cityId: string, cityName: string) {
+
+  const userDocRef = doc(usersCollection, docId);
+
+  return await updateDoc(userDocRef, {phoneNumber: phoneNumber, cityId: cityId, cityName: cityName})
+}
+
+
+export async function updateUserCity(docId: string, cityId: string, cityName: string) {
+
+  const userDocRef = doc(usersCollection, docId);
+
+  return await updateDoc(userDocRef, {cityId: cityId, cityName: cityName})
 }

@@ -9,7 +9,8 @@ export interface UserInfo {
   phoneNumber: string | null | undefined,
   notifyPhoneId: string | null | undefined,
   cityId: string | null | undefined,
-  photoURL: string | null | undefined
+  photoURL: string | null | undefined,
+  cityName: string | null | undefined
 }
 
 // Define a type for the slice state
@@ -29,16 +30,25 @@ export const userSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setUserInfo(state, action: PayloadAction<UserInfo | undefined>) {
+    setUserInfo: (state, action: PayloadAction<UserInfo | undefined>) => {
       state.user = action.payload;
     },
-    setIsLoggedIn(state, action: PayloadAction<boolean>) {
+    setIsLoggedIn: (state, action: PayloadAction<boolean>) => {
       state.isLoggedIn = action.payload;
+    },
+    setUserPhoneAndCity: (state, action: PayloadAction<{
+      phoneNumber: string | null | undefined,
+      cityId: string | null | undefined,
+      cityName: string | null | undefined
+    }>) => {
+      state.user!.phoneNumber = action.payload.phoneNumber;
+      state.user!.cityId = action.payload.cityId;
+      state.user!.cityName = action.payload.cityName;
     }
   },
 })
 
-export const {setUserInfo, setIsLoggedIn} = userSlice.actions
+export const {setUserInfo, setIsLoggedIn, setUserPhoneAndCity} = userSlice.actions
 
 export const selectUser = (state: RootState) => state.user
 

@@ -91,8 +91,8 @@ const ProfileScreen = () => {
             justifyContent: 'space-between'
           }}>
             <Button mode='outlined' onPress={() => {
-              router.push('/city', {})
-            }}>{t("city")}</Button>
+              router.push('/city?mode=CHANGE_USER_CITY', {})
+            }}>{user ? user.cityName : t("city")}</Button>
             <IconButton
                 onPress={showLanguageModal}
                 icon={({size, color}) => {
