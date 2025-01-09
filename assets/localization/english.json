@@ -36,5 +36,7 @@
   "coverAdditionalCosts": "I cover additional costs",
   "confirm": "Confirm",
   "profileInfo": "Profile info",
-  "logOut": "Log out"
+  "logOut": "Log out",
+  "address": "Address",
+  "search": "Search"
 }

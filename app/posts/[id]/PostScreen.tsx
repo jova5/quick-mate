@@ -1,12 +1,13 @@
-import {StyleSheet, View} from "react-native";
+import {Linking, Platform, StyleSheet, View} from "react-native";
 import {Button, Card, Dialog, MD3Theme, Portal, Text, useTheme} from "react-native-paper";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {acceptPost, completePost, PostInterface} from "@/db/collections/posts";
+import {acceptPost, completePost, GeoLocation, PostInterface} from "@/db/collections/posts";
 import {formatDate} from "@/assets/functions/dateFormater";
 import {router} from "expo-router";
 import {useAppSelector} from "@/redux/hooks";
 import {selectUser} from "@/redux/user-slice/userSlice";
+import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 
 const Post = ({post, mode}:{post: PostInterface, mode: string | undefined | string[]}) => {
 
@@ -61,6 +62,20 @@ const Post = ({post, mode}:{post: PostInterface, mode: string | undefined | stri
     }
   }
 
+  const openGoogleMaps = (destination: GeoLocation) => {
+
+    // Create the URL to open Google Maps
+    const url = Platform.select({
+      ios: `comgooglemaps://?q=${destination.latitude},${destination.longitude}`, // URL for iOS
+      android: `geo:${destination.latitude},${destination.longitude}?q=${destination.latitude},${destination.longitude}` // URL for Android
+    });
+
+    // Open the map using Linking API
+    if (typeof url === "string") {
+      Linking.openURL(url).catch(err => console.error('Error opening map:', err));
+    }
+  };
+
   return (
       <View style={styles.container}>
         <Card
@@ -100,10 +115,32 @@ const Post = ({post, mode}:{post: PostInterface, mode: string | undefined | stri
           <Card.Content>
             <View style={{
               marginVertical: 12,
-              backgroundColor: 'blue',
               height: 300,
               width: '100%'
-            }}></View>
+            }}>
+              <MapView
+                  onPress={() => openGoogleMaps(post.destination)}
+                  provider={PROVIDER_GOOGLE}
+                  style={styles.map}
+                  region={{
+                    latitude: 43.9,
+                    longitude: 17.7,
+                    latitudeDelta: 2.8,
+                    longitudeDelta: 2.8,
+                  }}
+              >
+                {post.destination.longitude !== null && (
+                    <Marker
+                        coordinate={
+                          {
+                            latitude: post.destination.latitude,
+                            longitude: post.destination.longitude
+                          }
+                        }
+                    />
+                )}
+              </MapView>
+            </View>
             <Text>{t("contact")} {post.contactPhoneNumber}</Text>
           </Card.Content>
           <Card.Actions>
@@ -176,6 +213,9 @@ const createStyles = (theme: MD3Theme) => {
     container: {
       backgroundColor: theme.colors.background,
       flex: 1,
-    }
+    },
+    map: {
+      ...StyleSheet.absoluteFillObject,
+    },
   })
 }

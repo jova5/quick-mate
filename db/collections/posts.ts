@@ -34,7 +34,8 @@ export interface CreatePostInterface {
   status: PostStatus,
   createdBy: string,
   workerUserId: string,
-  cowerAdditionalCost: boolean
+  cowerAdditionalCost: boolean,
+  address: string
 }
 
 export interface PostInterface extends CreatePostInterface {
@@ -93,7 +94,8 @@ export async function getAllCompletedPostsByUserId(userId: string): Promise<Post
       status: doc.data().status as PostStatus,
       createdBy: doc.data().createdBy,
       workerUserId: doc.data().workerUserId,
-      cowerAdditionalCost: doc.data().cowerAdditionalCost
+      cowerAdditionalCost: doc.data().cowerAdditionalCost,
+      address: doc.data().address
     }
   });
 }
@@ -120,7 +122,8 @@ export async function getAllInProgressPostsByUserId(userId: string): Promise<Pos
       status: doc.data().status as PostStatus,
       createdBy: doc.data().createdBy,
       workerUserId: doc.data().workerUserId,
-      cowerAdditionalCost: doc.data().cowerAdditionalCost
+      cowerAdditionalCost: doc.data().cowerAdditionalCost,
+      address: doc.data().address
     }
   });
 }
@@ -146,7 +149,8 @@ export async function getAllUserPostsByUserId(userId: string): Promise<PostInter
       status: doc.data().status as PostStatus,
       createdBy: doc.data().createdBy,
       workerUserId: doc.data().workerUserId,
-      cowerAdditionalCost: doc.data().cowerAdditionalCost
+      cowerAdditionalCost: doc.data().cowerAdditionalCost,
+      address: doc.data().address
     }
   });
 }
@@ -178,7 +182,8 @@ export async function getPost(docId: string): Promise<PostInterface | null> {
     status: postData.status as PostStatus,
     createdBy: postData.createdBy as string,
     workerUserId: postData.workerUserId as string,
-    cowerAdditionalCost: postData.cowerAdditionalCost as boolean
+    cowerAdditionalCost: postData.cowerAdditionalCost as boolean,
+    address: postData.address as string
   };
 }
 

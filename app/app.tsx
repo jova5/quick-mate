@@ -67,11 +67,11 @@ const App = () => {
             }}/>
           <Stack.Screen name="after-login-setup" options={
             {
-              headerShown: false,
-              // headerStyle: {backgroundColor: theme.colors.surfaceVariant},
-              // headerShadowVisible: false,
-              // headerTitleStyle: {color: theme.colors.onSurfaceVariant},
-              // headerTintColor: theme.colors.onSurfaceVariant
+              headerShown: false
+            }}/>
+          <Stack.Screen name="map" options={
+            {
+              headerShown: false
             }}/>
           <Stack.Screen name="+not-found"/>
         </Stack>

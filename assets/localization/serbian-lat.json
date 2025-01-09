@@ -35,5 +35,7 @@
   "coverAdditionalCosts": "Ja pokrivam dodatne troškove",
   "confirm": "Potvrdi",
   "profileInfo": "Informacije profila",
-  "logOut": "Odjavi se"
+  "logOut": "Odjavi se",
+  "address": "Adresa",
+  "search": "Pretraži"
 }

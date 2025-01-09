@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from "@/redux/store";
+import {GeoLocation} from "@/db/collections/posts";
 
 // Define a type for the slice state
 interface PostState {
@@ -7,6 +8,8 @@ interface PostState {
   existingPostLoading: boolean,
   postForCompletionId: string | undefined,
   postForCompletionTitle: string | undefined,
+  newPostAddress: string | undefined,
+  newPostGeoLocation: GeoLocation | undefined,
 }
 
 // Define the initial state using that type
@@ -15,6 +18,8 @@ const initialState: PostState = {
   existingPostLoading: false,
   postForCompletionId: undefined,
   postForCompletionTitle: undefined,
+  newPostAddress: undefined,
+  newPostGeoLocation: undefined
 }
 
 export const postSlice = createSlice({
@@ -34,9 +39,18 @@ export const postSlice = createSlice({
     setExistingPostNotLoading: (state: PostState) => {
       state.existingPostLoading = false;
     },
-    setPostForCompletion: (state: PostState, action: PayloadAction<{ title: string, id: string }>) => {
+    setPostForCompletion: (state: PostState, action: PayloadAction<{
+      title: string,
+      id: string
+    }>) => {
       state.postForCompletionId = action.payload.id;
       state.postForCompletionTitle = action.payload.title;
+    },
+    setNewPostAddress: (state: PostState, action: PayloadAction<string>) => {
+      state.newPostAddress = action.payload;
+    },
+    setNewPostGeoLocation: (state: PostState, action: PayloadAction<GeoLocation>) => {
+      state.newPostGeoLocation = action.payload;
     }
   },
 })
@@ -46,7 +60,9 @@ export const {
   hideCompleteDialog,
   setExistingPostLoading,
   setExistingPostNotLoading,
-  setPostForCompletion
+  setPostForCompletion,
+  setNewPostGeoLocation,
+  setNewPostAddress
 } = postSlice.actions
 
 export const selectPost = (state: RootState) => state.post

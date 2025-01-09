@@ -10,6 +10,8 @@ import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectCity, setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
 import {formatToISODate, formatToISOTime} from "@/assets/functions/dateFormater";
 import {selectUser} from "@/redux/user-slice/userSlice";
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {selectPost} from "@/redux/post-slice/postSlice"; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 const NewPost = () => {
 
@@ -20,6 +22,7 @@ const NewPost = () => {
 
   const {selectedCityId, selectedCityName} = useAppSelector(selectCity);
   const {user} = useAppSelector(selectUser);
+  const {newPostAddress, newPostGeoLocation} = useAppSelector(selectPost);
   const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState<string>("");
@@ -30,6 +33,7 @@ const NewPost = () => {
   const [time, setTime] = useState(null);
   const [date, setDate] = useState(null);
   const [cowerAdditionalCost, setCowerAdditionalCost] = useState<boolean>(false);
+  const [address, setAddress] = useState<string>("");
 
   const [showTime, setShowTime] = useState<string | null>(null);
   const [showDate, setShowDate] = useState<string | null>(null);
@@ -91,7 +95,8 @@ const NewPost = () => {
         status: PostStatus.OPEN,
         createdBy: user!.id as string,
         workerUserId: "",
-        cowerAdditionalCost: cowerAdditionalCost
+        cowerAdditionalCost: cowerAdditionalCost,
+        address: address,
       };
 
       await addPost(post);
@@ -135,6 +140,7 @@ const NewPost = () => {
                 mode="outlined"
                 label={t("contactPhone")}
                 placeholder="06x123456"
+                keyboardType="numeric"
                 value={contactNumber}
                 onChangeText={text => setContactNumber(text)}
             />
@@ -181,7 +187,7 @@ const NewPost = () => {
                 onChangeText={text => setPrice(text)}
             />
             <Checkbox.Item
-                labelStyle={{textAlign:'left'}}
+                labelStyle={{textAlign: 'left'}}
                 position="leading"
                 status={cowerAdditionalCost ? 'checked' : 'unchecked'}
                 onPress={() => {
@@ -189,12 +195,42 @@ const NewPost = () => {
                 }}
                 label={t("coverAdditionalCosts")}
             />
+            <TextInput
+                mode="outlined"
+                label={t("address")}
+                value={newPostAddress}
+                onPress={() => {
+                  router.navigate('/map')
+                }}
+            />
             <View style={{
               marginVertical: 12,
-              backgroundColor: 'blue',
               height: 300,
               width: '100%'
-            }}></View>
+            }}>
+              <MapView
+                  onPress={() => router.navigate('/map')}
+                  provider={PROVIDER_GOOGLE}
+                  style={styles.map}
+                  region={{
+                    latitude: newPostGeoLocation ? newPostGeoLocation.latitude : 43.9,
+                    longitude: newPostGeoLocation ? newPostGeoLocation.latitude : 17.7,
+                    latitudeDelta: 2.8,
+                    longitudeDelta: 2.8,
+                  }}
+              >
+                {newPostGeoLocation !== undefined && (
+                    <Marker
+                        coordinate={
+                          {
+                            latitude: newPostGeoLocation.latitude,
+                            longitude: newPostGeoLocation.longitude
+                          }
+                        }
+                    />
+                )}
+              </MapView>
+            </View>
             <Button
                 loading={isPostCreating}
                 mode='contained'
@@ -228,6 +264,9 @@ const createStyles = (theme: MD3Theme) => {
     container: {
       backgroundColor: theme.colors.background,
       flex: 1
-    }
+    },
+    map: {
+      ...StyleSheet.absoluteFillObject,
+    },
   })
 }
