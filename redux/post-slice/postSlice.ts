@@ -46,10 +46,10 @@ export const postSlice = createSlice({
       state.postForCompletionId = action.payload.id;
       state.postForCompletionTitle = action.payload.title;
     },
-    setNewPostAddress: (state: PostState, action: PayloadAction<string>) => {
+    setNewPostAddress: (state: PostState, action: PayloadAction<string | undefined>) => {
       state.newPostAddress = action.payload;
     },
-    setNewPostGeoLocation: (state: PostState, action: PayloadAction<GeoLocation>) => {
+    setNewPostGeoLocation: (state: PostState, action: PayloadAction<GeoLocation | undefined>) => {
       state.newPostGeoLocation = action.payload;
     }
   },

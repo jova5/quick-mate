@@ -3,13 +3,14 @@ import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import {Alert, Platform, ScrollView, StyleSheet, View} from "react-native";
 import React, {useRef, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Button, MD3Theme, useTheme} from "react-native-paper";
+import {Button, IconButton, MD3Theme, useTheme} from "react-native-paper";
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectPost, setNewPostAddress, setNewPostGeoLocation} from "@/redux/post-slice/postSlice";
 import {router} from "expo-router";
 import { GOOGLE_API_KEY } from '@env';
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const MapScreen = () => {
   const theme = useTheme();
@@ -25,12 +26,12 @@ const MapScreen = () => {
 
   const [region, setRegion] = useState({
     latitude: newPostGeoLocation ? newPostGeoLocation.latitude : 43.9,
-    longitude: newPostGeoLocation ? newPostGeoLocation.latitude : 17.7,
-    latitudeDelta: 4,
-    longitudeDelta: 4,
+    longitude: newPostGeoLocation ? newPostGeoLocation.longitude : 17.7,
+    latitudeDelta: newPostGeoLocation ? 0.002 : 4,
+    longitudeDelta: newPostGeoLocation ? 0.002 : 4,
   });
 
-  const [marker, setMarker] = useState(null);
+  const [marker, setMarker] = useState(newPostGeoLocation ?? null);
 
   const handlePlaceSelect = async (placeId) => {
     try {
@@ -127,8 +128,15 @@ const MapScreen = () => {
   return (
       <Container style={styles.container}>
         <MapView
+            loadingEnabled={true}
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={styles.map}
+            initialRegion={{
+              latitude: 43.9,
+              longitude: 17.7,
+              latitudeDelta: 4,
+              longitudeDelta: 4,
+            }}
             region={region}
             onLongPress={handleLongPress}
         >
@@ -139,13 +147,33 @@ const MapScreen = () => {
           )}
         </MapView>
           <GooglePlacesAutocomplete
+              textInputProps={{
+                placeholderTextColor: theme.colors.onSecondaryContainer,
+                clearButtonMode: "always"
+          }}
+              styles={{
+                textInput:{
+                  backgroundColor: theme.colors.background,
+                  color: theme.colors.onBackground,
+                },
+                row: {
+                  backgroundColor: theme.colors.background,
+                  color: theme.colors.onBackground,
+                },
+                poweredContainer: {display: 'none'},
+                description: {color: theme.colors.onBackground}
+              }}
+              // renderRightButton={() => <IconButton
+              //     onPress={() => {}}
+              //     icon={({size, color}) => {
+              //       return <Icon name="highlight-remove" size={size} color={color}/>
+              //     }}
+              // />}
               ref={googlePlacesRef}
               placeholder={t('search')}
               onPress={(data) => {
                 dispatch(setNewPostAddress(data.description));
                 handlePlaceSelect(data.place_id);
-                console.log(newPostGeoLocation);
-                console.log(newPostAddress);
               }}
               query={{
                 key: process.env.GOOGLE_API_KEY,

@@ -1,6 +1,6 @@
 import {ScrollView, StyleSheet, View} from "react-native";
 import {Button, Checkbox, MD3Theme, TextInput, useTheme} from "react-native-paper";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {router} from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {useTranslation} from "react-i18next";
@@ -11,7 +11,7 @@ import {selectCity, setSelectedCityId, setSelectedCityName} from "@/redux/city-s
 import {formatToISODate, formatToISOTime} from "@/assets/functions/dateFormater";
 import {selectUser} from "@/redux/user-slice/userSlice";
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import {selectPost} from "@/redux/post-slice/postSlice"; // remove PROVIDER_GOOGLE import if not using Google Maps
+import {selectPost, setNewPostAddress, setNewPostGeoLocation} from "@/redux/post-slice/postSlice";
 
 const NewPost = () => {
 
@@ -29,11 +29,9 @@ const NewPost = () => {
   const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<string>('');
   const [contactNumber, setContactNumber] = useState<string>("");
-  const [coordinates, setCoordinates] = useState<string>("");
   const [time, setTime] = useState(null);
   const [date, setDate] = useState(null);
   const [cowerAdditionalCost, setCowerAdditionalCost] = useState<boolean>(false);
-  const [address, setAddress] = useState<string>("");
 
   const [showTime, setShowTime] = useState<string | null>(null);
   const [showDate, setShowDate] = useState<string | null>(null);
@@ -48,9 +46,15 @@ const NewPost = () => {
 
     if (event.type === 'dismissed') {
       if (dateTimeMode === 'time') {
-        timeInputRef.current.blur()
+        if (timeInputRef.current !== null) {
+          // @ts-ignore
+          timeInputRef.current.blur()
+        }
       } else {
-        dateInputRef.current.blur()
+        if (dateInputRef.current !== null) {
+          // @ts-ignore
+          dateInputRef.current.blur()
+        }
       }
     }
     if (event.type === 'set') {
@@ -61,7 +65,10 @@ const NewPost = () => {
         const time = `${hours}:${minutes}`;
         setShowTime(time);
         setTime(selectedValue);
-        timeInputRef.current.blur()
+        if (timeInputRef.current !== null) {
+          // @ts-ignore
+          timeInputRef.current.blur()
+        }
       } else {
 
         const day = String(selectedValue.getDate()).padStart(2, '0');
@@ -72,7 +79,10 @@ const NewPost = () => {
 
         setShowDate(formattedDate);
         setDate(selectedValue)
-        dateInputRef.current.blur()
+        if (dateInputRef.current !== null) {
+          // @ts-ignore
+          dateInputRef.current.blur()
+        }
       }
     }
 
@@ -89,21 +99,20 @@ const NewPost = () => {
         description: description,
         price: parseFloat(price),
         dueDateTime: Timestamp.fromDate(new Date(`${formatToISODate(date!)}T${formatToISOTime(time!)}`)),
-        destination: {latitude: 12.123, longitude: 13.321},
+        destination: newPostGeoLocation!,
         contactPhoneNumber: contactNumber,
-        cityId: selectedCityId,
+        cityId: selectedCityId ?? user?.cityId!,
         status: PostStatus.OPEN,
         createdBy: user!.id as string,
         workerUserId: "",
         cowerAdditionalCost: cowerAdditionalCost,
-        address: address,
+        address: newPostAddress!,
       };
 
       await addPost(post);
 
-      // TODO mozda ovo treba ukloniti
-      dispatch(setSelectedCityId(""));
-      dispatch(setSelectedCityName(""));
+      dispatch(setSelectedCityId(undefined));
+      dispatch(setSelectedCityName(undefined));
       router.back();
     } catch (e) {
       console.log(e);
@@ -114,6 +123,19 @@ const NewPost = () => {
       router.back();
     }
   }
+
+  useEffect(() => {
+    dispatch(setSelectedCityId(undefined));
+    dispatch(setSelectedCityName(undefined));
+    dispatch(setNewPostAddress(undefined));
+    dispatch(setNewPostGeoLocation(undefined));
+    return () => {
+      dispatch(setSelectedCityId(undefined));
+      dispatch(setSelectedCityName(undefined));
+      dispatch(setNewPostAddress(undefined));
+      dispatch(setNewPostGeoLocation(undefined));
+    }
+  }, []);
 
   return (
       <>
@@ -147,7 +169,7 @@ const NewPost = () => {
             <TextInput
                 mode="outlined"
                 label={t("city")}
-                value={selectedCityName}
+                value={selectedCityName ?? user?.cityName!}
                 onPress={() => {
                   router.push('/city?mode=NEW_POST')
                 }}
@@ -155,7 +177,10 @@ const NewPost = () => {
             <TextInput
                 ref={timeInputRef}
                 onFocus={() => {
-                  timeInputRef.current.blur()
+                  if (timeInputRef.current !== null) {
+                    // @ts-ignore
+                    timeInputRef.current.blur()
+                  }
                 }}
                 mode="outlined"
                 label={t("time")}
@@ -168,7 +193,10 @@ const NewPost = () => {
             <TextInput
                 ref={dateInputRef}
                 onFocus={() => {
-                  dateInputRef.current.blur()
+                  if (dateInputRef.current !== null) {
+                    // @ts-ignore
+                    dateInputRef.current.blur()
+                  }
                 }}
                 mode="outlined"
                 label={t("date")}
@@ -199,9 +227,7 @@ const NewPost = () => {
                 mode="outlined"
                 label={t("address")}
                 value={newPostAddress}
-                onPress={() => {
-                  router.navigate('/map')
-                }}
+                onChangeText={(text) => dispatch(setNewPostAddress(text))}
             />
             <View style={{
               marginVertical: 12,
@@ -209,15 +235,26 @@ const NewPost = () => {
               width: '100%'
             }}>
               <MapView
+                  loadingEnabled={true}
                   onPress={() => router.navigate('/map')}
                   provider={PROVIDER_GOOGLE}
                   style={styles.map}
-                  region={{
-                    latitude: newPostGeoLocation ? newPostGeoLocation.latitude : 43.9,
-                    longitude: newPostGeoLocation ? newPostGeoLocation.latitude : 17.7,
+                  initialRegion={{
+                    latitude: 43.9,
+                    longitude: 17.7,
                     latitudeDelta: 2.8,
                     longitudeDelta: 2.8,
                   }}
+                  region={{
+                    latitude: newPostGeoLocation ? newPostGeoLocation.latitude : 43.9,
+                    longitude: newPostGeoLocation ? newPostGeoLocation.longitude : 17.7,
+                    latitudeDelta: newPostGeoLocation ? 0.002 : 2.8,
+                    longitudeDelta: newPostGeoLocation ? 0.002 : 2.8,
+                  }}
+                  scrollEnabled={false}  // Disable scrolling
+                  zoomEnabled={false}    // Disable zooming
+                  rotateEnabled={false}  // Disable rotation
+                  pitchEnabled={false}   // Disable tilting
               >
                 {newPostGeoLocation !== undefined && (
                     <Marker

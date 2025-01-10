@@ -1,8 +1,8 @@
-import {Linking, Platform, StyleSheet, View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import {Button, Card, Dialog, MD3Theme, Portal, Text, useTheme} from "react-native-paper";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {acceptPost, completePost, GeoLocation, PostInterface} from "@/db/collections/posts";
+import {acceptPost, completePost, PostInterface} from "@/db/collections/posts";
 import {formatDate} from "@/assets/functions/dateFormater";
 import {router} from "expo-router";
 import {useAppSelector} from "@/redux/hooks";
@@ -62,20 +62,6 @@ const Post = ({post, mode}:{post: PostInterface, mode: string | undefined | stri
     }
   }
 
-  const openGoogleMaps = (destination: GeoLocation) => {
-
-    // Create the URL to open Google Maps
-    const url = Platform.select({
-      ios: `comgooglemaps://?q=${destination.latitude},${destination.longitude}`, // URL for iOS
-      android: `geo:${destination.latitude},${destination.longitude}?q=${destination.latitude},${destination.longitude}` // URL for Android
-    });
-
-    // Open the map using Linking API
-    if (typeof url === "string") {
-      Linking.openURL(url).catch(err => console.error('Error opening map:', err));
-    }
-  };
-
   return (
       <View style={styles.container}>
         <Card
@@ -119,15 +105,18 @@ const Post = ({post, mode}:{post: PostInterface, mode: string | undefined | stri
               width: '100%'
             }}>
               <MapView
-                  onPress={() => openGoogleMaps(post.destination)}
                   provider={PROVIDER_GOOGLE}
                   style={styles.map}
                   region={{
-                    latitude: 43.9,
-                    longitude: 17.7,
-                    latitudeDelta: 2.8,
-                    longitudeDelta: 2.8,
+                    latitude: post.destination ? post.destination.latitude : 43.9,
+                    longitude: post.destination ? post.destination.longitude : 43.9,
+                    latitudeDelta: post.destination ? 0.002 : 2.8,
+                    longitudeDelta: post.destination ? 0.002 : 2.8,
                   }}
+                  scrollEnabled={false}  // Disable scrolling
+                  zoomEnabled={false}    // Disable zooming
+                  rotateEnabled={false}  // Disable rotation
+                  pitchEnabled={false}   // Disable tilting
               >
                 {post.destination.longitude !== null && (
                     <Marker

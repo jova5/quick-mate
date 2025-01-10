@@ -28,6 +28,8 @@ const Layout = () => {
     try {
       const post: PostInterface | null = await getPost(id);
 
+      console.log("post");
+      console.log(post);
       navigation.setOptions({title: post?.title});
 
       setIsLoading(false);

@@ -68,6 +68,7 @@ const CompletedPosts = () => {
 
             refreshControl={
               <RefreshControl
+                  progressBackgroundColor={theme.colors.surfaceVariant}
                   colors={[theme.colors.primary, theme.colors.primaryContainer]}
                   refreshing={arePostsLoading}
                   progressViewOffset={arePostsLoading ? -200 : 0}

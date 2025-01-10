@@ -20,6 +20,7 @@ import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectUser, setUserInfo} from "@/redux/user-slice/userSlice";
 import {GoogleSignin} from "@react-native-google-signin/google-signin";
 import {getUser, UserInterface} from "@/db/collections/users";
+import {useFocusEffect} from "@react-navigation/native";
 
 const HomeScreen = () => {
 
@@ -82,25 +83,29 @@ const HomeScreen = () => {
   }
 
   const loadUser = async () => {
-    const userId = GoogleSignin.getCurrentUser()?.user.id;
 
-    const loggedUser: UserInterface | null = await getUser(userId!);
+    if (user === undefined || user === null) {
+      const userId = GoogleSignin.getCurrentUser()?.user.id;
 
-    const userInfo = {
-      id: loggedUser?.id,
-      firstName: loggedUser?.firstName,
-      lastName: loggedUser?.lastName,
-      email: loggedUser?.email,
-      phoneNumber: loggedUser?.phoneNumber,
-      notifyPhoneId: loggedUser?.notifyPhoneId,
-      cityId: loggedUser?.cityId,
-      photoURL: loggedUser?.photoURL,
-      cityName: loggedUser?.cityName,
+      const loggedUser: UserInterface | null = await getUser(userId!);
+
+      const userInfo = {
+        id: loggedUser?.id,
+        firstName: loggedUser?.firstName,
+        lastName: loggedUser?.lastName,
+        email: loggedUser?.email,
+        phoneNumber: loggedUser?.phoneNumber,
+        notifyPhoneId: loggedUser?.notifyPhoneId,
+        cityId: loggedUser?.cityId,
+        photoURL: loggedUser?.photoURL,
+        cityName: loggedUser?.cityName,
+      }
+
+      dispatch(setUserInfo(userInfo));
+      getAllOpenPosts(userInfo?.cityId!);
+    } else {
+      getAllOpenPosts(user?.cityId!);
     }
-
-    dispatch(setUserInfo(userInfo));
-
-    getAllOpenPosts(userInfo.cityId!);
   }
 
   useEffect(() => {
@@ -128,6 +133,7 @@ const HomeScreen = () => {
 
               refreshControl={
                 <RefreshControl
+                    progressBackgroundColor={theme.colors.surfaceVariant}
                     colors={[theme.colors.primary, theme.colors.primaryContainer]}
                     refreshing={arePostsLoading}
                     progressViewOffset={arePostsLoading ? -200 : 0}
