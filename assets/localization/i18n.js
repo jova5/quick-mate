@@ -24,7 +24,7 @@ const saveLanguageData = async (languageCode) => {
   try {
     await AsyncStorage.setItem('LANGUAGE', languageCode);
   } catch {
-    console.log('err in saving language data');
+    console.log('error in saving language data');
   }
 };
 

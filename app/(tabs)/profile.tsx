@@ -12,7 +12,7 @@ import {
   useTheme
 } from "react-native-paper";
 import {SafeAreaView} from "react-native-safe-area-context";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import InProgressPosts from "@/app/profile-components/InProgressPosts";
 import YourPosts from "@/app/profile-components/YourPosts";
 import CompletedPosts from "@/app/profile-components/CompletedPosts";
@@ -24,6 +24,7 @@ import {useTranslation} from "react-i18next";
 import {changeI18NLanguage} from "@/assets/localization/i18n";
 import {selectUser} from "@/redux/user-slice/userSlice";
 import {completePost} from "@/db/collections/posts";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfileScreen = () => {
   const theme = useTheme();
@@ -33,6 +34,7 @@ const ProfileScreen = () => {
   const [value, setValue] = useState('in-progress-posts');
   const [isLanguageModalShowing, setIsLanguageModalShowing] = useState(false);
   const [isPostCompleting, setIsPostCompleting] = useState<boolean>(false);
+  const [chosenLanguage, setChosenLanguage] = useState<"rs" | "en" | undefined>(undefined);
 
   const dispatch = useAppDispatch();
   const {isCompleteDialogShowing, postForCompletionId, postForCompletionTitle} = useAppSelector(selectPost)
@@ -45,7 +47,7 @@ const ProfileScreen = () => {
   const changeLanguageLocalization = (languageCode: "rs" | "en") => {
 
     changeI18NLanguage(languageCode);
-
+    setChosenLanguage(languageCode);
     hideLanguageModal();
   }
 
@@ -67,6 +69,16 @@ const ProfileScreen = () => {
       setIsPostCompleting(false);
       hideDialog()
     }
+  }
+
+  useEffect(() => {
+    loadLanguage();
+  }, []);
+
+  const loadLanguage = async () => {
+    const languageCode = await AsyncStorage.getItem('LANGUAGE');
+    const lngCode = "rs" === languageCode ? "rs" : "en";
+    setChosenLanguage(lngCode);
   }
 
   return (
@@ -165,7 +177,7 @@ const ProfileScreen = () => {
                 }}>
               <Button
                   style={{flex: 1}}
-                  mode={'outlined'}
+                  mode={chosenLanguage === "rs" ? 'contained' : 'outlined'}
                   onPress={() => changeLanguageLocalization("rs")}>
                 {t("serbian")}</Button>
             </Dialog.Actions>
@@ -177,7 +189,7 @@ const ProfileScreen = () => {
                 }}>
               <Button
                   style={{flex: 1}}
-                  mode={'outlined'}
+                  mode={chosenLanguage === "en" ? 'contained' : 'outlined'}
                   onPress={() => changeLanguageLocalization("en")}>
                 {t("english")}</Button>
             </Dialog.Actions>

@@ -31,18 +31,17 @@ const LoginScreen = () => {
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
   const [isLanguageModalShowing, setIsLanguageModalShowing] = useState(false);
+  const [isLoggedUserLoading, setIsLoggedUserLoading] = useState(false)
+  const [chosenLanguage, setChosenLanguage] = useState<"rs" | "en" | undefined>(undefined);
 
-
-  const [isLoggedUserLoading, setIsLoggedUserLoading] = useState(false);
   const hideLanguageModal = () => setIsLanguageModalShowing(false);
-
   const showLanguageModal = () => setIsLanguageModalShowing(true);
 
   const changeLanguageLocalization = (languageCode: "rs" | "en") => {
 
     changeI18NLanguage(languageCode);
+    setChosenLanguage(languageCode);
     hideLanguageModal();
-
   }
 
   useEffect(() => {
@@ -75,8 +74,16 @@ const LoginScreen = () => {
       }
     });
 
+    loadLanguage();
+
     SplashScreen.hideAsync();
   }, []);
+
+  const loadLanguage = async () => {
+    const languageCode = await AsyncStorage.getItem('LANGUAGE');
+    const lngCode = "rs" === languageCode ? "rs" : "en";
+    setChosenLanguage(lngCode);
+  }
 
   const checkIsLoggedIn = async () => {
     try {
@@ -181,9 +188,6 @@ const LoginScreen = () => {
       await AsyncStorage.setItem('AUTH_TOKEN', user?.idToken);
       dispatch(setIsLoggedIn(true));
 
-      // navigiraj podesavanje telefonskog broja
-      // navigiraj podesavanje grada
-
       if (!exists || userInfo.phoneNumber === null || userInfo.phoneNumber === undefined || userInfo.phoneNumber === "") {
         router.navigate('/after-login-setup');
       }else{
@@ -261,7 +265,7 @@ const LoginScreen = () => {
                 }}>
               <Button
                   style={{flex: 1}}
-                  mode={'outlined'}
+                  mode={chosenLanguage === "rs" ? 'contained' : 'outlined'}
                   onPress={() => changeLanguageLocalization("rs")}>
                 {t("serbian")}</Button>
             </Dialog.Actions>
@@ -273,7 +277,7 @@ const LoginScreen = () => {
                 }}>
               <Button
                   style={{flex: 1}}
-                  mode={'outlined'}
+                  mode={chosenLanguage === "en" ? 'contained' : 'outlined'}
                   onPress={() => changeLanguageLocalization("en")}>
                 {t("english")}</Button>
             </Dialog.Actions>
