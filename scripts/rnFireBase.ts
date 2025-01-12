@@ -1,5 +1,6 @@
 import messaging from "@react-native-firebase/messaging";
 import {PermissionsAndroid} from "react-native";
+import * as Notifications from 'expo-notifications';
 
 export const requestUserPermission = async () => {
 
@@ -21,6 +22,20 @@ export const requestUserPermission = async () => {
   } catch (e) {
     console.log(e)
     return false
+  }
+};
+
+export const createNotificationChannel = async () => {
+  try {
+    await Notifications.setNotificationChannelAsync("quick-mate-default", {
+      name: "Quick Mate Default Channel",
+      importance: Notifications.AndroidImportance.HIGH,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+    console.log("Notification channel created.");
+  } catch (e) {
+    console.error("Error creating notification channel:", e);
   }
 };
 

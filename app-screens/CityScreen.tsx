@@ -7,6 +7,7 @@ import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectCity, setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
 import {updateUserCity} from "@/db/collections/users";
 import {selectUser, setUserPhoneAndCity} from "@/redux/user-slice/userSlice";
+import {subscribeToTopic, unsubscribeFromTopic} from "@/scripts/rnFireBase";
 
 const CityScreen = () => {
   const params = useLocalSearchParams();
@@ -75,11 +76,15 @@ const CityScreen = () => {
     try {
       await updateUserCity(user?.id!, cityId, cityName);
 
+      await unsubscribeFromTopic(user?.cityId!);
+
       dispatch(setUserPhoneAndCity({
         phoneNumber: user?.phoneNumber,
         cityId: cityId,
         cityName: cityName
       }));
+
+      await subscribeToTopic(cityId);
 
       setIsUserCityUpdating(false);
     } catch (e) {

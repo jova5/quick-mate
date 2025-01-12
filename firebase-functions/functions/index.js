@@ -21,6 +21,7 @@ export const pushNotification = onDocumentCreated("posts/{docId}", (event) => {
 
   const cityId = snapshot.get("cityId");
   const postTitle = snapshot.get("title");
+  const docId = event.params?.docId;
 
   if (!cityId) {
     console.warn("cityId field not found in the document.");
@@ -32,11 +33,17 @@ export const pushNotification = onDocumentCreated("posts/{docId}", (event) => {
     return;
   }
 
+  if (!docId) {
+    console.warn("docId not found.");
+    return;
+  }
+
   const message = {
     topic: `${cityId}`,
-    notification: {
+    data: {
       title: 'newPost',
-      body: `{newPostAdded}: ${postTitle}`
+      body: `{newPostAdded}: ${postTitle}`,
+      postId: docId
     }
   };
 

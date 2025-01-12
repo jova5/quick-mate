@@ -20,6 +20,7 @@ import {
 import {router} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import auth = firebase.auth;
+import {createNotificationChannel} from "@/scripts/rnFireBase";
 
 const LoginScreen = () => {
 
@@ -73,6 +74,8 @@ const LoginScreen = () => {
         dispatch(setIsLoggedIn(false));
       }
     });
+
+    createNotificationChannel();
 
     loadLanguage();
 
