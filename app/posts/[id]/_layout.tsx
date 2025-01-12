@@ -5,10 +5,11 @@ import {Platform, ScrollView, StyleSheet} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {useAppDispatch} from "@/redux/hooks";
 import {setExistingPostLoading, setExistingPostNotLoading} from "@/redux/post-slice/postSlice";
-import Post from "@/app/posts/[id]/PostScreen";
+import PostScreen from "@/app-screens/PostScreen";
 import {getPost, PostInterface} from "@/db/collections/posts";
 
 const Layout = () => {
+
   const params = useLocalSearchParams();
   const {id, mode} = params;
   const navigation = useNavigation();
@@ -57,7 +58,7 @@ const Layout = () => {
   }
 
   return (
-      <Post post={post} mode={mode}/>
+      <PostScreen post={post} mode={mode}/>
   )
 }
 

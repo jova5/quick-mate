@@ -4,8 +4,8 @@ import {CommonActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomNavigation} from 'react-native-paper';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import HomeScreen from "@/app/(tabs)/home";
-import ProfileScreen from "@/app/(tabs)/profile";
+import HomePage from "@/app/(tabs)/home";
+import ProfilePage from "@/app/(tabs)/profile";
 import {useTranslation} from "react-i18next";
 
 const Tab = createBottomTabNavigator();
@@ -56,7 +56,7 @@ const HomeScreens = () => {
       >
         <Tab.Screen
             name="home"
-            component={HomeScreen}
+            component={HomePage}
             options={{
               tabBarLabel: t("home"),
               tabBarIcon: ({ color, size }) => {
@@ -66,7 +66,7 @@ const HomeScreens = () => {
         />
         <Tab.Screen
             name="profile"
-            component={ProfileScreen}
+            component={ProfilePage}
             options={{
               tabBarLabel: t("profile"),
               tabBarIcon: ({ color, size }) => {

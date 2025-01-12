@@ -8,7 +8,7 @@ import {GoogleSignin} from "@react-native-google-signin/google-signin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {selectUser} from "@/redux/user-slice/userSlice";
 import {useAppSelector} from "@/redux/hooks";
-import RemotePushController from "@/app-components/RemotePushController";
+import { GOOGLE_SIGN_IN_WEB_CLIENT_ID } from '@env';
 
 const App = () => {
 
@@ -19,7 +19,7 @@ const App = () => {
 
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId: "394706700488-i46gnrvhq126vcvmcte9re19lcm3qaaa.apps.googleusercontent.com",
+      webClientId: process.env.GOOGLE_SIGN_IN_WEB_CLIENT_ID,
     });
   }, []);
 

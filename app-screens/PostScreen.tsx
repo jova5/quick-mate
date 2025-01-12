@@ -9,7 +9,7 @@ import {useAppSelector} from "@/redux/hooks";
 import {selectUser} from "@/redux/user-slice/userSlice";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 
-const Post = ({post, mode}:{post: PostInterface, mode: string | undefined | string[]}) => {
+const PostScreen = ({post, mode}:{post: PostInterface, mode: string | undefined | string[]}) => {
 
   const theme = useTheme();
   const styles = createStyles(theme);
@@ -195,7 +195,7 @@ const Post = ({post, mode}:{post: PostInterface, mode: string | undefined | stri
   )
 }
 
-export default Post;
+export default PostScreen;
 
 const createStyles = (theme: MD3Theme) => {
   return StyleSheet.create({
