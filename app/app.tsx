@@ -3,11 +3,12 @@ import {StatusBar} from "expo-status-bar";
 import {useColorScheme} from "@/hooks/useColorScheme";
 import {useTheme} from "react-native-paper";
 import {useTranslation} from "react-i18next";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {GoogleSignin} from "@react-native-google-signin/google-signin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {selectUser} from "@/redux/user-slice/userSlice";
 import {useAppSelector} from "@/redux/hooks";
+import RemotePushController from "@/app-components/RemotePushController";
 
 const App = () => {
 
@@ -39,7 +40,7 @@ const App = () => {
 
   return (
       <>
-        <Stack>
+        <Stack initialRouteName="(tabs)">
           {/*LOGIN SCREEN*/}
           <Stack.Screen name="index" options={{headerShown: false}}/>
           {/*HOME SCREENS*/}

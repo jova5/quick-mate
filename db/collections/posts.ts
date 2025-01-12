@@ -167,9 +167,6 @@ export async function getPost(docId: string): Promise<PostInterface | null> {
 
   const postData = docSnapshot.data();
 
-  console.log("post data")
-  console.log(postData)
-
   return {
     id: docSnapshot.id,
     title: postData.title as string,

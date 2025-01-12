@@ -37,7 +37,11 @@ const ProfileScreen = () => {
   const [chosenLanguage, setChosenLanguage] = useState<"rs" | "en" | undefined>(undefined);
 
   const dispatch = useAppDispatch();
-  const {isCompleteDialogShowing, postForCompletionId, postForCompletionTitle} = useAppSelector(selectPost)
+  const {
+    isCompleteDialogShowing,
+    postForCompletionId,
+    postForCompletionTitle
+  } = useAppSelector(selectPost)
   const {user} = useAppSelector(selectUser);
 
   const hideDialog = () => dispatch(hideCompleteDialog());
@@ -94,7 +98,10 @@ const ProfileScreen = () => {
               onPress={() => router.navigate("/profile-info")}
               rippleColor="rgba(0, 0, 0, .32)"
           >
-            <Avatar.Image source={{ uri: user!.photoURL! }} size={40}/>
+            {user?.photoURL!
+                ? <Avatar.Image source={{uri: user.photoURL}} size={40}/>
+                : <Avatar.Icon size={40} icon="account"/>
+            }
           </TouchableRipple>
 
           <View style={{

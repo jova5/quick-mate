@@ -1,5 +1,4 @@
 import {FlatList, RefreshControl, StyleSheet, View} from "react-native";
-import {HOME_ITEMS} from "@/constants/HomeItems";
 import {
   ActivityIndicator,
   Chip,

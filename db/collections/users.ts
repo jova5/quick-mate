@@ -16,7 +16,7 @@ export interface CreateUserInterface {
   lastName: string | null | undefined,
   email: string | null | undefined,
   phoneNumber: string | null | undefined,
-  notifyPhoneId: string | null | undefined,
+  notificationToken: string | null | undefined,
   cityId: string | null | undefined,
   photoURL: string | null | undefined,
   cityName: string | null | undefined
@@ -53,7 +53,7 @@ export async function getUser(docId: string): Promise<UserInterface | null> {
     lastName: userData.lastName as string,
     email: userData.email as string,
     phoneNumber: userData.phoneNumber as string,
-    notifyPhoneId: userData.notifyPhoneId as string,
+    notificationToken: userData.notificationToken as string,
     cityId: userData.cityId as string,
     photoURL: userData.photoURL as string,
     cityName: userData.cityName as string,
@@ -88,10 +88,16 @@ export async function updateUserPhoneNumberAndCityId(docId: string, phoneNumber:
   return await updateDoc(userDocRef, {phoneNumber: phoneNumber, cityId: cityId, cityName: cityName})
 }
 
-
 export async function updateUserCity(docId: string, cityId: string, cityName: string) {
 
   const userDocRef = doc(usersCollection, docId);
 
   return await updateDoc(userDocRef, {cityId: cityId, cityName: cityName})
+}
+
+export async function updateUserNotificationToken(docId: string, notificationToken: string) {
+
+  const userDocRef = doc(usersCollection, docId);
+
+  return await updateDoc(userDocRef, {notificationToken: notificationToken})
 }
