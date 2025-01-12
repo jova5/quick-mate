@@ -28,7 +28,7 @@ export const pushNotification = onDocumentCreated("posts/{docId}", (event) => {
     return;
   }
 
-  if (!title) {
+  if (!postTitle) {
     console.warn("post title field not found in the document.");
     return;
   }

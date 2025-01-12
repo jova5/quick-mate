@@ -56,7 +56,7 @@ const CompletedPosts = () => {
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item, _) => `${item.id}`}
 
-            contentContainerStyle={{flex: 1}}
+            contentContainerStyle={[(arePostsLoading || completedPosts === null || completedPosts?.length === 0) && {flex: 1}]}
             ListEmptyComponent={() => {
               if (arePostsLoading) {
                 return <ActivityIndicator style={{flex: 1}} size="large" animating={true}/>

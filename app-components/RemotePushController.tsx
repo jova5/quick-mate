@@ -1,6 +1,6 @@
 import messaging from "@react-native-firebase/messaging";
 import {useEffect} from "react";
-import {requestUserPermission} from "@/scripts/rnFireBase";
+import {requestUserPermission, subscribeToTopic} from "@/scripts/rnFireBase";
 import {useAppSelector} from "@/redux/hooks";
 import {selectUser} from "@/redux/user-slice/userSlice";
 import {updateUserNotificationToken} from "@/db/collections/users";
@@ -14,7 +14,7 @@ const RemotePushController = () => {
   const {user} = useAppSelector(selectUser);
   const {t} = useTranslation();
 
-  // Display a notification using Notifee
+  // Display a notification using expo notifications
   const displayNotification = async (message: any) => {
     await Notifications.scheduleNotificationAsync({
       content: {
@@ -58,7 +58,7 @@ const RemotePushController = () => {
         const enabled = await requestUserPermission();
 
         if (enabled) {
-          console.log("Notifications enabled");
+          // console.log("Notifications enabled");
 
           // Get FCM token
           const token = await messaging().getToken();
@@ -71,7 +71,7 @@ const RemotePushController = () => {
           // Handle foreground notifications
           const unsubscribeOnMessage = messaging().onMessage(async (message) => {
             console.log("Notification received in foreground:", message);
-            await displayNotification(message);
+            // await displayNotification(message);
           });
 
           // Handle background/killed state notifications
@@ -95,6 +95,10 @@ const RemotePushController = () => {
           const initialNotification = await messaging().getInitialNotification();
           if (initialNotification?.data?.postId) {
             handleNotificationPress(initialNotification.data.postId as string);
+          }
+
+          if (user?.cityId) {
+            await subscribeToTopic(user.cityId);
           }
 
           // Cleanup listeners on unmount

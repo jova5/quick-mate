@@ -8,7 +8,6 @@ import React, {useState} from "react";
 import {selectCity} from "@/redux/city-slice/citySlice";
 import {updateUserPhoneNumberAndCityId} from "@/db/collections/users";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {subscribeToTopic} from "@/scripts/rnFireBase";
 
 const AfterLoginSetupScreen = () => {
   const theme = useTheme();
@@ -36,8 +35,6 @@ const AfterLoginSetupScreen = () => {
         cityId: selectedCityId,
         cityName: selectedCityName
       }));
-
-      await subscribeToTopic(selectedCityId!);
 
       setIsUserUpdating(false);
 

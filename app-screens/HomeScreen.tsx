@@ -115,118 +115,116 @@ const HomeScreen = () => {
   return (
       <>
         <RemotePushController/>
-        <View style={{flex: 1}}>
-          <Container style={styles.container}>
-            <FlatList
-                data={availablePosts}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, _) => `${item.id}`}
+        <Container style={styles.container}>
+          <FlatList
+              scrollEnabled={true}
+              data={availablePosts}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, _) => `${item.id}`}
 
-                contentContainerStyle={{flex: 1}}
-                ListEmptyComponent={() => {
-                  if (arePostsLoading) {
-                    return <ActivityIndicator style={{flex: 1}} size="large" animating={true}/>
-                  }
-                  return <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
-                    <Text style={{textAlign: 'center'}}>{t("thereAreNoPosts")}</Text>
-                  </View>;
-                }}
-
-                refreshControl={
-                  <RefreshControl
-                      progressBackgroundColor={theme.colors.surfaceVariant}
-                      colors={[theme.colors.primary, theme.colors.primaryContainer]}
-                      refreshing={arePostsLoading}
-                      progressViewOffset={arePostsLoading ? -200 : 0}
-                      onRefresh={() => getAllOpenPosts(user!.cityId!)}
-                  />
+              contentContainerStyle={[(arePostsLoading || availablePosts === null || availablePosts?.length === 0) && {flex: 1}]}
+              ListEmptyComponent={() => {
+                if (arePostsLoading) {
+                  return <ActivityIndicator style={{flex: 1}} size="large" animating={true}/>
                 }
-
-                renderItem={({item}) => (
-                    <Card
-                        key={`${item.id}`}
-                        onPress={() => router.push(`/posts/${item.id}`)}
-                        style={{marginHorizontal: 16, marginBottom: 8, marginTop: 8}}
-                    >
-                      <Card.Title
-                          style={{marginTop: 0, paddingTop: 0, width: '100%'}}
-                          titleStyle={{marginTop: 0, paddingVertical: 4, textAlign: 'center'}}
-                          title={item.title.toUpperCase()}
-                          titleNumberOfLines={2}
-                          titleVariant={"titleLarge"}
-                      />
-                      <Card.Content>
-                        <Text
-                            variant="bodyLarge"
-                            numberOfLines={5}>{item.description}</Text>
-                      </Card.Content>
-                      <Card.Actions>
-                        <View style={{
-                          flex: 1,
-                          flexDirection: 'row',
-                          justifyContent: 'space-between'
-                        }}
-                        >
-                          <View style={{justifyContent: 'space-evenly'}}>
-                            <Text variant={"bodyLarge"}>{t("deadline")}</Text>
-                            <Text variant={"bodyLarge"}>
-                              {formatDate(item.dueDateTime.toDate().toString())}
-                            </Text>
-                          </View>
-                          <View style={{alignItems: "flex-end"}}>
-                            <Text variant={"bodyLarge"}>{t("service")}</Text>
-                            <Text variant={"bodyLarge"}>{item.price} KM</Text>
-                            {
-                                item.cowerAdditionalCost
-                                && <Text variant={"bodyLarge"}>{t("plusAdditionalCosts")}</Text>
-                            }
-                          </View>
-                        </View>
-                      </Card.Actions>
-                      <Card.Actions>
-                        <Button
-                            disabled={item.createdBy === user?.id}
-                            mode="contained-tonal"
-                            onPress={() => {
-                              setSelectedPostForAccepting(item);
-                              showDialog()
-                            }}
-                            style={{width: '100%'}}
-                            uppercase={true}
-                        >{t("accept").toUpperCase()}</Button>
-                      </Card.Actions>
-                    </Card>
-                )}/>
-          </Container>
-
-          <Portal>
-            <Dialog visible={visible} onDismiss={hideDialog}>
-              <Dialog.Title>{t("confirmation")}</Dialog.Title>
-              <Dialog.Content>
-                <Text variant="bodyMedium">{t("confirmObligation")}</Text>
-              </Dialog.Content>
-              <Dialog.Content>
-                <Text variant="bodyMedium">{selectedPostForAccepting?.title}</Text>
-              </Dialog.Content>
-              <Dialog.Actions>
-                <Button
-                    loading={isPostAccepting}
-                    onPress={() => acceptSelectedPost(selectedPostForAccepting?.id!, user!.id!)}
-                >{t("accept").toUpperCase()}</Button>
-              </Dialog.Actions>
-            </Dialog>
-          </Portal>
-
-          <FAB
-              icon="plus"
-              style={styles.fab}
-              onPress={() => {
-                router.navigate('/posts')
+                return <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
+                  <Text style={{textAlign: 'center'}}>{t("thereAreNoPosts")}</Text>
+                </View>;
               }}
 
-          />
-        </View>
+              refreshControl={
+                <RefreshControl
+                    progressBackgroundColor={theme.colors.surfaceVariant}
+                    colors={[theme.colors.primary, theme.colors.primaryContainer]}
+                    refreshing={arePostsLoading}
+                    progressViewOffset={arePostsLoading ? -200 : 0}
+                    onRefresh={() => getAllOpenPosts(user!.cityId!)}
+                />
+              }
+
+              renderItem={({item}) => (
+                  <Card
+                      key={`${item.id}`}
+                      onPress={() => router.push(`/posts/${item.id}`)}
+                      style={{marginHorizontal: 16, marginBottom: 8, marginTop: 8}}
+                  >
+                    <Card.Title
+                        style={{marginTop: 0, paddingTop: 0, width: '100%'}}
+                        titleStyle={{marginTop: 0, paddingVertical: 4, textAlign: 'center'}}
+                        title={item.title.toUpperCase()}
+                        titleNumberOfLines={2}
+                        titleVariant={"titleLarge"}
+                    />
+                    <Card.Content>
+                      <Text
+                          variant="bodyLarge"
+                          numberOfLines={5}>{item.description}</Text>
+                    </Card.Content>
+                    <Card.Actions>
+                      <View style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
+                      }}
+                      >
+                        <View style={{justifyContent: 'space-evenly'}}>
+                          <Text variant={"bodyLarge"}>{t("deadline")}</Text>
+                          <Text variant={"bodyLarge"}>
+                            {formatDate(item.dueDateTime.toDate().toString())}
+                          </Text>
+                        </View>
+                        <View style={{alignItems: "flex-end"}}>
+                          <Text variant={"bodyLarge"}>{t("service")}</Text>
+                          <Text variant={"bodyLarge"}>{item.price} KM</Text>
+                          {
+                              item.cowerAdditionalCost
+                              && <Text variant={"bodyLarge"}>{t("plusAdditionalCosts")}</Text>
+                          }
+                        </View>
+                      </View>
+                    </Card.Actions>
+                    <Card.Actions>
+                      <Button
+                          disabled={item.createdBy === user?.id}
+                          mode="contained-tonal"
+                          onPress={() => {
+                            setSelectedPostForAccepting(item);
+                            showDialog()
+                          }}
+                          style={{width: '100%'}}
+                          uppercase={true}
+                      >{t("accept").toUpperCase()}</Button>
+                    </Card.Actions>
+                  </Card>
+              )}/>
+        </Container>
+
+        <Portal>
+          <Dialog visible={visible} onDismiss={hideDialog}>
+            <Dialog.Title>{t("confirmation")}</Dialog.Title>
+            <Dialog.Content>
+              <Text variant="bodyMedium">{t("confirmObligation")}</Text>
+            </Dialog.Content>
+            <Dialog.Content>
+              <Text variant="bodyMedium">{selectedPostForAccepting?.title}</Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button
+                  loading={isPostAccepting}
+                  onPress={() => acceptSelectedPost(selectedPostForAccepting?.id!, user!.id!)}
+              >{t("accept").toUpperCase()}</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+        <FAB
+            icon="plus"
+            style={styles.fab}
+            onPress={() => {
+              router.navigate('/posts')
+            }}
+
+        />
       </>
   )
 }

@@ -50,7 +50,6 @@ const YourPosts = () => {
     getAllUserPosts(user?.id!);
   }, []);
 
-
   return (
       <View style={{flexDirection: 'column', flex: 1}}>
         <FlatList
@@ -59,7 +58,7 @@ const YourPosts = () => {
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item, _) => `${item.id}`}
 
-            contentContainerStyle={{flex: 1}}
+            contentContainerStyle={[(arePostsLoading || userPosts === null || userPosts?.length === 0) && {flex: 1}]}
             ListEmptyComponent={() => {
               if (arePostsLoading) {
                 return <ActivityIndicator style={{flex: 1}} size="large" animating={true}/>

@@ -33,7 +33,6 @@ export const createNotificationChannel = async () => {
       vibrationPattern: [0, 250, 250, 250],
       lightColor: "#FF231F7C",
     });
-    console.log("Notification channel created.");
   } catch (e) {
     console.error("Error creating notification channel:", e);
   }
@@ -42,7 +41,9 @@ export const createNotificationChannel = async () => {
 export const subscribeToTopic = async (topic: string) => {
   messaging()
   .subscribeToTopic(topic)
-  .then(() => {})
+  .then(() => {
+    console.log("Successfully subscribed to topic: ", topic)
+  })
   .catch((e) => {
     console.log(e);
   });
@@ -51,7 +52,9 @@ export const subscribeToTopic = async (topic: string) => {
 export const unsubscribeFromTopic = async (topic: string) => {
   messaging()
   .unsubscribeFromTopic(topic)
-  .then(() => {})
+  .then(() => {
+    console.log("Successfully unsubscribed from topic: ", topic)
+  })
   .catch((e) => {
     console.log(e);
   });
