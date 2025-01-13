@@ -58,7 +58,6 @@ const RemotePushController = () => {
         const enabled = await requestUserPermission();
 
         if (enabled) {
-          // console.log("Notifications enabled");
 
           // Get FCM token
           const token = await messaging().getToken();

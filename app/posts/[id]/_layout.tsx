@@ -31,9 +31,9 @@ const Layout = () => {
 
       navigation.setOptions({title: post?.title});
 
-      setIsLoading(false);
       setPost(post);
       dispatch(setExistingPostNotLoading());
+      setIsLoading(false);
     } catch (e) {
       console.log(e);
       setIsLoading(false);
