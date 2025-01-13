@@ -100,7 +100,7 @@ const NewPostScreen = () => {
         price: parseFloat(price),
         dueDateTime: Timestamp.fromDate(new Date(`${formatToISODate(date!)}T${formatToISOTime(time!)}`)),
         destination: newPostGeoLocation!,
-        contactPhoneNumber: contactNumber,
+        contactPhoneNumber: contactNumber !== "" ? contactNumber : user?.phoneNumber!,
         cityId: selectedCityId ?? user?.cityId!,
         status: PostStatus.OPEN,
         createdBy: user!.id as string,
@@ -163,7 +163,7 @@ const NewPostScreen = () => {
                 label={t("contactPhone")}
                 placeholder="06x123456"
                 keyboardType="numeric"
-                value={contactNumber}
+                value={contactNumber !== "" ? contactNumber : user?.phoneNumber!}
                 onChangeText={text => setContactNumber(text)}
             />
             <TextInput

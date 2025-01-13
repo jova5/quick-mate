@@ -101,3 +101,18 @@ export async function updateUserNotificationToken(docId: string, notificationTok
 
   return await updateDoc(userDocRef, {notificationToken: notificationToken})
 }
+
+export async function updateUserData(docId: string, firstName: string, lastName: string, email: string, phoneNumber: string) {
+
+  const userDocRef = doc(usersCollection, docId);
+
+  return await updateDoc(
+      userDocRef,
+      {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phoneNumber: phoneNumber
+      }
+  )
+}

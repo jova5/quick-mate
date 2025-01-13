@@ -38,5 +38,10 @@
   "logOut": "Odjavi se",
   "address": "Adresa",
   "search": "Pretraži",
-  "newPostAdded": "Nova objava kreirana"
+  "newPostAdded": "Nova objava kreirana",
+  "firstName": "Ime",
+  "lastName": "Prezime",
+  "email": "email",
+  "phoneNumber": "Broj telefona",
+  "save": "Sačuvaj"
 }

@@ -39,5 +39,10 @@
   "logOut": "Log out",
   "address": "Address",
   "search": "Search",
-  "newPostAdded": "New post added"
+  "newPostAdded": "New post added",
+  "firstName": "First name",
+  "lastName": "Last name",
+  "email": "email",
+  "phoneNumber": "Phone number",
+  "save": "Save"
 }
