@@ -8,7 +8,7 @@ import {addPost, CreatePostInterface, PostStatus} from "@/db/collections/posts";
 import {Timestamp} from "@firebase/firestore";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectCity, setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
-import {formatToISODate, formatToISOTime} from "@/assets/functions/dateFormater";
+import {formatToISODate, formatToISOTime} from "@/assets/scripts/dateFormater";
 import {selectUser} from "@/redux/user-slice/userSlice";
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {selectPost, setNewPostAddress, setNewPostGeoLocation} from "@/redux/post-slice/postSlice";

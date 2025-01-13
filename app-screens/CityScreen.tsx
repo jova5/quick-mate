@@ -7,7 +7,7 @@ import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectCity, setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
 import {updateUserCity} from "@/db/collections/users";
 import {selectUser, setUserPhoneAndCity} from "@/redux/user-slice/userSlice";
-import {subscribeToTopic, unsubscribeFromTopic} from "@/scripts/rnFireBase";
+import {subscribeToTopic, unsubscribeFromTopic} from "@/assets/scripts/rnFireBase";
 
 const CityScreen = () => {
   const params = useLocalSearchParams();

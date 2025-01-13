@@ -1,12 +1,12 @@
 import messaging from "@react-native-firebase/messaging";
 import {useEffect} from "react";
-import {requestUserPermission, subscribeToTopic} from "@/scripts/rnFireBase";
+import {requestUserPermission, subscribeToTopic} from "@/assets/scripts/rnFireBase";
 import {useAppSelector} from "@/redux/hooks";
 import {selectUser} from "@/redux/user-slice/userSlice";
 import {updateUserNotificationToken} from "@/db/collections/users";
 import {useTranslation} from "react-i18next";
 import {router} from "expo-router";
-import {replacePlaceholder} from "@/assets/functions/replacePlaceholder";
+import {replacePlaceholder} from "@/assets/scripts/replacePlaceholder";
 import * as Notifications from 'expo-notifications';
 
 const RemotePushController = () => {

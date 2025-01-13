@@ -3,7 +3,7 @@ import {Button, Card, Dialog, MD3Theme, Portal, Text, useTheme} from "react-nati
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {acceptPost, completePost, PostInterface} from "@/db/collections/posts";
-import {formatDate} from "@/assets/functions/dateFormater";
+import {formatDate} from "@/assets/scripts/dateFormater";
 import {router} from "expo-router";
 import {useAppSelector} from "@/redux/hooks";
 import {selectUser} from "@/redux/user-slice/userSlice";

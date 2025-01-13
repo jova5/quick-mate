@@ -20,7 +20,7 @@ import {
 import {router} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import auth = firebase.auth;
-import {createNotificationChannel} from "@/scripts/rnFireBase";
+import {createNotificationChannel} from "@/assets/scripts/rnFireBase";
 
 const LoginScreen = () => {
 
@@ -247,7 +247,7 @@ const LoginScreen = () => {
               loading={isLoggedUserLoading}
               mode='contained-tonal'
               icon={() => (
-                  <Image source={require('../assets/icon/unnamed.png')}
+                  <Image source={require('../assets/icon/google-icon.png')}
                          style={{width: 20, height: 20,}}
                   />
               )}

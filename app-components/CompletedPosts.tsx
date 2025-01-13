@@ -14,7 +14,7 @@ import {router} from "expo-router";
 import {useTranslation} from "react-i18next";
 import {getAllCompletedPostsByUserId, PostInterface} from "@/db/collections/posts";
 import {useEffect, useState} from "react";
-import {formatDate} from "@/assets/functions/dateFormater";
+import {formatDate} from "@/assets/scripts/dateFormater";
 
 const CompletedPosts = () => {
   const theme = useTheme();

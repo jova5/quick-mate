@@ -14,7 +14,7 @@ import {router} from "expo-router";
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
 import {getAllUserPostsByUserId, PostInterface} from "@/db/collections/posts";
-import {formatDate} from "@/assets/functions/dateFormater";
+import {formatDate} from "@/assets/scripts/dateFormater";
 import {selectUser} from "@/redux/user-slice/userSlice";
 
 const YourPosts = () => {

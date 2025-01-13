@@ -4,7 +4,13 @@ import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
 import 'react-native-reanimated';
 import {useColorScheme} from '@/hooks/useColorScheme';
-import {adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, PaperProvider} from "react-native-paper";
+import {
+  adaptNavigationTheme,
+  configureFonts,
+  MD3DarkTheme,
+  MD3LightTheme,
+  PaperProvider
+} from "react-native-paper";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 
 import {Colors} from "@/constants/Colors";
@@ -26,8 +32,20 @@ const store = setupStore();
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const customDarkTheme = {...MD3DarkTheme, colors: Colors.dark};
-const customLightTheme = {...MD3LightTheme, colors: Colors.light};
+const fontConfig = {
+    fontFamily: 'RobotoRegular'
+};
+
+const customDarkTheme = {
+  ...MD3DarkTheme,
+  colors: Colors.dark,
+  fonts: configureFonts({config: fontConfig})
+};
+const customLightTheme = {
+  ...MD3LightTheme,
+  colors: Colors.light,
+  fonts: configureFonts({config: fontConfig})
+};
 
 const {LightTheme, DarkTheme} = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -45,6 +63,9 @@ export default function RootLayout() {
 
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    RobotoLight: require('../assets/fonts/Roboto-Regular.ttf'),
+    RobotoRegular: require('../assets/fonts/Roboto-Regular.ttf'),
+    RobotoMedium: require('../assets/fonts/Roboto-Medium.ttf'),
   });
 
   useEffect(() => {

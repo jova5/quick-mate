@@ -15,7 +15,7 @@ import {router} from "expo-router";
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {acceptPost, getAllOpenPostsByCityId, PostInterface} from "@/db/collections/posts";
-import {formatDate} from "@/assets/functions/dateFormater";
+import {formatDate} from "@/assets/scripts/dateFormater";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectUser, setUserInfo} from "@/redux/user-slice/userSlice";
 import {GoogleSignin} from "@react-native-google-signin/google-signin";
