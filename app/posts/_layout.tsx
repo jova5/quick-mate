@@ -22,7 +22,15 @@ const Layout = () => {
             headerTitleStyle: {color: theme.colors.onSurfaceVariant},
             headerTintColor: theme.colors.onSurfaceVariant
           }}/>
-        <Stack.Screen name="[id]" options={
+        <Stack.Screen name="[id]/index" options={
+          {
+            headerShown: !existingPostLoading,
+            headerStyle: {backgroundColor: theme.colors.surfaceVariant},
+            headerShadowVisible: false,
+            headerTitleStyle: {color: theme.colors.onSurfaceVariant},
+            headerTintColor: theme.colors.onSurfaceVariant
+          }}/>
+        <Stack.Screen name="[id]/edit" options={
           {
             headerShown: !existingPostLoading,
             headerStyle: {backgroundColor: theme.colors.surfaceVariant},

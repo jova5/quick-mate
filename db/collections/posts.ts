@@ -193,3 +193,10 @@ export async function completePost(docId: string) {
 
   return await updateDoc(docRef, {status: PostStatus.COMPLETED})
 }
+
+export async function editPost(docId: string, editedPost: CreatePostInterface) {
+
+  const docRef = doc(postsCollection, docId);
+
+  return await updateDoc(docRef, {...editedPost})
+}

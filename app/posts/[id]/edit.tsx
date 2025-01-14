@@ -5,16 +5,18 @@ import {Platform, ScrollView, StyleSheet} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {useAppDispatch} from "@/redux/hooks";
 import {setExistingPostLoading, setExistingPostNotLoading} from "@/redux/post-slice/postSlice";
-import PostScreen from "@/app-screens/PostScreen";
 import {getPost, PostInterface} from "@/db/collections/posts";
+import EditPostScreen from "@/app-screens/EditPostScreen";
+import {useTranslation} from "react-i18next";
 
-const Layout = () => {
+const EditPostPage = () => {
 
   const params = useLocalSearchParams();
-  const {id, mode} = params;
+  const {id} = params;
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [post, setPost] = useState<any>(undefined);
+  const {t} = useTranslation();
 
   const theme = useTheme();
   const styles = createStyles(theme);
@@ -29,7 +31,7 @@ const Layout = () => {
     try {
       const post: PostInterface | null = await getPost(id);
 
-      navigation.setOptions({title: post?.title});
+      navigation.setOptions({title: `${t('editPost')}: ${post?.title}`});
 
       setPost(post);
       dispatch(setExistingPostNotLoading());
@@ -58,11 +60,11 @@ const Layout = () => {
   }
 
   return (
-      <PostScreen post={post} mode={mode}/>
+      <EditPostScreen post={post}/>
   )
 }
 
-export default Layout;
+export default EditPostPage;
 
 const createStyles = (theme: MD3Theme) => {
   return StyleSheet.create({

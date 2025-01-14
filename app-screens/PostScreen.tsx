@@ -9,7 +9,7 @@ import {useAppSelector} from "@/redux/hooks";
 import {selectUser} from "@/redux/user-slice/userSlice";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 
-const PostScreen = ({post, mode}:{post: PostInterface, mode: string | undefined | string[]}) => {
+const PostScreen = ({post, mode}: { post: PostInterface, mode: string | undefined | string[] }) => {
 
   const theme = useTheme();
   const styles = createStyles(theme);
@@ -106,6 +106,7 @@ const PostScreen = ({post, mode}:{post: PostInterface, mode: string | undefined 
             }}>
               <MapView
                   provider={PROVIDER_GOOGLE}
+                  loadingEnabled={true}
                   style={styles.map}
                   region={{
                     latitude: post.destination ? post.destination.latitude : 43.9,
@@ -142,7 +143,7 @@ const PostScreen = ({post, mode}:{post: PostInterface, mode: string | undefined 
                       style={{width: '100%'}}
                       uppercase={true}
                   >{t("accept")}</Button>
-                ) : (
+              ) : (
                   <Button
                       disabled={mode === undefined || mode !== "IN_PROGRESS"}
                       mode="contained-tonal"
@@ -156,8 +157,20 @@ const PostScreen = ({post, mode}:{post: PostInterface, mode: string | undefined 
           </Card.Actions>
         </Card>
 
+        {
+            user?.id === post.createdBy && (
+                <View style={{padding: 12}}>
+                  <Button mode="outlined" onPress={() => {
+                    router.push(`/posts/${post.id}/edit`)
+                  }}>{t('edit').toUpperCase()}</Button>
+                </View>
+            )
+        }
+
         <Portal>
-          <Dialog visible={isCompleteDialogShowing} onDismiss={() => setIsCompleteDialogShowing(false)}>
+          <Dialog
+              visible={isCompleteDialogShowing}
+              onDismiss={() => setIsCompleteDialogShowing(false)}>
             <Dialog.Title>{t("confirmation")}</Dialog.Title>
             <Dialog.Content>
               <Text variant="bodyMedium">{t("confirmCompletion")}</Text>
@@ -202,6 +215,7 @@ const createStyles = (theme: MD3Theme) => {
     container: {
       backgroundColor: theme.colors.background,
       flex: 1,
+      justifyContent: 'space-between'
     },
     map: {
       ...StyleSheet.absoluteFillObject,

@@ -43,5 +43,6 @@
   "lastName": "Prezime",
   "email": "email",
   "phoneNumber": "Broj telefona",
-  "save": "Sačuvaj"
+  "save": "Sačuvaj",
+  "editPost": "Izmjeni objavu"
 }

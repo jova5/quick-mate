@@ -44,5 +44,6 @@
   "lastName": "Last name",
   "email": "email",
   "phoneNumber": "Phone number",
-  "save": "Save"
+  "save": "Save",
+  "editPost": "Edit post"
 }
