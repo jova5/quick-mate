@@ -8,7 +8,6 @@ import {GoogleSignin} from "@react-native-google-signin/google-signin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {selectUser} from "@/redux/user-slice/userSlice";
 import {useAppSelector} from "@/redux/hooks";
-import { GOOGLE_SIGN_IN_WEB_CLIENT_ID } from '@env';
 
 const App = () => {
 
@@ -19,7 +18,7 @@ const App = () => {
 
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId: process.env.GOOGLE_SIGN_IN_WEB_CLIENT_ID,
+      webClientId: process.env.EXPO_PUBLIC_GOOGLE_SIGN_IN_WEB_CLIENT_ID,
     });
   }, []);
 

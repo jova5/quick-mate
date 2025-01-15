@@ -45,5 +45,9 @@
   "email": "email",
   "phoneNumber": "Phone number",
   "save": "Save",
-  "editPost": "Edit post"
+  "editPost": "Edit post",
+  "fieldRequired": "Field required!",
+  "firstNameInvalid": "First name invalid!",
+  "lastNameInvalid": "Last name invalid!",
+  "notValidEmail": "Not valid email!"
 }

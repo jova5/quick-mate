@@ -44,5 +44,9 @@
   "email": "email",
   "phoneNumber": "Broj telefona",
   "save": "Sačuvaj",
-  "editPost": "Izmjeni objavu"
+  "editPost": "Izmjeni objavu",
+  "fieldRequired": "Polje je obavezno!",
+  "firstNameInvalid": "Ime nije validno!",
+  "lastNameInvalid": "Prezime nije validno!",
+  "notValidEmail": "Email nije validan!"
 }

@@ -228,6 +228,26 @@ const EditPostScreen = ({post}:{post: PostInterface}) => {
                 }}
                 label={t("coverAdditionalCosts")}
             />
+
+            {/*<View style={styles.row}>*/}
+            {/*  <Text>Terms Accept</Text>*/}
+            {/*  <Controller*/}
+            {/*      control={control}*/}
+            {/*      defaultValue={false}*/}
+            {/*      name="termsAccepted"*/}
+            {/*      rules={{ required: { value: true, message: ERROR_MESSAGES.TERMS } }}*/}
+            {/*      render={({ value, onChange }) => (*/}
+            {/*          <>*/}
+            {/*            <Switch*/}
+            {/*                value={value}*/}
+            {/*                onValueChange={(value) => onChange(value)}*/}
+            {/*            />*/}
+            {/*          </>*/}
+            {/*      )}*/}
+            {/*  />*/}
+            {/*</View>*/}
+            {/*<HelperText type="error">{errors.termsAccepted?.message}</HelperText>*/}
+
             <TextInput
                 mode="outlined"
                 label={t("address")}

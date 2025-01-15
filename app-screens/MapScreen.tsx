@@ -9,7 +9,6 @@ import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectPost, setNewPostAddress, setNewPostGeoLocation} from "@/redux/post-slice/postSlice";
 import {router} from "expo-router";
-import { GOOGLE_API_KEY } from '@env';
 
 const MapScreen = () => {
   const theme = useTheme();
@@ -59,7 +58,7 @@ const MapScreen = () => {
   };
 
   const getPlaceDetails = async (placeId) => {
-    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${process.env.GOOGLE_API_KEY}`;
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${process.env.EXPO_PUBLIC_GOOGLE_API_KEY}`;
 
     const response = await fetch(url);
     const result = await response.json();
@@ -107,7 +106,7 @@ const MapScreen = () => {
   };
 
   const fetchAddressFromCoords = async (latitude, longitude) => {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.GOOGLE_API_KEY}`;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.EXPO_PUBLIC_GOOGLE_API_KEY}`;
 
     try {
       const response = await fetch(url);
@@ -175,7 +174,7 @@ const MapScreen = () => {
               handlePlaceSelect(data.place_id);
             }}
             query={{
-              key: process.env.GOOGLE_API_KEY,
+              key: process.env.EXPO_PUBLIC_GOOGLE_API_KEY,
               language: 'en',
               components: 'country:ba'
             }}
