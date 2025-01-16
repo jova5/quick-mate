@@ -66,7 +66,6 @@ const AfterLoginSetupScreen = () => {
         />
         <View style={{flex: 1, justifyContent: 'flex-end'}}>
           <Button
-              disabled={selectedCityId === undefined || contactNumber === ""}
               mode='contained'
               loading={isUserUpdating}
               onPress={() => updateUserPhoneAndCity()}

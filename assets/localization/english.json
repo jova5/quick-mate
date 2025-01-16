@@ -49,5 +49,7 @@
   "fieldRequired": "Field required!",
   "firstNameInvalid": "First name invalid!",
   "lastNameInvalid": "Last name invalid!",
-  "notValidEmail": "Not valid email!"
+  "notValidEmail": "Not valid email!",
+  "priceInvalid": "Invalid price!",
+  "phoneNumberInvalid": "Invalid phone number!"
 }
