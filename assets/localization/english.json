@@ -51,5 +51,6 @@
   "lastNameInvalid": "Last name invalid!",
   "notValidEmail": "Not valid email!",
   "priceInvalid": "Invalid price!",
-  "phoneNumberInvalid": "Invalid phone number!"
+  "phoneNumberInvalid": "Invalid phone number!",
+  "next": "Next"
 }

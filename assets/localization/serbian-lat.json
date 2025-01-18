@@ -50,5 +50,6 @@
   "lastNameInvalid": "Prezime nije validno!",
   "notValidEmail": "Email nije validan!",
   "priceInvalid": "Cijena nije validan!",
-  "phoneNumberInvalid": "Broj telefona nije validan!"
+  "phoneNumberInvalid": "Broj telefona nije validan!",
+  "next": "Dalje"
 }

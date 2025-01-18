@@ -76,7 +76,9 @@ const CityScreen = () => {
     try {
       await updateUserCity(user?.id!, cityId, cityName);
 
-      await unsubscribeFromTopic(user?.cityId!);
+      if (user?.cityId !== undefined && user?.cityId !== null) {
+        await unsubscribeFromTopic(user?.cityId);
+      }
 
       dispatch(setUserPhoneAndCity({
         phoneNumber: user?.phoneNumber,

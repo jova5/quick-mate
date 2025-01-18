@@ -4,7 +4,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {router} from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {useTranslation} from "react-i18next";
-import {addPost, CreatePostInterface, GeoLocation, PostStatus} from "@/db/collections/posts";
+import {addPost, CreatePostInterface, PostStatus} from "@/db/collections/posts";
 import {Timestamp} from "@firebase/firestore";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectCity, setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
@@ -41,10 +41,6 @@ const NewPostScreen = () => {
   const {newPostAddress, newPostGeoLocation} = useAppSelector(selectPost);
   const dispatch = useAppDispatch();
 
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [price, setPrice] = useState<string>('');
-  const [contactNumber, setContactNumber] = useState<string>("");
   const [time, setTime] = useState(null);
   const [date, setDate] = useState(null);
   const [cowerAdditionalCost, setCowerAdditionalCost] = useState<boolean>(false);
@@ -133,6 +129,7 @@ const NewPostScreen = () => {
         workerUserId: "",
         cowerAdditionalCost: cowerAdditionalCost,
         address: data.address,
+        cityName: selectedCityName ?? user?.cityName!
       };
 
       await addPost(post);
@@ -199,7 +196,7 @@ const NewPostScreen = () => {
               keyboardShouldPersistTaps="handled">
             <Controller
                 control={control}
-                defaultValue={title}
+                defaultValue={''}
                 name="title"
                 rules={{
                   required: {value: true, message: t('fieldRequired')},
@@ -221,7 +218,7 @@ const NewPostScreen = () => {
             />
             <Controller
                 control={control}
-                defaultValue={description}
+                defaultValue={''}
                 name="description"
                 rules={{
                   required: {value: true, message: t('fieldRequired')},
@@ -244,7 +241,7 @@ const NewPostScreen = () => {
             />
             <Controller
                 control={control}
-                defaultValue={contactNumber !== "" ? contactNumber : user?.phoneNumber!}
+                defaultValue={user?.phoneNumber!}
                 name="contactPhoneNumber"
                 rules={{
                   required: {value: true, message: t('fieldRequired')},
@@ -286,7 +283,6 @@ const NewPostScreen = () => {
                           onPress={() => {
                             router.push('/city?mode=NEW_POST')
                           }}
-                          // onChangeText={(value) => onChange(value)}
                       />
                       <HelperText type="error">{errors.city?.message}</HelperText>
                     </>
@@ -297,7 +293,7 @@ const NewPostScreen = () => {
                 defaultValue={showTime ?? ''}
                 name="time"
                 rules={{
-                  required: {value: showTime === null ? false : true, message: t('fieldRequired')},
+                  required: {value: showTime !== null, message: t('fieldRequired')},
                 }}
                 render={({field: {onChange, onBlur, value}}) => (
                     <>
@@ -330,7 +326,7 @@ const NewPostScreen = () => {
                 defaultValue={showDate ?? ''}
                 name="date"
                 rules={{
-                  required: {value: showDate === null ? false : true, message: t('fieldRequired')},
+                  required: {value: showDate !== null, message: t('fieldRequired')},
                 }}
                 render={({field: {onChange, onBlur, value}}) => (
                     <>
@@ -360,7 +356,7 @@ const NewPostScreen = () => {
             />
             <Controller
                 control={control}
-                defaultValue={price}
+                defaultValue={''}
                 name="price"
                 rules={{
                   required: {value: true, message: t('fieldRequired')},
@@ -437,7 +433,7 @@ const NewPostScreen = () => {
                 name="address"
                 rules={{
                   required: {
-                    value: newPostAddress === undefined ? false : true,
+                    value: newPostAddress !== undefined,
                     message: t('fieldRequired')
                   },
                 }}

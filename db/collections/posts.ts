@@ -35,7 +35,8 @@ export interface CreatePostInterface {
   createdBy: string,
   workerUserId: string,
   cowerAdditionalCost: boolean,
-  address: string
+  address: string,
+  cityName: string,
 }
 
 export interface PostInterface extends CreatePostInterface {
@@ -95,7 +96,8 @@ export async function getAllCompletedPostsByUserId(userId: string): Promise<Post
       createdBy: doc.data().createdBy,
       workerUserId: doc.data().workerUserId,
       cowerAdditionalCost: doc.data().cowerAdditionalCost,
-      address: doc.data().address
+      address: doc.data().address,
+      cityName: doc.data().cityName,
     }
   });
 }
@@ -123,7 +125,8 @@ export async function getAllInProgressPostsByUserId(userId: string): Promise<Pos
       createdBy: doc.data().createdBy,
       workerUserId: doc.data().workerUserId,
       cowerAdditionalCost: doc.data().cowerAdditionalCost,
-      address: doc.data().address
+      address: doc.data().address,
+      cityName: doc.data().cityName,
     }
   });
 }
@@ -150,7 +153,8 @@ export async function getAllUserPostsByUserId(userId: string): Promise<PostInter
       createdBy: doc.data().createdBy,
       workerUserId: doc.data().workerUserId,
       cowerAdditionalCost: doc.data().cowerAdditionalCost,
-      address: doc.data().address
+      address: doc.data().address,
+      cityName: doc.data().cityName,
     }
   });
 }
@@ -183,7 +187,8 @@ export async function getPost(docId: string): Promise<PostInterface | null> {
     createdBy: postData.createdBy as string,
     workerUserId: postData.workerUserId as string,
     cowerAdditionalCost: postData.cowerAdditionalCost as boolean,
-    address: postData.address as string
+    address: postData.address as string,
+    cityName: postData.cityName as string
   };
 }
 

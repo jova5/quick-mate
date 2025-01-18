@@ -111,7 +111,7 @@ const ProfileScreen = () => {
           }}>
             <Button mode='outlined' onPress={() => {
               router.push('/city?mode=CHANGE_USER_CITY', {})
-            }}>{user ? user.cityName : t("city")}</Button>
+            }}>{(user && user.cityName !== undefined && user.cityName !== null) ? user.cityName : t("city")}</Button>
             <IconButton
                 onPress={showLanguageModal}
                 icon={({size, color}) => {

@@ -1,11 +1,17 @@
 import {StyleSheet, View} from "react-native";
 import {Button, HelperText, MD3Theme, TextInput, useTheme} from "react-native-paper";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
-import {selectUser, setIsLoggedIn, setUserInfo} from "@/redux/user-slice/userSlice";
+import {
+  selectUser,
+  setIsLoggedIn,
+  setIsLoggingOut,
+  setUserInfo
+} from "@/redux/user-slice/userSlice";
 import {useTranslation} from "react-i18next";
 import React, {useState} from "react";
 import {updateUserData} from "@/db/collections/users";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
+import {setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
 
 type ProfileFormData = {
   firstName: string,
@@ -27,7 +33,7 @@ const ProfileInfoScreen = () => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
-  const {user} = useAppSelector(selectUser);
+  const {user, isLoggingOut} = useAppSelector(selectUser);
 
   const [isUserUpdating, setIsUserUpdating] = useState<boolean>(false);
 
@@ -166,9 +172,13 @@ const ProfileInfoScreen = () => {
           >{t('save')}</Button>
         </View>
         <Button
+            loading={isLoggingOut}
             mode="contained"
             onPress={() => {
+              dispatch(setIsLoggingOut(true))
               dispatch(setIsLoggedIn(false));
+              dispatch(setSelectedCityId(undefined));
+              dispatch(setSelectedCityName(undefined));
               dispatch(setUserInfo(undefined));
             }}>{t('logOut')}</Button>
       </View>
