@@ -20,7 +20,7 @@ export const requestUserPermission = async () => {
 
     return enabled;
   } catch (e) {
-    console.log(e)
+    console.error("Error in requesting users permissions: ", e);
     return false
   }
 };
@@ -34,7 +34,7 @@ export const createNotificationChannel = async () => {
       lightColor: "#FF231F7C",
     });
   } catch (e) {
-    console.error("Error creating notification channel:", e);
+    console.error("Error creating notification channel: ", e);
   }
 };
 
@@ -45,7 +45,7 @@ export const subscribeToTopic = async (topic: string) => {
     console.log("Successfully subscribed to topic: ", topic)
   })
   .catch((e) => {
-    console.log(e);
+    console.error("Error subscribing to topic: ", e);
   });
 };
 
@@ -56,6 +56,6 @@ export const unsubscribeFromTopic = async (topic: string) => {
     console.log("Successfully unsubscribed from topic: ", topic)
   })
   .catch((e) => {
-    console.log(e);
+    console.error("Error unsubscribing from topic: ", e);
   });
 };

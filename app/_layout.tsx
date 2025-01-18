@@ -76,7 +76,7 @@ export default function RootLayout() {
           i18next.changeLanguage(storedLanguage);
         }
       } catch (e) {
-        console.log(e)
+        console.error("Error loading languages: ", e);
       }
 
     }

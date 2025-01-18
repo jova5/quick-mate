@@ -137,7 +137,7 @@ const NewPostScreen = () => {
       dispatch(setSelectedCityId(undefined));
       dispatch(setSelectedCityName(undefined));
     } catch (e) {
-      console.log(e);
+      console.error("Error adding new post: ", e);
       setIsPostCreating(false);
       router.back();
     } finally {

@@ -142,7 +142,7 @@ const EditPostScreen = ({post}:{post: PostInterface}) => {
       dispatch(setSelectedCityId(undefined));
       dispatch(setSelectedCityName(undefined));
     } catch (e) {
-      console.log(e);
+      console.error("Error editing post: ", e);
       setIsPostUpdating(false);
       router.back();
     } finally {

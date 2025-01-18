@@ -5,8 +5,7 @@ import {useTheme} from "react-native-paper";
 import {useTranslation} from "react-i18next";
 import React, {useEffect} from "react";
 import {GoogleSignin} from "@react-native-google-signin/google-signin";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {selectUser, setIsLoggingOut} from "@/redux/user-slice/userSlice";
+import {selectUser} from "@/redux/user-slice/userSlice";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 
 const App = () => {
@@ -26,18 +25,9 @@ const App = () => {
   useEffect(() => {
 
     if (isLoggedIn === false) {
-      removeSession().then(() => {
-        router.navigate('/');
-      });
-      dispatch(setIsLoggingOut(false));
+      router.navigate('/');
     }
   }, [isLoggedIn]);
-
-
-  async function removeSession() {
-    await GoogleSignin.signOut();
-    await AsyncStorage.removeItem('AUTH_TOKEN');
-  }
 
   return (
       <>

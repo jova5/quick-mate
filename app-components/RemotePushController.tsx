@@ -29,7 +29,7 @@ const RemotePushController = () => {
 // Handle notification press actions
   const handleNotificationPress = (postId: string) => {
     if (postId) {
-      console.log(`Navigating to post: ${postId}`);
+      console.log(`Notification press action. Navigating to post: ${postId}`);
       router.push(`/posts/${postId}`, {}) // Adjust the route name as per your app
     }
   };

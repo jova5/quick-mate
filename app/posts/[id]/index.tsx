@@ -35,7 +35,7 @@ const PostPage = () => {
       dispatch(setExistingPostNotLoading());
       setIsLoading(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error getting info about existing post: ", e);
       setIsLoading(false);
       dispatch(setExistingPostNotLoading());
     } finally {

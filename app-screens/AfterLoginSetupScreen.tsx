@@ -58,7 +58,7 @@ const AfterLoginSetupScreen = () => {
 
       router.navigate('/home');
     } catch (e) {
-      console.log(e);
+      console.error("Error updating user phone number and city: ", e);
       setIsUserUpdating(false);
     } finally {
       setIsUserUpdating(false);
@@ -73,8 +73,6 @@ const AfterLoginSetupScreen = () => {
   }, [selectedCityName, control]);
 
   useEffect(() => {
-
-    console.log(selectedCityName);
 
     dispatch(setSelectedCityId(undefined));
     dispatch(setSelectedCityName(undefined));

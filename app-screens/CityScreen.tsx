@@ -35,7 +35,7 @@ const CityScreen = () => {
       setCountries(countries);
       setAreCountriesLoading(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error getting countries with cities: ", e);
       setAreCountriesLoading(false);
     } finally {
       setAreCountriesLoading(false);
@@ -90,7 +90,7 @@ const CityScreen = () => {
 
       setIsUserCityUpdating(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error updating user cities: ", e);
       setIsUserCityUpdating(false);
     } finally {
       setIsUserCityUpdating(false);

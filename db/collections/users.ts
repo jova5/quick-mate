@@ -76,7 +76,7 @@ export async function checkUserByEmail(email: string) {
       return true;
     }
   } catch (error) {
-    console.error('Greška pri provjeri korisnika:', error);
+    console.error('Error while checking user by email: ', error);
     return false;
   }
 }

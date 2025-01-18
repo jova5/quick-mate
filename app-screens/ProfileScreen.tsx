@@ -66,7 +66,7 @@ const ProfileScreen = () => {
       setIsPostCompleting(false);
       hideDialog()
     } catch (e) {
-      console.log(e);
+      console.error("Error completing post: ", e);
       setIsPostCompleting(false);
       hideDialog()
     } finally {

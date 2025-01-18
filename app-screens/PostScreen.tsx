@@ -35,7 +35,7 @@ const PostScreen = ({post, mode}: { post: PostInterface, mode: string | undefine
       hideDialog()
       router.back();
     } catch (e) {
-      console.log(e);
+      console.error("Error accepting post: ", e);
       setIsPostAccepting(false);
       hideDialog()
     } finally {
@@ -53,7 +53,7 @@ const PostScreen = ({post, mode}: { post: PostInterface, mode: string | undefine
       setIsPostCompleting(false);
       setIsCompleteDialogShowing(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error completing post: ", e);
       setIsPostCompleting(false);
       setIsCompleteDialogShowing(false);
     } finally {

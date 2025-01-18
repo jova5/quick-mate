@@ -12,6 +12,8 @@ import React, {useState} from "react";
 import {updateUserData} from "@/db/collections/users";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
+import {GoogleSignin} from "@react-native-google-signin/google-signin";
+import auth from "@react-native-firebase/auth";
 
 type ProfileFormData = {
   firstName: string,
@@ -33,9 +35,10 @@ const ProfileInfoScreen = () => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
-  const {user, isLoggingOut} = useAppSelector(selectUser);
+  const {user} = useAppSelector(selectUser);
 
   const [isUserUpdating, setIsUserUpdating] = useState<boolean>(false);
+  const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
 
   const {
     control,
@@ -65,12 +68,33 @@ const ProfileInfoScreen = () => {
 
       setIsUserUpdating(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error updating user info: ", e);
       setIsUserUpdating(false);
     } finally {
       setIsUserUpdating(false);
     }
   }
+
+  const handleSignOut = async () => {
+
+    setIsLoggingOut(true);
+
+    signOut().then(() =>{
+      dispatch(setIsLoggedIn(false));
+      dispatch(setSelectedCityId(undefined));
+      dispatch(setSelectedCityName(undefined));
+      dispatch(setUserInfo(undefined));
+    });
+  }
+
+  const signOut = async () => {
+    try {
+      await GoogleSignin.signOut();
+      await auth().signOut();
+    } catch (error) {
+      console.error('Error signing out: ', error);
+    }
+  };
 
   return (
       <View style={styles.container}>
@@ -174,13 +198,8 @@ const ProfileInfoScreen = () => {
         <Button
             loading={isLoggingOut}
             mode="contained"
-            onPress={() => {
-              dispatch(setIsLoggingOut(true))
-              dispatch(setIsLoggedIn(false));
-              dispatch(setSelectedCityId(undefined));
-              dispatch(setSelectedCityName(undefined));
-              dispatch(setUserInfo(undefined));
-            }}>{t('logOut')}</Button>
+            onPress={() => handleSignOut()}
+        >{t('logOut')}</Button>
       </View>
   )
 }

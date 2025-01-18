@@ -52,7 +52,7 @@ const HomeScreen = () => {
       hideDialog()
       getAllOpenPosts(user!.cityId!);
     } catch (e) {
-      console.log(e);
+      console.error("Error accepting selected post: ", e);
       setIsPostAccepting(false);
       hideDialog()
     } finally {
@@ -75,7 +75,7 @@ const HomeScreen = () => {
       setAvailablePosts(posts);
       setArePostsLoading(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error getting all opened posts: ", e);
       setArePostsLoading(false);
     } finally {
       setArePostsLoading(false);
@@ -83,29 +83,7 @@ const HomeScreen = () => {
   }
 
   const loadUser = async () => {
-
-    if (user === undefined || user === null) {
-      const userId = GoogleSignin.getCurrentUser()?.user.id;
-
-      const loggedUser: UserInterface | null = await getUser(userId!);
-
-      const userInfo = {
-        id: loggedUser?.id,
-        firstName: loggedUser?.firstName,
-        lastName: loggedUser?.lastName,
-        email: loggedUser?.email,
-        phoneNumber: loggedUser?.phoneNumber,
-        notifyPhoneId: loggedUser?.notificationToken,
-        cityId: loggedUser?.cityId,
-        photoURL: loggedUser?.photoURL,
-        cityName: loggedUser?.cityName,
-      }
-
-      dispatch(setUserInfo(userInfo));
-      getAllOpenPosts(userInfo?.cityId!);
-    } else {
       getAllOpenPosts(user?.cityId!);
-    }
   }
 
   useEffect(() => {

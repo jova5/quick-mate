@@ -39,7 +39,7 @@ const InProgressPosts = () => {
       setInProgressPosts(posts);
       setArePostsLoading(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error getting in progress posts: ", e);
       setArePostsLoading(false);
     } finally {
       setArePostsLoading(false);

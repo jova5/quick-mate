@@ -7,7 +7,6 @@ import {useTranslation} from "react-i18next";
 import Icon from "react-native-vector-icons/Ionicons";
 import {changeI18NLanguage} from "@/assets/localization/i18n";
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import firebase from "firebase/compat";
 import {setIsLoggedIn, setUserInfo, UserInfo} from "@/redux/user-slice/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -19,7 +18,7 @@ import {
 } from "@/db/collections/users";
 import {router} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import auth = firebase.auth;
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {createNotificationChannel} from "@/assets/scripts/rnFireBase";
 
 const LoginScreen = () => {
@@ -47,29 +46,10 @@ const LoginScreen = () => {
 
   useEffect(() => {
 
-    checkIsLoggedIn().then(isLogged => {
-      if (isLogged) {
-        dispatch(setIsLoggedIn(true));
+    auth().onAuthStateChanged((currentUser) => {
 
-        let userInfo;
-
-        getLoggedUser().then(loggedUser => {
-          userInfo = {
-            id: loggedUser?.id,
-            firstName: loggedUser?.firstName,
-            lastName: loggedUser?.lastName,
-            email: loggedUser?.email,
-            phoneNumber: loggedUser?.phoneNumber,
-            notifyPhoneId: null,
-            cityId: null,
-            photoURL: loggedUser?.photoURL,
-          }
-
-          dispatch(setUserInfo(userInfo));
-        });
-
-        router.navigate('/home');
-        // dispatch(setIsLoggedIn(false));
+      if (currentUser) {
+        handleLoggedInUser(currentUser);
       } else {
         dispatch(setIsLoggedIn(false));
       }
@@ -82,48 +62,87 @@ const LoginScreen = () => {
     SplashScreen.hideAsync();
   }, []);
 
-  const loadLanguage = async () => {
-    const languageCode = await AsyncStorage.getItem('LANGUAGE');
-    const lngCode = "rs" === languageCode ? "rs" : "en";
-    setChosenLanguage(lngCode);
-  }
+  const handleLoggedInUser = async (currentUser: FirebaseAuthTypes.User | null) => {
 
-  const checkIsLoggedIn = async () => {
-    try {
-      const storedToken = await AsyncStorage.getItem('AUTH_TOKEN');
-      if (storedToken) {
-        const credential = auth.GoogleAuthProvider.credential(storedToken);
-        await auth().signInWithCredential(credential);
-        return true;
-      } else {
-        return false;
+    let userInfo;
+
+    const exists = await checkUserByEmail(currentUser?.email!);
+
+    if (!exists) {
+
+      const displayedName = currentUser?.displayName?.split(' ');
+
+      userInfo = {
+        id: currentUser?.uid,
+        firstName: displayedName === undefined ? "" : displayedName[0],
+        lastName: displayedName === undefined ? "" : displayedName[1],
+        email: currentUser?.email,
+        phoneNumber: currentUser?.phoneNumber,
+        notificationToken: null,
+        cityId: null,
+        photoURL: currentUser?.photoURL,
+        cityName: null,
       }
-    } catch (error) {
-      console.error('Greška pri provjeri prijave:', error);
-      return false;
+
+      await addLoggedUser(currentUser?.uid!, userInfo);
+
+      dispatch(setUserInfo(userInfo));
+    } else {
+
+      const loggedUser = await getLoggedUser(currentUser?.uid!);
+
+      userInfo = {
+        id: currentUser?.uid,
+        firstName: loggedUser?.firstName,
+        lastName: loggedUser?.lastName,
+        email: loggedUser?.email,
+        phoneNumber: loggedUser?.phoneNumber,
+        notificationToken: loggedUser?.notificationToken,
+        cityId: loggedUser?.cityId,
+        photoURL: loggedUser?.photoURL,
+        cityName: loggedUser?.cityName
+      }
+
+      dispatch(setUserInfo(userInfo));
     }
 
-  };
+    dispatch(setIsLoggedIn(true));
 
-  async function getLoggedUser() {
+    if (!exists
+        || userInfo?.phoneNumber === null
+        || userInfo?.phoneNumber === undefined
+        || userInfo?.phoneNumber === "") {
+      router.navigate('/after-login-setup');
+    } else {
+      router.navigate('/home')
+    }
+
+    setIsLoggedUserLoading(false);
+  }
+
+  async function getLoggedUser(id: string) {
 
     setIsLoggedUserLoading(true);
 
     try {
 
-      const userId = GoogleSignin.getCurrentUser()?.user.id;
-
-      const user: UserInterface | null = await getUser(userId!);
+      const user: UserInterface | null = await getUser(id);
 
       setIsLoggedUserLoading(false);
 
       return user;
     } catch (e) {
-      console.log(e);
+      console.error("Error getting logged user: ", e);
       setIsLoggedUserLoading(false);
     } finally {
       setIsLoggedUserLoading(false);
     }
+  }
+
+  const loadLanguage = async () => {
+    const languageCode = await AsyncStorage.getItem('LANGUAGE');
+    const lngCode = "rs" === languageCode ? "rs" : "en";
+    setChosenLanguage(lngCode);
   }
 
   async function onGoogleButtonPress() {
@@ -143,65 +162,10 @@ const LoginScreen = () => {
 
       const googleCredential = auth.GoogleAuthProvider.credential(user?.idToken);
 
-      const userCredential = await auth().signInWithCredential(googleCredential);
-
-      const userI = userCredential.user;
-
-      let userInfo;
-
-      const exists = await checkUserByEmail(user?.user.email);
-
-      if (!exists) {
-
-        userInfo = {
-          id: user.user.id,
-          firstName: user?.user.givenName,
-          lastName: user?.user.familyName,
-          email: user?.user.email,
-          phoneNumber: userI?.phoneNumber,
-          notifyPhoneId: null,
-          cityId: null,
-          photoURL: user?.user.photo,
-          cityName: null,
-        }
-
-        await addLoggedUser(user.user.id, userInfo);
-
-        dispatch(setUserInfo(userInfo));
-      } else {
-        const userId = GoogleSignin.getCurrentUser()?.user.id;
-
-        const loggedUser: UserInterface | null = await getUser(userId!);
-
-        userInfo = {
-          id: loggedUser?.id,
-          firstName: loggedUser?.firstName,
-          lastName: loggedUser?.lastName,
-          email: loggedUser?.email,
-          phoneNumber: loggedUser?.phoneNumber,
-          notifyPhoneId: loggedUser?.notificationToken,
-          cityId: loggedUser?.cityId,
-          photoURL: loggedUser?.photoURL,
-          cityName: loggedUser?.cityName,
-        }
-
-        dispatch(setUserInfo(userInfo));
-      }
-
-      await AsyncStorage.setItem('AUTH_TOKEN', user?.idToken);
-      dispatch(setIsLoggedIn(true));
-
-      if (!exists || userInfo.phoneNumber === null || userInfo.phoneNumber === undefined || userInfo.phoneNumber === "") {
-        router.navigate('/after-login-setup');
-      }else{
-        router.navigate('/home')
-      }
-
-      setIsLoggedUserLoading(false);
-
-      return userCredential;
+      const t = await auth().signInWithCredential(googleCredential);
+      return t
     } catch (e) {
-      console.log("error continue with google: " + e)
+      console.error("Error continue with google: ", e)
       setIsLoggedUserLoading(false);
 
     }
@@ -217,16 +181,14 @@ const LoginScreen = () => {
         photoURL: user.photoURL,
         phoneNumber: user.phoneNumber,
         cityId: user.cityId,
-        notificationToken: user.notifyPhoneId,
+        notificationToken: user.notificationToken,
         cityName: user.cityName
       };
 
       await addUser(id, userData);
     } catch (e) {
-      console.log(e);
-    } finally {
+      console.error("Error adding logged user: ", e);
     }
-
   }
 
   return (

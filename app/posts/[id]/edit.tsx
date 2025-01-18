@@ -34,10 +34,11 @@ const EditPostPage = () => {
       navigation.setOptions({title: `${t('editPost')}: ${post?.title}`});
 
       setPost(post);
+
       dispatch(setExistingPostNotLoading());
       setIsLoading(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error getting info about existing post: ", e);
       setIsLoading(false);
       dispatch(setExistingPostNotLoading());
     } finally {

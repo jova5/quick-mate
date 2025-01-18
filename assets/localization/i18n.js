@@ -23,8 +23,8 @@ export default i18next;
 const saveLanguageData = async (languageCode) => {
   try {
     await AsyncStorage.setItem('LANGUAGE', languageCode);
-  } catch {
-    console.log('error in saving language data');
+  } catch (e) {
+    console.error("Error in saving language data: ", e);
   }
 };
 

@@ -39,7 +39,7 @@ const YourPosts = () => {
       setUserPosts(posts);
       setArePostsLoading(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error getting your posts: ", e);
       setArePostsLoading(false);
     } finally {
       setArePostsLoading(false);

@@ -37,7 +37,7 @@ const CompletedPosts = () => {
       setCompletedPosts(posts);
       setArePostsLoading(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error getting completed posts: ", e);
       setArePostsLoading(false);
     } finally {
       setArePostsLoading(false);
