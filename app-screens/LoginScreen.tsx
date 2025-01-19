@@ -1,6 +1,6 @@
 import {Image, Platform, ScrollView, StyleSheet, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context"
-import {Button, Dialog, IconButton, MD3Theme, Portal, Text, useTheme} from "react-native-paper";
+import {Button, Dialog, IconButton, MD3Theme, Portal, useTheme} from "react-native-paper";
 import React, {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {useTranslation} from "react-i18next";
@@ -78,10 +78,12 @@ const LoginScreen = () => {
               }}
           />
         </View>
-        <View style={{height: '40%', justifyContent: 'center'}}>
-          <Text variant='displayLarge' style={{textAlign: 'center'}}>Quick Mate</Text>
+        <View style={{height: '40%', justifyContent: 'center', alignItems: 'center'}}>
+          <Image source={require('../assets/images/splash-icon.png')}
+                 style={{width: 200, height: 200, borderRadius: 150}}
+          />
         </View>
-        <View style={{alignItems: 'center', width: '100%'}}>
+        <View style={{alignItems: 'center'}}>
           <Button
               loading={isLoggedUserLoading}
               mode='contained-tonal'

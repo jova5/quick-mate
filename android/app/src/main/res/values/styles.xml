@@ -4,7 +4,7 @@
     <item name="android:editTextStyle">@style/ResetEditText</item>
     <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
     <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="android:statusBarColor">#ffffff</item>
+    <item name="android:statusBarColor">#6b3ceb</item>
     <item name="android:datePickerDialogTheme">@style/DatePickerDialogTheme</item>
     <item name="android:timePickerStyle">@style/TimePickerTheme</item>
   </style>

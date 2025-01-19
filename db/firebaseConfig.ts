@@ -1,13 +1,12 @@
-// import {initializeApp} from 'firebase/app';
 import firebase from 'firebase/compat/app';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBlaq7X3owtJRwpy4WLJ4KMdM2uw5vUDD4",
-  authDomain: "quick-mate.firebaseapp.com",
-  projectId: "quick-mate",
-  storageBucket: "quick-mate.firebasestorage.app",
-  messagingSenderId: "394706700488",
-  appId: "1:394706700488:web:4e25dc12a0885b32837dfd"
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID
 };
 
 const app = firebase.initializeApp(firebaseConfig);
