@@ -3,12 +3,13 @@ import {Button, HelperText, MD3Theme, TextInput, useTheme} from "react-native-pa
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectUser, setUserPhoneAndCity} from "@/redux/user-slice/userSlice";
 import {useTranslation} from "react-i18next";
-import {router} from "expo-router";
+import {router, useNavigation} from "expo-router";
 import React, {useEffect, useState} from "react";
 import {selectCity, setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
 import {updateUserPhoneNumberAndCityId} from "@/db/collections/users";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
+import {CommonActions} from "@react-navigation/native";
 
 type AfterLoginFormData = {
   contactPhoneNumber: string,
@@ -20,6 +21,9 @@ const REGEX = {
 }
 
 const AfterLoginSetupScreen = () => {
+
+  const navigation = useNavigation();
+
   const theme = useTheme();
   const styles = createStyles(theme);
 
@@ -56,7 +60,9 @@ const AfterLoginSetupScreen = () => {
 
       setIsUserUpdating(false);
 
-      router.navigate('/home');
+      navigation.dispatch(CommonActions.reset({
+        routes: [{key: "(tabs)", name: "(tabs)"}]
+      }))
     } catch (e) {
       console.error("Error updating user phone number and city: ", e);
       setIsUserUpdating(false);

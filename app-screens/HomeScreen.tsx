@@ -16,17 +16,15 @@ import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {acceptPost, getAllOpenPostsByCityId, PostInterface} from "@/db/collections/posts";
 import {formatDate} from "@/assets/scripts/dateFormater";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks";
-import {selectUser, setUserInfo} from "@/redux/user-slice/userSlice";
-import {GoogleSignin} from "@react-native-google-signin/google-signin";
-import {getUser, UserInterface} from "@/db/collections/users";
+import {useAppSelector} from "@/redux/hooks";
+import {selectUser} from "@/redux/user-slice/userSlice";
 import RemotePushController from "@/app-components/RemotePushController";
+import * as SplashScreen from "expo-splash-screen";
 
 const HomeScreen = () => {
 
   const theme = useTheme();
   const styles = createStyles(theme);
-  const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
@@ -74,16 +72,19 @@ const HomeScreen = () => {
       }))
       setAvailablePosts(posts);
       setArePostsLoading(false);
+      SplashScreen.hideAsync();
     } catch (e) {
       console.error("Error getting all opened posts: ", e);
       setArePostsLoading(false);
+      SplashScreen.hideAsync();
     } finally {
       setArePostsLoading(false);
+      SplashScreen.hideAsync();
     }
   }
 
   const loadUser = async () => {
-      getAllOpenPosts(user?.cityId!);
+    getAllOpenPosts(user?.cityId!);
   }
 
   useEffect(() => {

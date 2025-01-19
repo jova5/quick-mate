@@ -16,13 +16,15 @@ export interface UserInfo {
 // Define a type for the slice state
 interface UserState {
   user: UserInfo | undefined,
-  isLoggedIn: boolean | undefined
+  isLoggedIn: boolean | undefined,
+  isLoggedUserLoading: boolean
 }
 
 // Define the initial state using that type
 const initialState: UserState = {
   user: undefined,
-  isLoggedIn: undefined
+  isLoggedIn: undefined,
+  isLoggedUserLoading: false
 }
 
 export const userSlice = createSlice({
@@ -44,11 +46,14 @@ export const userSlice = createSlice({
       state.user!.phoneNumber = action.payload.phoneNumber;
       state.user!.cityId = action.payload.cityId;
       state.user!.cityName = action.payload.cityName;
-    }
+    },
+    setIsLoggedUserLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoggedUserLoading = action.payload;
+    },
   },
 })
 
-export const {setUserInfo, setIsLoggedIn, setUserPhoneAndCity} = userSlice.actions
+export const {setUserInfo, setIsLoggedIn, setUserPhoneAndCity, setIsLoggedUserLoading} = userSlice.actions
 
 export const selectUser = (state: RootState) => state.user
 

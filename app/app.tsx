@@ -1,4 +1,4 @@
-import {router, Stack} from "expo-router";
+import {Stack, useNavigation} from "expo-router";
 import {StatusBar} from "expo-status-bar";
 import {useColorScheme} from "@/hooks/useColorScheme";
 import {useTheme} from "react-native-paper";
@@ -6,15 +6,17 @@ import {useTranslation} from "react-i18next";
 import React, {useEffect} from "react";
 import {GoogleSignin} from "@react-native-google-signin/google-signin";
 import {selectUser} from "@/redux/user-slice/userSlice";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks";
+import {useAppSelector} from "@/redux/hooks";
+import {CommonActions} from "@react-navigation/native";
 
 const App = () => {
+
+  const navigation = useNavigation();
 
   const colorScheme = useColorScheme();
   const theme = useTheme();
   const {t} = useTranslation();
   const {isLoggedIn} = useAppSelector(selectUser);
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -25,7 +27,9 @@ const App = () => {
   useEffect(() => {
 
     if (isLoggedIn === false) {
-      router.navigate('/');
+      navigation.dispatch(CommonActions.reset({
+        routes: [{key: "index", name: "index"}]
+      }));
     }
   }, [isLoggedIn]);
 
