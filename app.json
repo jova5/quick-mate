@@ -12,11 +12,17 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#6b3ceb"
       },
-      "package": "com.anonymous.quickmate"
+      "package": "com.anonymous.quickmate",
+      "config": {
+        "googleMaps": {
+          "apiKey": ""
+        }
+      }
     },
     "web": {
       "bundler": "metro",
@@ -85,9 +91,16 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/Roboto-Light.ttf", "./assets/fonts/Roboto-Regular.ttf"]
+          "fonts": [
+            "./assets/fonts/Roboto-Light.ttf",
+            "./assets/fonts/Roboto-Regular.ttf"
+          ]
         }
-      ]
+      ],
+      "@react-native-google-signin/google-signin",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "@react-native-firebase/messaging"
     ],
     "experiments": {
       "typedRoutes": true

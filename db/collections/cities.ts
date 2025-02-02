@@ -1,5 +1,4 @@
-import {collection, getDocs, QuerySnapshot} from "@firebase/firestore";
-import db from "@/db/firestore";
+import firestore from '@react-native-firebase/firestore';
 
 export interface CityInterface {
   id: string;
@@ -12,36 +11,43 @@ export interface CountryInterface {
   cities: CityInterface[];
 }
 
-const countriesCollection = collection(db, 'countries')
+const countriesCollection = firestore().collection('countries')
 
 export async function getAllCities(): Promise<CountryInterface[]> {
+  try {
+    // Fetch all countries
+    const countriesSnapshot = await countriesCollection.get();
 
-  // Fetch all countries
-  const countriesSnapshot: QuerySnapshot = await getDocs(countriesCollection);
+    // Map over countries and fetch their cities
+    const countriesWithCities: CountryInterface[] = await Promise.all(
+        countriesSnapshot.docs.map(async (doc) => {
+          const countryId = doc.id;
+          const countryData = doc.data();
+          const countryName = countryData.name as string; // Assuming the country has a "name" field
 
-  // Map over countries and fetch their cities
-  const countriesWithCities: CountryInterface[] = await Promise.all(
-      countriesSnapshot.docs.map(async (doc) => {
-        const countryId = doc.id;
-        const countryData = doc.data();
-        const countryName = countryData.name as string; // Assuming the country has a "name" field
+          // Reference and fetch the cities subcollection
+          const citiesSnapshot = await firestore()
+          .collection('countries')
+          .doc(countryId)
+          .collection('cities')
+          .get();
 
-        // Reference and fetch the cities subcollection
-        const citiesCollection = collection(doc.ref, "cities");
-        const citiesSnapshot: QuerySnapshot = await getDocs(citiesCollection);
+          const cities: CityInterface[] = citiesSnapshot.docs.map((cityDoc) => ({
+            id: cityDoc.id,
+            name: cityDoc.data().name as string, // Assuming the city has a "name" field
+          }));
 
-        const cities: CityInterface[] = citiesSnapshot.docs.map((cityDoc) => ({
-          id: cityDoc.id,
-          name: cityDoc.data().name as string, // Assuming the city has a "name" field
-        }));
+          return {
+            id: countryId,
+            name: countryName,
+            cities,
+          };
+        })
+    );
 
-        return {
-          id: countryId,
-          name: countryName,
-          cities,
-        };
-      })
-  );
-
-  return countriesWithCities;
+    return countriesWithCities;
+  } catch (error) {
+    console.error('Error fetching cities: ', error);
+    return [];
+  }
 }

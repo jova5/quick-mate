@@ -1,15 +1,4 @@
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  Timestamp,
-  updateDoc,
-  where
-} from "@firebase/firestore";
-import db from "@/db/firestore";
+import firestore, {Timestamp} from '@react-native-firebase/firestore';
 
 export enum PostStatus {
   OPEN = "OPEN",
@@ -43,128 +32,131 @@ export interface PostInterface extends CreatePostInterface {
   id: string
 }
 
-const postsCollection = collection(db, 'posts')
+const postsCollection = firestore().collection('posts')
 
 export async function addPost(post: CreatePostInterface) {
 
   const dbData = {
-    createdAt: Timestamp.now(),
+    createdAt: Timestamp.now(), // Use the Firebase Timestamp from @react-native-firebase/firestore
     ...post
-  }
+  };
 
-  return await addDoc(postsCollection, dbData);
+  return await postsCollection.add(dbData);
 }
 
 export async function acceptPost(docId: string, workerUserId: string) {
 
-  const docRef = doc(postsCollection, docId);
+  const docRef = postsCollection.doc(docId);
 
-  return await updateDoc(docRef, {workerUserId: workerUserId, status: PostStatus.IN_PROGRESS})
+  return await docRef.update({
+    workerUserId: workerUserId,
+    status: PostStatus.IN_PROGRESS // Update the status
+  });
 }
 
 export async function getAllOpenPostsByCityId(cityId: string) {
 
-  const posts = query(
-      postsCollection,
-      where("cityId", "==", cityId),
-      where("status", "==", PostStatus.OPEN)
-  );
+  const postsQuery = postsCollection
+  .where('cityId', '==', cityId)
+  .where('status', '==', PostStatus.OPEN);
 
-  return await getDocs(posts);
+  const querySnapshot = await postsQuery.get();
+
+  return querySnapshot;
 }
 
 export async function getAllCompletedPostsByUserId(userId: string): Promise<PostInterface[]> {
 
-  const posts = query(
-      postsCollection,
-      where("workerUserId", "==", userId),
-      where("status", "==", PostStatus.COMPLETED)
-  );
+  const postsQuery = postsCollection
+  .where("workerUserId", "==", userId)
+  .where("status", "==", PostStatus.COMPLETED);
 
-  const t = await getDocs(posts);
-  return t.docs.map(doc => {
+  const querySnapshot = await postsQuery.get(); // Using `.get()` for React Native Firebase
+
+  return querySnapshot.docs.map(doc => {
+    const postData = doc.data();
     return {
       id: doc.id,
-      title: doc.data().title,
-      description: doc.data().description,
-      price: doc.data().price,
-      dueDateTime: doc.data().dueDateTime,
-      destination: doc.data().destination as GeoLocation,
-      contactPhoneNumber: doc.data().contactPhoneNumber,
-      cityId: doc.data().cityId,
-      status: doc.data().status as PostStatus,
-      createdBy: doc.data().createdBy,
-      workerUserId: doc.data().workerUserId,
-      cowerAdditionalCost: doc.data().cowerAdditionalCost,
-      address: doc.data().address,
-      cityName: doc.data().cityName,
-    }
+      title: postData.title,
+      description: postData.description,
+      price: postData.price,
+      dueDateTime: postData.dueDateTime,
+      destination: postData.destination as GeoLocation,
+      contactPhoneNumber: postData.contactPhoneNumber,
+      cityId: postData.cityId,
+      status: postData.status as PostStatus,
+      createdBy: postData.createdBy,
+      workerUserId: postData.workerUserId,
+      cowerAdditionalCost: postData.cowerAdditionalCost,
+      address: postData.address,
+      cityName: postData.cityName,
+    };
   });
 }
 
 export async function getAllInProgressPostsByUserId(userId: string): Promise<PostInterface[]> {
 
-  const posts = query(
-      postsCollection,
-      where("workerUserId", "==", userId),
-      where("status", "==", PostStatus.IN_PROGRESS)
-  );
+  const postsQuery = postsCollection
+  .where("workerUserId", "==", userId)
+  .where("status", "==", PostStatus.IN_PROGRESS);
 
-  const t = await getDocs(posts);
-  return t.docs.map(doc => {
+  const querySnapshot = await postsQuery.get(); // Using `.get()` for React Native Firebase
+
+  return querySnapshot.docs.map(doc => {
+    const postData = doc.data();
     return {
       id: doc.id,
-      title: doc.data().title,
-      description: doc.data().description,
-      price: doc.data().price,
-      dueDateTime: doc.data().dueDateTime,
-      destination: doc.data().destination as GeoLocation,
-      contactPhoneNumber: doc.data().contactPhoneNumber,
-      cityId: doc.data().cityId,
-      status: doc.data().status as PostStatus,
-      createdBy: doc.data().createdBy,
-      workerUserId: doc.data().workerUserId,
-      cowerAdditionalCost: doc.data().cowerAdditionalCost,
-      address: doc.data().address,
-      cityName: doc.data().cityName,
-    }
+      title: postData.title,
+      description: postData.description,
+      price: postData.price,
+      dueDateTime: postData.dueDateTime,
+      destination: postData.destination as GeoLocation,
+      contactPhoneNumber: postData.contactPhoneNumber,
+      cityId: postData.cityId,
+      status: postData.status as PostStatus,
+      createdBy: postData.createdBy,
+      workerUserId: postData.workerUserId,
+      cowerAdditionalCost: postData.cowerAdditionalCost,
+      address: postData.address,
+      cityName: postData.cityName,
+    };
   });
 }
 
 export async function getAllUserPostsByUserId(userId: string): Promise<PostInterface[]> {
 
-  const posts = query(
-      postsCollection,
-      where("createdBy", "==", userId)
-  );
+  const postsQuery = postsCollection
+  .where("createdBy", "==", userId);
 
-  const t = await getDocs(posts);
-  return t.docs.map(doc => {
+  const querySnapshot = await postsQuery.get(); // Using `.get()` for React Native Firebase
+
+  return querySnapshot.docs.map(doc => {
+    const postData = doc.data();
     return {
       id: doc.id,
-      title: doc.data().title,
-      description: doc.data().description,
-      price: doc.data().price,
-      dueDateTime: doc.data().dueDateTime,
-      destination: doc.data().destination as GeoLocation,
-      contactPhoneNumber: doc.data().contactPhoneNumber,
-      cityId: doc.data().cityId,
-      status: doc.data().status as PostStatus,
-      createdBy: doc.data().createdBy,
-      workerUserId: doc.data().workerUserId,
-      cowerAdditionalCost: doc.data().cowerAdditionalCost,
-      address: doc.data().address,
-      cityName: doc.data().cityName,
-    }
+      title: postData.title,
+      description: postData.description,
+      price: postData.price,
+      dueDateTime: postData.dueDateTime,
+      destination: postData.destination as GeoLocation,
+      contactPhoneNumber: postData.contactPhoneNumber,
+      cityId: postData.cityId,
+      status: postData.status as PostStatus,
+      createdBy: postData.createdBy,
+      workerUserId: postData.workerUserId,
+      cowerAdditionalCost: postData.cowerAdditionalCost,
+      address: postData.address,
+      cityName: postData.cityName,
+    };
   });
 }
 
 export async function getPost(docId: string): Promise<PostInterface | null> {
 
-  const docRef = doc(postsCollection, docId);
-  const docSnapshot = await getDoc(docRef);
+  const docRef = postsCollection.doc(docId);
+  const docSnapshot = await docRef.get();
 
-  if (!docSnapshot.exists()) {
+  if (!docSnapshot.exists) {
     console.error(`Document with ID ${docId} does not exist.`);
     return null;
   }
@@ -173,35 +165,35 @@ export async function getPost(docId: string): Promise<PostInterface | null> {
 
   return {
     id: docSnapshot.id,
-    title: postData.title as string,
-    description: postData.description as string,
-    price: postData.price as number,
-    dueDateTime: postData.dueDateTime as Timestamp,
+    title: postData?.title as string,
+    description: postData?.description as string,
+    price: postData?.price as number,
+    dueDateTime: postData?.dueDateTime as Timestamp,
     destination: {
-      latitude: postData.destination.latitude as number,
-      longitude: postData.destination.longitude as number,
+      latitude: postData?.destination.latitude as number,
+      longitude: postData?.destination.longitude as number,
     } as GeoLocation,
-    contactPhoneNumber: postData.contactPhoneNumber as string,
-    cityId: postData.cityId as string,
-    status: postData.status as PostStatus,
-    createdBy: postData.createdBy as string,
-    workerUserId: postData.workerUserId as string,
-    cowerAdditionalCost: postData.cowerAdditionalCost as boolean,
-    address: postData.address as string,
-    cityName: postData.cityName as string
+    contactPhoneNumber: postData?.contactPhoneNumber as string,
+    cityId: postData?.cityId as string,
+    status: postData?.status as PostStatus,
+    createdBy: postData?.createdBy as string,
+    workerUserId: postData?.workerUserId as string,
+    cowerAdditionalCost: postData?.cowerAdditionalCost as boolean,
+    address: postData?.address as string,
+    cityName: postData?.cityName as string,
   };
 }
 
 export async function completePost(docId: string) {
 
-  const docRef = doc(postsCollection, docId);
+  const docRef = postsCollection.doc(docId);
 
-  return await updateDoc(docRef, {status: PostStatus.COMPLETED})
+  return await docRef.update({status: PostStatus.COMPLETED});
 }
 
 export async function editPost(docId: string, editedPost: CreatePostInterface) {
 
-  const docRef = doc(postsCollection, docId);
+  const docRef = postsCollection.doc(docId);
 
-  return await updateDoc(docRef, {...editedPost})
+  return await docRef.update({...editedPost});
 }
