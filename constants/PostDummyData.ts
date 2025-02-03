@@ -18,7 +18,8 @@ export const POST_DUMMY: PostInterface[] = [
     "createdBy": "user1",
     "workerUserId": "worker1",
     "cowerAdditionalCost": true,
-    "address": "123 Example St, Paris, France"
+    "address": "123 Example St, Paris, France",
+    "cityName": "Test"
   },
   {
     "id": "2",
@@ -36,7 +37,8 @@ export const POST_DUMMY: PostInterface[] = [
     "createdBy": "user2",
     "workerUserId": "worker2",
     "cowerAdditionalCost": false,
-    "address": "456 Example Rd, London, UK"
+    "address": "456 Example Rd, London, UK",
+    "cityName": "Test"
   },
   {
     "id": "3",
@@ -54,7 +56,8 @@ export const POST_DUMMY: PostInterface[] = [
     "createdBy": "user3",
     "workerUserId": "worker3",
     "cowerAdditionalCost": false,
-    "address": "789 Example Ave, New York, USA"
+    "address": "789 Example Ave, New York, USA",
+    "cityName": "Test"
   },
   {
     "id": "4",
@@ -72,7 +75,8 @@ export const POST_DUMMY: PostInterface[] = [
     "createdBy": "user3",
     "workerUserId": "worker3",
     "cowerAdditionalCost": false,
-    "address": "789 Example Ave, New York, USA"
+    "address": "789 Example Ave, New York, USA",
+    "cityName": "Test"
   },
   {
     "id": "5",
@@ -90,6 +94,7 @@ export const POST_DUMMY: PostInterface[] = [
     "createdBy": "user3",
     "workerUserId": "worker3",
     "cowerAdditionalCost": false,
-    "address": "789 Example Ave, New York, USA"
+    "address": "789 Example Ave, New York, USA",
+    "cityName": "Test"
   }
 ]
