@@ -1,5 +1,13 @@
 import {ScrollView, StyleSheet, View} from "react-native";
-import {Button, Checkbox, HelperText, MD3Theme, TextInput, useTheme} from "react-native-paper";
+import {
+  Button,
+  Checkbox,
+  HelperText,
+  MD3Theme,
+  TextInput,
+  TouchableRipple,
+  useTheme
+} from "react-native-paper";
 import React, {useEffect, useRef, useState} from "react";
 import {router} from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -212,7 +220,10 @@ const NewPostScreen = () => {
                           value={value}
                           onChangeText={(value) => onChange(value)}
                       />
-                      <HelperText type="error">{errors.title?.message}</HelperText>
+                      {
+                          errors.title?.message &&
+                          <HelperText type="error">{errors.title?.message}</HelperText>
+                      }
                     </>
                 )}
             />
@@ -228,14 +239,20 @@ const NewPostScreen = () => {
                       <TextInput
                           outlineColor={errors.description ? theme.colors.error : undefined}
                           activeOutlineColor={errors.description ? theme.colors.error : undefined}
-                          style={{height: 160, color: theme.colors.error}}
+                          style={[
+                            !errors.title?.message && {marginTop: 4},
+                            {height: 160, color: theme.colors.error}
+                          ]}
                           mode="outlined"
                           label={t("description")}
                           value={value}
                           multiline={true}
                           onChangeText={(value) => onChange(value)}
                       />
-                      <HelperText type="error">{errors.description?.message}</HelperText>
+                      {
+                          errors.description?.message &&
+                          <HelperText type="error">{errors.description?.message}</HelperText>
+                      }
                     </>
                 )}
             />
@@ -252,7 +269,10 @@ const NewPostScreen = () => {
                       <TextInput
                           outlineColor={errors.contactPhoneNumber ? theme.colors.error : undefined}
                           activeOutlineColor={errors.contactPhoneNumber ? theme.colors.error : undefined}
-                          style={{color: theme.colors.error}}
+                          style={[
+                            !errors.description?.message && {marginTop: 4},
+                            {color: theme.colors.error}
+                          ]}
                           mode="outlined"
                           label={t("contactPhone")}
                           placeholder="06x123456"
@@ -260,7 +280,10 @@ const NewPostScreen = () => {
                           value={value}
                           onChangeText={(value) => onChange(value)}
                       />
-                      <HelperText type="error">{errors.contactPhoneNumber?.message}</HelperText>
+                      {
+                          errors.contactPhoneNumber?.message &&
+                          <HelperText type="error">{errors.contactPhoneNumber?.message}</HelperText>
+                      }
                     </>
                 )}
             />
@@ -273,18 +296,28 @@ const NewPostScreen = () => {
                 }}
                 render={({field: {onChange, onBlur, value}}) => (
                     <>
-                      <TextInput
-                          outlineColor={errors.city ? theme.colors.error : undefined}
-                          activeOutlineColor={errors.city ? theme.colors.error : undefined}
-                          style={{color: theme.colors.error}}
-                          mode="outlined"
-                          label={t("city")}
-                          value={selectedCityName ?? value}
+                      <TouchableRipple
+                          style={!errors.contactPhoneNumber?.message && {marginTop: 4}}
+                          rippleColor="rgba(0, 0, 0, .32)"
                           onPress={() => {
                             router.push('/city?mode=NEW_POST')
-                          }}
-                      />
-                      <HelperText type="error">{errors.city?.message}</HelperText>
+                          }}>
+                        <View>
+                          <TextInput
+                              editable={false}
+                              outlineColor={errors.city ? theme.colors.error : undefined}
+                              activeOutlineColor={errors.city ? theme.colors.error : undefined}
+                              style={{color: theme.colors.error, backgroundColor: 'transparent'}}
+                              mode="outlined"
+                              label={t("city")}
+                              value={selectedCityName ?? value}
+                          />
+                        </View>
+                      </TouchableRipple>
+                      {
+                          errors.city?.message &&
+                          <HelperText type="error">{errors.city?.message}</HelperText>
+                      }
                     </>
                 )}
             />
@@ -297,27 +330,34 @@ const NewPostScreen = () => {
                 }}
                 render={({field: {onChange, onBlur, value}}) => (
                     <>
-                      <TextInput
-                          ref={timeInputRef}
-                          outlineColor={errors.time ? theme.colors.error : undefined}
-                          activeOutlineColor={errors.time ? theme.colors.error : undefined}
-                          style={{color: theme.colors.error}}
-                          onFocus={() => {
-                            if (timeInputRef.current !== null) {
-                              // @ts-ignore
-                              timeInputRef.current.blur()
-                            }
-                          }}
-                          mode="outlined"
-                          label={t("time")}
-                          value={showTime ?? value}
+                      <TouchableRipple
+                          style={!errors.city?.message && {marginTop: 4}}
+                          rippleColor="rgba(0, 0, 0, .32)"
                           onPress={() => {
                             setDateTimeMode('time')
                             setShowTimePicker(true)
-                          }}
-                          // onChangeText={(value) => onChange(value)}
-                      />
-                      <HelperText type="error">{errors.time?.message}</HelperText>
+                          }}>
+                        <TextInput
+                            ref={timeInputRef}
+                            editable={false}
+                            outlineColor={errors.time ? theme.colors.error : undefined}
+                            activeOutlineColor={errors.time ? theme.colors.error : undefined}
+                            style={{color: theme.colors.error, backgroundColor: 'transparent'}}
+                            onFocus={() => {
+                              if (timeInputRef.current !== null) {
+                                // @ts-ignore
+                                timeInputRef.current.blur()
+                              }
+                            }}
+                            mode="outlined"
+                            label={t("time")}
+                            value={showTime ?? value}
+                        />
+                      </TouchableRipple>
+                      {
+                          errors.time?.message &&
+                          <HelperText type="error">{errors.time?.message}</HelperText>
+                      }
                     </>
                 )}
             />
@@ -330,27 +370,34 @@ const NewPostScreen = () => {
                 }}
                 render={({field: {onChange, onBlur, value}}) => (
                     <>
-                      <TextInput
-                          ref={dateInputRef}
-                          outlineColor={errors.date ? theme.colors.error : undefined}
-                          activeOutlineColor={errors.date ? theme.colors.error : undefined}
-                          style={{color: theme.colors.error}}
-                          onFocus={() => {
-                            if (dateInputRef.current !== null) {
-                              // @ts-ignore
-                              dateInputRef.current.blur()
-                            }
-                          }}
-                          mode="outlined"
-                          label={t("date")}
-                          value={showDate ?? value}
+                      <TouchableRipple
+                          style={!errors.time?.message && {marginTop: 4}}
+                          rippleColor="rgba(0, 0, 0, .32)"
                           onPress={() => {
                             setDateTimeMode('date')
                             setShowTimePicker(true)
-                          }}
-                          // onChangeText={(value) => onChange(value)}
-                      />
-                      <HelperText type="error">{errors.date?.message}</HelperText>
+                          }}>
+                        <TextInput
+                            ref={dateInputRef}
+                            editable={false}
+                            outlineColor={errors.date ? theme.colors.error : undefined}
+                            activeOutlineColor={errors.date ? theme.colors.error : undefined}
+                            style={{color: theme.colors.error, backgroundColor: 'transparent'}}
+                            onFocus={() => {
+                              if (dateInputRef.current !== null) {
+                                // @ts-ignore
+                                dateInputRef.current.blur()
+                              }
+                            }}
+                            mode="outlined"
+                            label={t("date")}
+                            value={showDate ?? value}
+                        />
+                      </TouchableRipple>
+                      {
+                          errors.date?.message &&
+                          <HelperText type="error">{errors.date?.message}</HelperText>
+                      }
                     </>
                 )}
             />
@@ -367,7 +414,10 @@ const NewPostScreen = () => {
                       <TextInput
                           outlineColor={errors.price ? theme.colors.error : undefined}
                           activeOutlineColor={errors.price ? theme.colors.error : undefined}
-                          style={{color: theme.colors.error}}
+                          style={[
+                            !errors.date?.message && {marginTop: 4},
+                            {color: theme.colors.error}
+                          ]}
                           mode="outlined"
                           label={t("price")}
                           placeholder="11"
@@ -375,7 +425,10 @@ const NewPostScreen = () => {
                           value={value}
                           onChangeText={(value) => onChange(value)}
                       />
-                      <HelperText type="error">{errors.price?.message}</HelperText>
+                      {
+                          errors.price?.message &&
+                          <HelperText type="error">{errors.price?.message}</HelperText>
+                      }
                     </>
                 )}
             />
@@ -395,8 +448,8 @@ const NewPostScreen = () => {
             }, isDestinationError && {borderWidth: 2, borderColor: theme.colors.error}]}>
               <MapView
                   loadingEnabled={true}
-                  onPress={() => router.navigate('/map')}
                   provider={PROVIDER_GOOGLE}
+                  onPress={() => router.navigate('/map')}
                   scrollEnabled={false}  // Disable scrolling
                   zoomEnabled={false}    // Disable zooming
                   rotateEnabled={false}  // Disable rotation
@@ -451,30 +504,35 @@ const NewPostScreen = () => {
                             onChange(value)
                           }}
                       />
-                      <HelperText type="error">{errors.address?.message}</HelperText>
+                      {
+                          errors.address?.message &&
+                          <HelperText type="error">{errors.address?.message}</HelperText>
+                      }
                     </>
                 )}
             />
-            <Button
-                loading={isPostCreating}
-                mode='contained'
-                style={{marginBottom: 6}}
-                onPress={() => {
-                  if (newPostAddress === undefined) {
-                    dispatch(setNewPostAddress(""));
-                  }
-                  if (showTime === null) {
-                    setShowTime("");
-                  }
-                  if (showDate === null) {
-                    setShowDate("");
-                  }
-                  if (newPostGeoLocation === undefined) {
-                    setIsDestinationError(true);
-                  }
-                  handleSubmit(submit)();
-                }}
-            >{t("post").toUpperCase()}</Button>
+            <View style={{marginTop: 8}}>
+              <Button
+                  loading={isPostCreating}
+                  mode='contained'
+                  style={{marginBottom: 6}}
+                  onPress={() => {
+                    if (newPostAddress === undefined) {
+                      dispatch(setNewPostAddress(""));
+                    }
+                    if (showTime === null) {
+                      setShowTime("");
+                    }
+                    if (showDate === null) {
+                      setShowDate("");
+                    }
+                    if (newPostGeoLocation === undefined) {
+                      setIsDestinationError(true);
+                    }
+                    handleSubmit(submit)();
+                  }}
+              >{t("post").toUpperCase()}</Button>
+            </View>
           </ScrollView>
         </View>
         {

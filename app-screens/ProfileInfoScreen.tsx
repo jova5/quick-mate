@@ -1,12 +1,7 @@
 import {StyleSheet, View} from "react-native";
 import {Button, HelperText, MD3Theme, TextInput, useTheme} from "react-native-paper";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
-import {
-  selectUser,
-  setIsLoggedIn,
-  setIsLoggingOut,
-  setUserInfo
-} from "@/redux/user-slice/userSlice";
+import {selectUser, setIsLoggedIn, setUserInfo} from "@/redux/user-slice/userSlice";
 import {useTranslation} from "react-i18next";
 import React, {useState} from "react";
 import {updateUserData} from "@/db/collections/users";
@@ -79,7 +74,7 @@ const ProfileInfoScreen = () => {
 
     setIsLoggingOut(true);
 
-    signOut().then(() =>{
+    signOut().then(() => {
       dispatch(setIsLoggedIn(false));
       dispatch(setSelectedCityId(undefined));
       dispatch(setSelectedCityName(undefined));
@@ -112,13 +107,15 @@ const ProfileInfoScreen = () => {
                     <TextInput
                         outlineColor={errors.firstName ? theme.colors.error : undefined}
                         activeOutlineColor={errors.firstName ? theme.colors.error : undefined}
-                        style={{color: theme.colors.error}}
                         mode="outlined"
                         label={t("firstName")}
                         value={value}
                         onChangeText={(value) => onChange(value)}
                     />
-                    <HelperText type="error">{errors.firstName?.message}</HelperText>
+                    {
+                        errors.firstName?.message &&
+                        <HelperText type="error">{errors.firstName?.message}</HelperText>
+                    }
                   </>
               )}
           />
@@ -133,6 +130,7 @@ const ProfileInfoScreen = () => {
               render={({field: {onChange, onBlur, value}}) => (
                   <>
                     <TextInput
+                        style={!errors.firstName?.message && {marginTop: 4}}
                         outlineColor={errors.lastName ? theme.colors.error : undefined}
                         activeOutlineColor={errors.lastName ? theme.colors.error : undefined}
                         mode="outlined"
@@ -140,7 +138,10 @@ const ProfileInfoScreen = () => {
                         value={value}
                         onChangeText={(value) => onChange(value)}
                     />
-                    <HelperText type="error">{errors.lastName?.message}</HelperText>
+                    {
+                        errors.lastName?.message &&
+                        <HelperText type="error">{errors.lastName?.message}</HelperText>
+                    }
                   </>
               )}
           />
@@ -155,6 +156,7 @@ const ProfileInfoScreen = () => {
               render={({field: {onChange, onBlur, value}}) => (
                   <>
                     <TextInput
+                        style={!errors.lastName?.message && {marginTop: 4}}
                         outlineColor={errors.email ? theme.colors.error : undefined}
                         activeOutlineColor={errors.email ? theme.colors.error : undefined}
                         mode="outlined"
@@ -162,7 +164,10 @@ const ProfileInfoScreen = () => {
                         value={value}
                         onChangeText={(value) => onChange(value)}
                     />
-                    <HelperText type="error">{errors.email?.message}</HelperText>
+                    {
+                        errors.email?.message &&
+                        <HelperText type="error">{errors.email?.message}</HelperText>
+                    }
                   </>
               )}
           />
@@ -176,6 +181,7 @@ const ProfileInfoScreen = () => {
               render={({field: {onChange, onBlur, value}}) => (
                   <>
                     <TextInput
+                        style={!errors.email?.message && {marginTop: 4}}
                         outlineColor={errors.phoneNumber ? theme.colors.error : undefined}
                         activeOutlineColor={errors.phoneNumber ? theme.colors.error : undefined}
                         mode="outlined"
@@ -183,17 +189,22 @@ const ProfileInfoScreen = () => {
                         value={value}
                         onChangeText={(value) => onChange(value)}
                     />
-                    <HelperText type="error">{errors.phoneNumber?.message}</HelperText>
+                    {
+                        errors.phoneNumber?.message &&
+                        <HelperText type="error">{errors.phoneNumber?.message}</HelperText>
+                    }
                   </>
               )}
           />
-          <Button
-              loading={isUserUpdating}
-              mode="outlined"
-              onPress={() => {
-                handleSubmit(submit)();
-              }}
-          >{t('save')}</Button>
+          <View style={{marginTop: 8}}>
+            <Button
+                loading={isUserUpdating}
+                mode="outlined"
+                onPress={() => {
+                  handleSubmit(submit)();
+                }}
+            >{t('save')}</Button>
+          </View>
         </View>
         <Button
             loading={isLoggingOut}
