@@ -9,7 +9,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: 'quick-mate',
   name: 'Potrčko',
   android: {
-    googleServicesFile: "./google-services.json",
+    googleServicesFile: process.env.EXPO_PUBLIC_GOOGLE_SERVICES,
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#6b3ceb"
