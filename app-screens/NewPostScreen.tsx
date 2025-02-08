@@ -13,7 +13,7 @@ import {router} from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {useTranslation} from "react-i18next";
 import {addPost, CreatePostInterface, PostStatus} from "@/db/collections/posts";
-import {Timestamp} from "@firebase/firestore";
+import {Timestamp} from '@react-native-firebase/firestore';
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {selectCity, setSelectedCityId, setSelectedCityName} from "@/redux/city-slice/citySlice";
 import {formatToISODate, formatToISOTime} from "@/assets/scripts/dateFormater";
